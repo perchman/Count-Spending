@@ -3,20 +3,13 @@
 export default class View {
     constructor() {
         this.content = document.getElementById('content');
-        this.url = new URL(window.location.href);
-    }
-
-    setModel(model) {
-        this.model = model;
-        return this;
     }
 
     setController(controller) {
         this.controller = controller;
-        return this;
     }
 
-    createTable(config) {
+    renderTable(config) {
         if (!config.data) {
             return '<p class="mt-4 text-decoration-underline fst-italic">No records</p>'
         } else {
@@ -49,21 +42,18 @@ export default class View {
         }
     }
 
-    createTablePage(config) {
+    renderTablePage(config) {
         this.content.innerHTML = `
             <div>
                 <a href="${config.buttons.add.url}" id="btn-add" class="btn btn-primary">${config.buttons.add.text}</a>
             </div>
             <div>
-                ${this.createTable(config)}
+                ${this.renderTable(config)}
             </div>
         `;
-
-        const link = document.getElementById('btn-add');
-        link.addEventListener('click', this.controller.handelClick);
     }
 
-    createFormPage(config) {
+    renderFormPage(config) {
         let form = `<form id="${config.id}" class="form-label" \
         name="${config.name}"><div class="row mt-4">`;
 
@@ -83,21 +73,5 @@ export default class View {
         `;
 
         this.content.innerHTML = form;
-
-        const elem = document.getElementById(config.id);
-        elem.addEventListener('submit', this.controller.addEntity);
-    }
-
-    addEventsToNavbarButtons() {
-        const links = document.getElementsByClassName('nav-link');
-
-        for (let link of links) {
-            link.addEventListener('click', this.controller.handelClick);
-        }
-    }
-
-    render() {
-        this.controller.defineRoute();
-        this.addEventsToNavbarButtons();
     }
 }

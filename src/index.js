@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const view = new View();
     const controller = new Controller();
 
-    model.setView(view);
-    view.setModel(model).setController(controller);
-    controller.setModel(model).setView(view);
-    view.render();
+    model.setController(controller);
+    view.setController(controller);
+    controller.setModel(model).setView(view).addEventsNavbarButtons();
+    controller.route();
 });
