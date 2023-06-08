@@ -1,6 +1,6 @@
 "use strict"
 
-export default class CostModel {
+export default class Cost {
     constructor() {
         this.configs = {
             'cost/index': {
@@ -72,13 +72,19 @@ export default class CostModel {
     }
 
     getCosts() {
-        let data = JSON.parse(localStorage.getItem('costs'));
+        const data = JSON.parse(localStorage.getItem('cost'));
 
         if (data) {
             return data;
         } else {
-            return {};
+            new Error("costs not added");
+            return null;
         }
+    }
+
+    getCostsArray() {
+        const costs = this.getCosts() || {};
+        return Object.values(costs);
     }
 
     getCostId() {
@@ -92,7 +98,7 @@ export default class CostModel {
     }
 
     saveCosts(costs) {
-        localStorage.setItem('costs', JSON.stringify(costs));
+        localStorage.setItem('cost', JSON.stringify(costs));
     }
 
     saveCostId(id) {

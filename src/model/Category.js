@@ -1,6 +1,6 @@
 "use strict"
 
-export default class CategoryModel {
+export default class Category {
     constructor() {
         this.configs = {
             'category/index': {
