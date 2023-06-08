@@ -1,59 +1,7 @@
 "use strict"
 
 export default class Cost {
-    constructor() {
-        this.configs = {
-            'cost/index': {
-                headers: [
-                    {
-                        name: 'Date',
-                        sort: true
-                    },
-                    {
-                        name:'Price',
-                        sort: true
-                    },
-                    {
-                        name: 'Description',
-                        sort: false
-                    }
-                ],
-                data: JSON.parse(localStorage.getItem('costs')),
-                buttons: {
-                    add: {
-                        url: '?action=cost/create',
-                        text: 'Add cost'
-                    }
-                }
-            },
-            'cost/create': {
-                id: 'cost-form',
-                name: 'cost',
-                fields: [
-                    {
-                        name: 'date',
-                        type: 'date',
-                        label: 'Date',
-                    },
-                    {
-                        name: 'price',
-                        type: 'number',
-                        label: 'Price',
-                    },
-                    {
-                        name: 'description',
-                        type: 'text',
-                        label: 'Description',
-                    }
-                ]
-            }
-
-        }
-    }
-
-    setController(controller) {
-        this.controller = controller;
-    }
+    constructor() {}
 
     createCost(formData) {
         const id = this.getCostId();
@@ -77,8 +25,7 @@ export default class Cost {
         if (data) {
             return data;
         } else {
-            new Error("costs not added");
-            return null;
+            return {};
         }
     }
 
@@ -95,6 +42,10 @@ export default class Cost {
         } else {
             return 1;
         }
+    }
+
+    getCostById(id) {
+        return this.getCosts()[id];
     }
 
     saveCosts(costs) {

@@ -78,6 +78,19 @@ export default class Cost {
         })
     }
 
+    gatherCostUpdate() {
+        this.viewForm.render();
+
+        const url = new URL(window.location.href);
+        const id = url.searchParams.get('id');
+        let cost = this.model.getCostById(id);
+
+        const form = document.getElementById('form-cost');
+        form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
+        form.elements['price'].value = cost.price;
+        form.elements['description'].value = cost.description;
+    }
+
     redirect(url) {
         window.addEventListener('popstate', (e) => this.route());
         window.history.pushState({}, "", url);
@@ -96,6 +109,10 @@ export default class Cost {
 
             case 'cost/create':
                 this.gatherCostCreate();
+                break;
+
+            case 'cost/update':
+                this.gatherCostUpdate();
                 break;
 
             default:

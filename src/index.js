@@ -17,7 +17,6 @@ let routes = {
         const viewTable = new CostTable();
         const viewForm = new CostForm();
 
-        model.setController(controller);
         controller.setModel(model).setViewTable(viewTable).setViewForm(viewForm);
         controller.route();
     },
