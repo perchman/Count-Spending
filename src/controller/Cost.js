@@ -8,18 +8,24 @@ export default class Cost {
         return this;
     }
 
-    setViewTable(viewTable) {
+    setView(viewTable, viewForm) {
         this.viewTable = viewTable;
-        return this;
-    }
-
-    setViewForm(viewForm) {
         this.viewForm = viewForm;
         return this;
     }
 
+    setURL(url) {
+        this.url = url;
+        return this;
+    }
+
     gatherCostIndex() {
-        this.viewTable.render(this.model.getCostsArray());
+        const url = new URL(window.location.href);
+        const sort = url.searchParams.get('sort') || `date_desc`;
+        const sortKey = sort.split('_')[0];
+        const sortDirection = sort.split('_')[1];
+        const pageNum = url.searchParams.get('page') || 1;
+        this.viewTable.render(this.model.getData(pageNum, sortKey, sortDirection));
         this.addEvents();
     }
 
@@ -29,49 +35,16 @@ export default class Cost {
         this.addEventsToDeleteButtons();
     }
 
-    addEventToAddButton() {
-        const addButton = document.getElementById('btn-add');
-        addButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.history.pushState({}, "", e.target.href);
 
-            this.route();
-        });
-    }
-
-    addEventsToUpdateButtons() {
-        const updateButtons = document.getElementsByClassName('btn-update');
-        for (const button of updateButtons) {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
-                this.route();
-            })
-        }
-    }
-
-    addEventsToDeleteButtons() {
-        const deleteButtons = document.getElementsByClassName('btn-delete');
-        for (const button of deleteButtons) {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
-                this.route();
-            })
-        }
-    }
 
     gatherCostCreate() {
         this.viewForm.render();
 
-        const saveButton = document.getElementById('btn-save');
-        saveButton.addEventListener('click', (e) => {
+        const form = document.getElementById('form-cost');
+        form.addEventListener('click', (e) => {
             e.preventDefault();
 
-            const form = document.getElementById('form-cost');
-            let formData = new FormData(form);
+            const formData = new FormData(form);
             this.model.createCost(formData);
 
             this.redirect('?action=cost/index');
@@ -89,34 +62,16 @@ export default class Cost {
         form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
         form.elements['price'].value = cost.price;
         form.elements['description'].value = cost.description;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            this.model.updateCost(formData, id);
+
+            this.redirect('?action=cost/index');
+        })
     }
 
-    redirect(url) {
-        window.addEventListener('popstate', (e) => this.route());
-        window.history.pushState({}, "", url);
-        window.dispatchEvent(new Event('popstate'));
-    }
 
-    route() {
-        console.log(this);
-        const url = new URL(window.location.href);
-        const action = url.searchParams.get('action') || 'cost/index';
-
-        switch (action) {
-            case 'cost/index':
-                this.gatherCostIndex();
-                break;
-
-            case 'cost/create':
-                this.gatherCostCreate();
-                break;
-
-            case 'cost/update':
-                this.gatherCostUpdate();
-                break;
-
-            default:
-                throw new Error(action + ' route not found');
-        }
-    }
 }

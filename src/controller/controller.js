@@ -1,96 +1,61 @@
 "use strict"
 
-import Model from "../model/model";
-
 export default class Controller {
     constructor() {}
 
-    setModel(model) {
-        this.model = model;
-        return this;
+    setRoute(route) {
+        this.route = route;
     }
 
-    setView(view) {
-        this.view = view;
-        return this;
+    addEventsToNavbarButtons() {
+        const navLinks = document.getElementsByClassName('nav-link');
+        for (const navLink of navLinks) {
+            navLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+            });
+        }
+
+        this.route.route();
     }
 
-    costIndex() {
-        const config = this.model.getConfig('cost/index');
-
-        this.view.renderTablePage(config);
-        this.addEventCreateButton();
-    }
-
-    categoryIndex() {
-        const config = this.model.getConfig('category/index');
-
-        this.view.renderTablePage(config);
-        this.addEventCreateButton();
-    }
-
-    createCost() {
-        const config = this.model.getConfig('cost/create');
-
-        this.view.renderFormPage(config);
-
-        const form = document.getElementById(config.id);
-        form.addEventListener('submit', (e) => {
+    addEventToAddButton() {
+        const addButton = document.getElementById('btn-add');
+        addButton.addEventListener('click', (e) => {
             e.preventDefault();
+            window.history.pushState({}, "", e.target.href);
 
-            let data = new FormData(e.target);
-            this.model.createCost(data);
-        })
+            this.route.route();
+        });
     }
 
-    createCategory() {
-        const config = this.model.getConfig('category/create');
+    addEventsToUpdateButtons() {
+        const updateButtons = document.getElementsByClassName('btn-update');
+        for (const button of updateButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
 
-        this.view.renderFormPage(config);
-    }
-
-    addEventsNavbarButtons() {
-        const links = document.getElementsByClassName('nav-link');
-        for (let link of links) {
-            link.addEventListener('click', this.handelClick);
+                this.route.route();
+            })
         }
     }
 
-    addEventCreateButton() {
-        const button = document.getElementById('btn-add');
-        button.addEventListener('click', this.handelClick);
-    }
+    addEventsToDeleteButtons() {
+        const deleteButtons = document.getElementsByClassName('btn-delete');
+        for (const button of deleteButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
 
-    handelClick = (e) => {
-        e.preventDefault();
-        window.history.pushState({}, "", e.target.href);
-
-        this.route();
-    }
-
-    route() {
-        const url = new URL(window.location.href);
-        const action = url.searchParams.get('action') || 'cost/index';
-
-        switch (action) {
-            case 'cost/index':
-                this.costIndex();
-                break;
-
-            case 'category/index':
-                this.categoryIndex();
-                break;
-
-            case 'cost/create':
-                this.createCost();
-                break;
-
-            case 'category/create':
-                this.createCategory();
-                break;
-
-            default:
-                throw new Error(action + ' route not found');
+                this.route.route();
+            })
         }
+    }
+
+    redirect(url) {
+        window.addEventListener('popstate', (e) => this.route());
+        window.history.pushState({}, "", url);
+        window.dispatchEvent(new Event('popstate'));
     }
 }
