@@ -72,6 +72,4 @@ export default class Cost {
             this.redirect('?action=cost/index');
         })
     }
-
-
 }
