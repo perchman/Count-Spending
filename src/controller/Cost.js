@@ -1,58 +1,90 @@
 "use strict"
 
 export default class Cost {
-    constructor() {}
-
-    setModel(model) {
+    constructor(model, view, route) {
         this.model = model;
-        return this;
+        this.view = view;
+        this.route = route;
     }
 
-    setView(viewTable, viewForm) {
-        this.viewTable = viewTable;
-        this.viewForm = viewForm;
-        return this;
+    addNavbarButtonsEventHandler() {
+        const navLinks = document.getElementsByClassName('nav-link');
+        for (const navLink of navLinks) {
+            navLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.route();
+            });
+        }
     }
 
-    setURL(url) {
-        this.url = url;
-        return this;
+    addEventToAddButton() {
+        const addButton = document.getElementById('btn-add');
+        addButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.history.pushState({}, "", e.target.href);
+
+            this.route.route();
+        });
     }
 
-    gatherCostIndex() {
+    addEventsToUpdateButtons() {
+        const updateButtons = document.getElementsByClassName('btn-update');
+        for (const button of updateButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.route();
+            });
+        }
+    }
+
+    addEventsToDeleteButtons() {
+        const deleteButtons = document.getElementsByClassName('btn-delete');
+        for (const button of deleteButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.route();
+            });
+        }
+    }
+
+    redirect(action) {
+        const url = this.url.createUrl(action);
+
+        window.addEventListener('popstate', (e) => this.route.route());
+        window.history.pushState({}, "", url);
+        window.dispatchEvent(new Event('popstate'));
+    }
+
+    index() {
         const url = new URL(window.location.href);
-        const sort = url.searchParams.get('sort') || `date_desc`;
-        const sortKey = sort.split('_')[0];
-        const sortDirection = sort.split('_')[1];
-        const pageNum = url.searchParams.get('page') || 1;
-        this.viewTable.render(this.model.getData(pageNum, sortKey, sortDirection));
-        this.addEvents();
+
+        this.view.render(this.model.getCostsArray());
+        this.addHandlers();
     }
 
-    addEvents() {
-        this.addEventToAddButton();
-        this.addEventsToUpdateButtons();
-        this.addEventsToDeleteButtons();
-    }
-
-
-
-    gatherCostCreate() {
-        this.viewForm.render();
+    create() {
+        this.view.render();
+        this.addNavbarButtonsEventHandler();
 
         const form = document.getElementById('form-cost');
-        form.addEventListener('click', (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const formData = new FormData(form);
             this.model.createCost(formData);
 
-            this.redirect('?action=cost/index');
+            this.redirect({action: 'cost/index'});
         })
     }
 
-    gatherCostUpdate() {
-        this.viewForm.render();
+    update() {
+        this.view.render();
 
         const url = new URL(window.location.href);
         const id = url.searchParams.get('id');
@@ -69,7 +101,7 @@ export default class Cost {
             const formData = new FormData(form);
             this.model.updateCost(formData, id);
 
-            this.redirect('?action=cost/index');
+            this.redirect({action: 'cost/index'});
         })
     }
 }

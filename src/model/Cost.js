@@ -1,49 +1,34 @@
 "use strict"
 
 export default class Cost {
-    constructor() {
-        this.quantityElemsInTable = 5;
-    }
+    constructor() {}
 
-    getData(pageNum) {
-        const costs = this.getCostsArray();
-        const all = costs.length;
-        const start = (pageNum - 1) * this.quantityElemsInTable;
-        const end = Math.min(start + this.quantityElemsInTable, all)
-
-        return {
-            costs: costs.slice(start, end),
-            pagination: {
-                all: all,
-                start: start,
-                end: end
-            }
-        }
-    }
+    // getData(pageNum) {
+    //     const costs = this.getCostsArray();
+    //     const all = costs.length;
+    //     const start = (pageNum - 1) * this.quantityElemsInTable;
+    //     const end = Math.min(start + this.quantityElemsInTable, all)
+    //
+    //     return {
+    //         costs: costs.slice(start, end),
+    //         pagination: {
+    //             all: all,
+    //             start: start,
+    //             end: end
+    //         }
+    //     }
+    // }
 
     getCosts() {
-        const data = JSON.parse(localStorage.getItem('cost'));
-
-        if (data) {
-            return data;
-        } else {
-            return {};
-        }
+        return JSON.parse(localStorage.getItem('cost')) || {};
     }
 
     getCostsArray() {
-        const costs = this.getCosts() || {};
-        return Object.values(costs);
+        return Object.values(this.getCosts()) || [];
     }
 
     getCostId() {
-        let id = localStorage.getItem('costId');
-
-        if (id) {
-            return parseInt(id);
-        } else {
-            return 1;
-        }
+        return parseInt(localStorage.getItem('costId')) || 1;
     }
 
     getCostById(id) {

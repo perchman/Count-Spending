@@ -3,10 +3,14 @@
 export default class Url {
     constructor() {}
 
-    createUrl(action) {
-        const url = new URL(window.location.href);
+    createUrl(params) {
+        let url = new URL(window.location.href);
         url.search = '';
-        url.searchParams.set('action', action);
+
+        for (let param in params) {
+            url.searchParams.set(param, params[param]);
+        }
+
         return url.toString();
     }
 
@@ -14,7 +18,7 @@ export default class Url {
         let url = new URL(window.location.href);
         sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
         url.searchParams.set('sort', `${key}_${sortDirection}`);
-        return url;
+        return url.toString();
     }
 
     createUrlPagination(pageNum, length) {
@@ -29,6 +33,6 @@ export default class Url {
             search.set('page', pageNum);
         }
 
-        return url;
+        return url.toString();
     }
 }
