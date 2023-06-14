@@ -49,15 +49,6 @@ export default class View {
             `;
         })
 
-        // for (let obj in params.fields) {
-        //     form += `
-        //         <div class="col">
-        //             <input type="${params.fields[obj].type}" class="form-control" \
-        //             name="${params.fields[obj].name}" placeholder="${params.fields[obj].label}">
-        //         </div>
-        //     `;
-        // }
-
         form += `
             <div class="col-1">
                 <button type="submit" id= "btnForm" class="btn btn-primary w-100">Save</button>
@@ -71,24 +62,24 @@ export default class View {
         let thead = '';
         let tbody = '';
 
-        Object.values(data.headers).forEach((header) => {
+        for (let header in data.headers) {
             let content;
 
-            if (header.sort) {
-                content = this.createButton(header)
+            if (data.headers[header].sort) {
+                content = this.createButton(data.headers[header]);
             } else {
-                content = header.text;
+                content = data.headers[header].text;
             }
 
             thead += `<th class="col">${content}</th>`;
-        });
+        }
 
-        data.rows.forEach((row) => {
+        for (let row of data.rows) {
             tbody += '<tr>';
 
-            Object.keys(data.headers).forEach((header) => {
+            for (let header in data.headers) {
                 tbody += `<td>${row[header]}</td>`;
-            })
+            }
 
             tbody += `
                 <td>
@@ -104,7 +95,7 @@ export default class View {
                     })}
                 </td></tr>
             `;
-        })
+        }
 
         return `
         <table id="table" class="table table-hover table-bordered mt-4">

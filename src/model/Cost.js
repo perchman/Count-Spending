@@ -1,82 +1,80 @@
 "use strict"
 
 export default class Cost {
-    constructor() {}
 
-    // getData(pageNum) {
-    //     const costs = this.getCostsArray();
-    //     const all = costs.length;
-    //     const start = (pageNum - 1) * this.quantityElemsInTable;
-    //     const end = Math.min(start + this.quantityElemsInTable, all)
-    //
-    //     return {
-    //         costs: costs.slice(start, end),
-    //         pagination: {
-    //             all: all,
-    //             start: start,
-    //             end: end
-    //         }
-    //     }
-    // }
+    constructor(id, date, price, description) {
+        this.id = id;
+        this.date = date;
+        this.price = price;
+        this.description = description;
+    }
 
-    getCosts() {
+    static getCosts() {
         return JSON.parse(localStorage.getItem('cost')) || {};
     }
 
-    getCostsArray() {
+    static getCostsArray() {
         return Object.values(this.getCosts()) || [];
     }
 
-    getCostId() {
+    static getCostId() {
         return parseInt(localStorage.getItem('costId')) || 1;
     }
 
-    getCostById(id) {
-        return this.getCosts()[id];
+    static getById(id) {
+        const data = this.getCosts()[id];
+
+        return new Cost(
+            id,
+            new Date(data.date),
+            data.price,
+            data.description
+        );
     }
 
-    saveCosts(costs) {
-        localStorage.setItem('cost', JSON.stringify(costs));
-    }
-
-    saveCostId(id) {
+    static saveId(id) {
         localStorage.setItem(`costId`, JSON.stringify(id + 1));
     }
 
-    createCost(formData) {
+    static create(date, price, description) {
         const id = this.getCostId();
-        let costs = this.getCosts();
-        let cost = {
-            date: new Date(formData.get('date')?.toString()).getTime(),
-            price: formData.get('price')?.toString(),
-            description: formData.get('description')?.toString()
-        }
+        this.saveId(id);
 
-        cost.id = id;
-        costs[id] = cost;
-
-        this.saveCosts(costs);
-        this.saveCostId(id);
+        return new Cost(id, date, price, description);
     }
 
-    updateCost(formData, id) {
-        let costs = this.getCosts();
-        let cost = {
-            date: new Date(formData.get('date')?.toString()).getTime(),
-            price: formData.get('price')?.toString(),
-            description: formData.get('description')?.toString()
+    save(costs) {
+        costs = costs || null;
+
+        if (!costs) {
+            costs = Cost.getCosts();
+            costs[this.id] = {
+                id: this.id,
+                date: new Date(this.date).getTime(),
+                price: this.price,
+                description: this.description,
+            };
         }
 
-        cost.id = id;
-        costs[id] = cost;
-
-        this.saveCosts(costs);
+        localStorage.setItem('cost', JSON.stringify(costs));
     }
 
-    deleteCost(id) {
-        let costs = this.getCosts();
-        delete costs[id];
+    delete() {
+        let costs = Cost.getCosts();
+        delete costs[this.id];
 
-        this.saveCosts(costs);
+        this.save(costs);
+    }
+
+    changeDate(date) {
+        this.date = date;
+    }
+
+    changePrice(price) {
+        this.price = price;
+    }
+
+    changeDescription(description) {
+        this.description = description;
     }
 }

@@ -1,44 +1,47 @@
 "use strict"
 
+import View from "../framework/View";
+import Url from "../framework/URL";
+
 export default class CostTable {
-    constructor(create, url) {
-        this.create = create;
-        this.url = url;
+    constructor() {
         this.body = document.body;
     }
 
     render(data) {
-        console.log(data);
-        const navbar = this.create.createNavbar([
+        const view = new View();
+        const url = new Url();
+
+        const navbar = view.createNavbar([
             {
                 text: 'Cost',
-                url: this.url.createUrl({action: 'cost/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'cost/index'}),
+                class: 'nav-link active',
             },
             {
                 text: 'Category',
-                url: this.url.createUrl({action: 'category/index'}),
+                url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
             }
         ]);
-        const addButton = this.create.createButton({
+        const addButton = view.createButton({
             text: 'Add cost',
-            url: this.url.createUrl({action: 'cost/create'}),
+            url: url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const table = this.create.createTable({
+        const table = view.createTable({
             headers: {
                 date: {
                     text: 'Date',
                     sort: true,
-                    url: this.url.createUrlSort(),
+                    url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold'
                 },
                 price: {
                     text: 'Price',
                     sort: true,
-                    url: this.url.createUrlSort(),
+                    url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold'
                 },
                 description: {
@@ -46,12 +49,19 @@ export default class CostTable {
                     sort: false
                 }
             },
-            rows: data.forEach((row) => row.date = new Date(row.date).toLocaleDateString()),
+            rows: data.map((cost) => {
+                return {
+                    id: cost.id,
+                    date: new Date(cost.date).toLocaleDateString(),
+                    price: cost.price,
+                    description: cost.description
+                }
+            }),
             buttons: {
                 update: {
-                    text: '<i class="bi bi-pencil-fill"></i>',
+                    text: '<i class="bi bi-pencil-fill pe-none"></i>',
                     url: (cost) => {
-                        return this.url.createUrl({
+                        return url.createUrl({
                             action: 'cost/update',
                             id: cost.id
                         })
@@ -59,14 +69,14 @@ export default class CostTable {
                     class: 'btn btn-update btn-warning px-1 py-0'
                 },
                 delete: {
-                    text: '<i class="bi bi-trash-fill"></i>',
+                    text: '<i class="bi bi-trash-fill pe-none"></i>',
                     url: (cost) => {
-                        return this.url.createUrl({
+                        return url.createUrl({
                             action: 'cost/delete',
                             id: cost.id
                         })
                     },
-                    class: 'btn btn-update btn-danger px-1 py-0'
+                    class: 'btn btn-delete btn-danger px-1 py-0'
                 }
             }
         });

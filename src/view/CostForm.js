@@ -1,26 +1,30 @@
 "use strict"
 
+import View from "../framework/View";
+import Url from "../framework/URL";
+
 export default class CostForm {
-    constructor(create, url) {
-        this.create = create;
-        this.url = url;
+    constructor() {
         this.body = document.body;
     }
 
     render() {
-        const navbar = this.create.createNavbar([
+        const view = new View();
+        const url = new Url();
+
+        const navbar = view.createNavbar([
             {
                 text: 'Cost',
-                url: this.url.createUrl({action: 'cost/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'cost/index'}),
+                class: 'nav-link active'
             },
             {
                 text: 'Category',
-                url: this.url.createUrl({action: 'category/index'}),
+                url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
             }
         ]);
-        const form = this.create.createForm(
+        const form = view.createForm(
             {
                 id: 'form-cost',
                 name: 'cost',

@@ -10,7 +10,7 @@ export default class Route {
         const action = url.searchParams.get('action') || 'cost/index';
         const handler = this.routes[action];
         if (!handler) {
-            throw new Error(action + "route not found");
+            throw new Error(action + " route not found");
         }
         handler();
     }

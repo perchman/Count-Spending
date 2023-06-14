@@ -2,65 +2,58 @@
 
 import './bootstrap.css';
 import Route from "./framework/Route";
-import Url from "./framework/URL";
-import View from "./framework/View";
-import CostModel from "./model/Cost";
-import CostController from "./controller/Cost";
+import CostController from "./controller/CostController";
 import CostTable from "./view/CostTable";
 import CostForm from "./view/CostForm";
+import CategoryController from "./controller/CategoryController";
+import CategoryTable from "./view/CategoryTable";
+import CategoryForm from "./view/CategoryForm";
 
 
 document.addEventListener('DOMContentLoaded', () => {
     const route = new Route();
-    const url = new Url();
-    const view = new View();
 
     route.addRoute('cost/index', () => {
-        const model = new CostModel();
-        const indexView = new CostTable(view, url);
-        const controller = new CostController(model, indexView, route);
+        const indexView = new CostTable();
+        const controller = new CostController(indexView, route);
 
         controller.index();
     });
 
     route.addRoute('cost/create', () => {
-        const model = new CostModel();
-        const createView = new CostForm(view, url);
-        const controller = new CostController(model, createView, route);
+        const createView = new CostForm();
+        const controller = new CostController(createView, route);
 
         controller.create();
     });
 
     route.addRoute('cost/update', () => {
-        const model = new CostModel();
         const updateView = new CostForm();
-        const controller = new CostController(model, updateView);
+        const controller = new CostController(updateView, route);
+
+        controller.update();
+    });
+
+    route.addRoute('category/index', () => {
+        const indexView = new CategoryTable();
+        const controller = new CategoryController(indexView, route);
+
+        controller.index();
+    });
+
+    route.addRoute('category/create', () => {
+        const createView = new CategoryForm();
+        const controller = new CategoryController(createView, route);
+
+        controller.create();
+    });
+
+    route.addRoute('category/update', () => {
+        const updateView = new CategoryForm();
+        const controller = new CategoryController(updateView, route);
 
         controller.update();
     });
 
     route.route();
 });
-
-
-// 'cost/index': () => {
-//
-// },
-//     'cost/create': () => {
-//     const model = new CostModel();
-//     const controller = new CostController();
-//     const view = new CostForm();
-//
-//     controller.setModel(model);
-//     controller.setView(view);
-//     controller.gatherCostCreate();
-// },
-//     'cost/update': () => {
-//     const model = new CostModel();
-//     const controller = new CostController();
-//     const view = new CostForm();
-//
-//     controller.setModel(model);
-//     controller.setView(view);
-//     controller.gatherCostUpdate();
-// }

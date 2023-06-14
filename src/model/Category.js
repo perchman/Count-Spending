@@ -1,84 +1,65 @@
 "use strict"
 
 export default class Category {
-    constructor() {
-        this.configs = {
-            'category/index': {
-                headers: [
-                    {
-                        name: 'Id',
-                        sort: true
-                    },
-                    {
-                        name: 'Category',
-                        sort: false
-                    }
-                ],
-                data: JSON.parse(localStorage.getItem('categories')),
-                buttons: {
-                    add: {
-                        url: '?action=category/create',
-                        text: 'Add category'
-                    }
-                }
-            },
-            'category/create': {
-                id: 'category-form',
-                name: 'category',
-                fields: [
-                    {
-                        name: 'category',
-                        type: 'text',
-                        label: 'Category',
-                    }
-                ]
-            }
-        }
+    constructor(id, category) {
+        this.id = id;
+        this.category = category;
     }
 
-    setController(controller) {
-        this.controller = controller;
+    static getCategories() {
+        return JSON.parse(localStorage.getItem('category')) || {};
     }
 
-    createCategory(formData) {
-        const id = this.getCategoryId();
-        let categories = this.getCategories();
-        let category = {
-            category: formData.get('category')?.toString()
-        }
-
-        category.id = id;
-        categories[id] = category;
-
-        this.saveCategories(categories);
-        this.saveCategoryId(id);
+    static getCategoriesArray() {
+        return Object.values(this.getCategories()) || [];
     }
 
-    getCategories() {
-        let data = JSON.parse(localStorage.getItem('categories'));
-
-        if (data) {
-            return data;
-        } else {
-            return {};
-        }
+    static getCategoryId() {
+        return parseInt(localStorage.getItem('categoryId')) || 1;
     }
 
-    getCategoryId() {
-        let id = localStorage.getItem('categoryId');
+    static getById(id) {
+        const data = this.getCategories()[id];
 
-        if (id) {
-            return parseInt(id);
-        } else {
-            return 1;
-        }
+        return new Category(
+            id,
+            data.category
+        );
     }
 
-    saveCategories(categories) {
-        localStorage.setItem('categories', JSON.stringify(categories));
-    }
-
-    saveCategoryId(id) {
+    static saveId(id) {
         localStorage.setItem(`categoryId`, JSON.stringify(id + 1));
+    }
+
+    static create(category) {
+        const id = this.getCategoryId();
+        this.saveId(id);
+
+        return new Category(id, category);
+    }
+
+    save(categories) {
+        categories = categories || null;
+
+        if (!categories) {
+            categories = Category.getCategories();
+            categories[this.id] = {
+                id: this.id,
+                category: this.category
+            };
+        }
+
+        localStorage.setItem('category', JSON.stringify(categories));
+    }
+
+    delete() {
+        let categories = Category.getCategories();
+        delete categories[this.id];
+
+        this.save(categories);
+    }
+
+    changeCategory(category) {
+        this.category = category;
     }
 }

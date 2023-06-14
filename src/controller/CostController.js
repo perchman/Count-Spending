@@ -1,8 +1,10 @@
 "use strict"
 
-export default class Cost {
-    constructor(model, view, route) {
-        this.model = model;
+import Cost from "../model/Cost";
+import Url from "../framework/URL";
+
+export default class CostController {
+    constructor(view, route) {
         this.view = view;
         this.route = route;
     }
@@ -19,7 +21,7 @@ export default class Cost {
         }
     }
 
-    addEventToAddButton() {
+    addCreateButtonEventHandler() {
         const addButton = document.getElementById('btn-add');
         addButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -29,7 +31,7 @@ export default class Cost {
         });
     }
 
-    addEventsToUpdateButtons() {
+    addUpdateButtonsEventHandler() {
         const updateButtons = document.getElementsByClassName('btn-update');
         for (const button of updateButtons) {
             button.addEventListener('click', (e) => {
@@ -41,31 +43,39 @@ export default class Cost {
         }
     }
 
-    addEventsToDeleteButtons() {
+    addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
         for (const button of deleteButtons) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
+                const url = new URL(window.location.href);
+                const targetUrl = new URL(e.target.href);
+                const id = targetUrl.searchParams.get('id');
 
+                this.delete(id);
+
+                window.history.pushState({}, "", url);
                 this.route.route();
             });
         }
     }
 
     redirect(action) {
-        const url = this.url.createUrl(action);
+        const url = new Url();
 
         window.addEventListener('popstate', (e) => this.route.route());
-        window.history.pushState({}, "", url);
+        window.history.pushState({}, "", url.createUrl(action));
         window.dispatchEvent(new Event('popstate'));
     }
 
     index() {
         const url = new URL(window.location.href);
 
-        this.view.render(this.model.getCostsArray());
-        this.addHandlers();
+        this.view.render(Cost.getCostsArray());
+        this.addNavbarButtonsEventHandler();
+        this.addCreateButtonEventHandler();
+        this.addUpdateButtonsEventHandler();
+        this.addDeleteButtonsEventHandler();
     }
 
     create() {
@@ -77,7 +87,14 @@ export default class Cost {
             e.preventDefault();
 
             const formData = new FormData(form);
-            this.model.createCost(formData);
+
+            const cost = Cost.create(
+                formData.get('date')?.toString(),
+                parseInt(formData.get('price')?.toString()),
+                formData.get('description')?.toString()
+            );
+
+            cost.save();
 
             this.redirect({action: 'cost/index'});
         })
@@ -85,10 +102,11 @@ export default class Cost {
 
     update() {
         this.view.render();
+        this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);
         const id = url.searchParams.get('id');
-        let cost = this.model.getCostById(id);
+        let cost = Cost.getById(id);
 
         const form = document.getElementById('form-cost');
         form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
@@ -99,9 +117,19 @@ export default class Cost {
             e.preventDefault();
 
             const formData = new FormData(form);
-            this.model.updateCost(formData, id);
+
+            cost.changeDate(new Date(formData.get('date')?.toString()));
+            cost.changePrice(parseInt(formData.get('price')?.toString()));
+            cost.changeDescription(formData.get('description')?.toString());
+
+            cost.save();
 
             this.redirect({action: 'cost/index'});
         })
+    }
+
+    delete(id) {
+        const cost = Cost.getById(id);
+        cost.delete();
     }
 }
