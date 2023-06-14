@@ -2,7 +2,6 @@
 
 import Category from "../model/Category";
 import Url from "../framework/URL";
-import Cost from "../model/Cost";
 
 export default class CategoryController {
     constructor(view, route) {
@@ -72,7 +71,7 @@ export default class CategoryController {
     index() {
         const url = new URL(window.location.href);
 
-        this.view.render(Category.getCategoriesArray());
+        this.view.render(Category.getAllAsArray());
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
@@ -88,9 +87,7 @@ export default class CategoryController {
             e.preventDefault();
 
             const formData = new FormData(form);
-
             const category = Category.create(formData.get('category')?.toString());
-
             category.save();
 
             this.redirect({action: 'category/index'});

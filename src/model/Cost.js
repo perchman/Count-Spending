@@ -9,12 +9,23 @@ export default class Cost {
         this.description = description;
     }
 
-    static getCosts() {
-        return JSON.parse(localStorage.getItem('cost')) || {};
+    static getAllRaw() {
+        let costs = JSON.parse(localStorage.getItem('cost')) || {};
+
+        for (let cost in costs) {
+            costs[cost] = new Cost(
+                costs[cost].id,
+                costs[cost].date,
+                costs[cost].price,
+                costs[cost].description
+            );
+        }
+
+        return costs;
     }
 
-    static getCostsArray() {
-        return Object.values(this.getCosts()) || [];
+    static getAllAsArray() {
+        return Object.values(this.getAllRaw()) || [];
     }
 
     static getCostId() {
@@ -22,14 +33,7 @@ export default class Cost {
     }
 
     static getById(id) {
-        const data = this.getCosts()[id];
-
-        return new Cost(
-            id,
-            new Date(data.date),
-            data.price,
-            data.description
-        );
+        return this.getAllRaw()[id];
     }
 
     static saveId(id) {
@@ -43,27 +47,23 @@ export default class Cost {
         return new Cost(id, date, price, description);
     }
 
-    save(costs) {
-        costs = costs || null;
-
-        if (!costs) {
-            costs = Cost.getCosts();
-            costs[this.id] = {
-                id: this.id,
-                date: new Date(this.date).getTime(),
-                price: this.price,
-                description: this.description,
-            };
+    save() {
+        let costs = this.constructor.getAllRaw();
+        costs[this.id] = {
+            id: this.id,
+            date: new Date(this.date).getTime(),
+            price: this.price,
+            description: this.description
         }
 
         localStorage.setItem('cost', JSON.stringify(costs));
     }
 
     delete() {
-        let costs = Cost.getCosts();
+        let costs = this.constructor.getAllRaw();
         delete costs[this.id];
 
-        this.save(costs);
+        localStorage.setItem('cost', JSON.stringify(costs));
     }
 
     changeDate(date) {

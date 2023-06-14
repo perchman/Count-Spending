@@ -6,12 +6,21 @@ export default class Category {
         this.category = category;
     }
 
-    static getCategories() {
-        return JSON.parse(localStorage.getItem('category')) || {};
+    static getAllRaw() {
+        const categories = JSON.parse(localStorage.getItem('category')) || {};
+
+        for (let category in categories) {
+            categories[category] = new Category(
+                categories[category].id,
+                categories[category].category
+            );
+        }
+
+        return categories;
     }
 
-    static getCategoriesArray() {
-        return Object.values(this.getCategories()) || [];
+    static getAllAsArray() {
+        return Object.values(this.getAllRaw()) || [];
     }
 
     static getCategoryId() {
@@ -19,12 +28,7 @@ export default class Category {
     }
 
     static getById(id) {
-        const data = this.getCategories()[id];
-
-        return new Category(
-            id,
-            data.category
-        );
+        return this.getAllRaw()[id];
     }
 
     static saveId(id) {
@@ -38,22 +42,18 @@ export default class Category {
         return new Category(id, category);
     }
 
-    save(categories) {
-        categories = categories || null;
-
-        if (!categories) {
-            categories = Category.getCategories();
-            categories[this.id] = {
-                id: this.id,
-                category: this.category
-            };
-        }
+    save() {
+        let categories = Category.getAllRaw();
+        categories[this.id] = {
+            id: this.id,
+            category: this.category
+        };
 
         localStorage.setItem('category', JSON.stringify(categories));
     }
 
     delete() {
-        let categories = Category.getCategories();
+        let categories = Category.getAllRaw();
         delete categories[this.id];
 
         this.save(categories);

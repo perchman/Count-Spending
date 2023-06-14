@@ -71,7 +71,7 @@ export default class CostController {
     index() {
         const url = new URL(window.location.href);
 
-        this.view.render(Cost.getCostsArray());
+        this.view.render(Cost.getAllAsArray());
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
