@@ -1,62 +1,35 @@
 "use strict"
 
-export default class Category {
+import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
+
+export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, category) {
-        this.id = id;
+        super(id);
         this.category = category;
     }
 
-    static getAllRaw() {
-        const categories = JSON.parse(localStorage.getItem('category')) || {};
-
-        for (let category in categories) {
-            categories[category] = new Category(
-                categories[category].id,
-                categories[category].category
-            );
-        }
-
-        return categories;
+    static getEntityName() {
+        return 'category';
     }
 
-    static getAllAsArray() {
-        return Object.values(this.getAllRaw()) || [];
-    }
-
-    static getCategoryId() {
-        return parseInt(localStorage.getItem('categoryId')) || 1;
-    }
-
-    static getById(id) {
-        return this.getAllRaw()[id];
-    }
-
-    static saveId(id) {
-        localStorage.setItem(`categoryId`, JSON.stringify(id + 1));
+    static makeModel(data) {
+        return new Category(
+            data.id,
+            data.category
+        );
     }
 
     static create(category) {
-        const id = this.getCategoryId();
-        this.saveId(id);
+        const id = this.getNextId();
 
         return new Category(id, category);
     }
 
-    save() {
-        let categories = Category.getAllRaw();
-        categories[this.id] = {
+    toJSON() {
+        return {
             id: this.id,
             category: this.category
-        };
-
-        localStorage.setItem('category', JSON.stringify(categories));
-    }
-
-    delete() {
-        let categories = Category.getAllRaw();
-        delete categories[this.id];
-
-        this.save(categories);
+        }
     }
 
     changeCategory(category) {

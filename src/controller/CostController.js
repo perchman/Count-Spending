@@ -107,7 +107,7 @@ export default class CostController {
         const url = new URL(window.location.href);
         const id = url.searchParams.get('id');
         let cost = Cost.getById(id);
-
+        console.log(cost);
         const form = document.getElementById('form-cost');
         form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
         form.elements['price'].value = cost.price;
