@@ -1,17 +1,17 @@
 "use strict"
 
 import NavbarView from "../framework/NavbarView";
-import FormView from "../framework/FormView";
+import ButtonView from "../framework/ButtonView";
 import Url from "../framework/URL";
 
-export default class CategoryForm {
+export default class BalanceIndex {
     constructor() {
         this.body = document.body;
     }
 
-    render(title) {
+    render(value) {
         const navbarView = new NavbarView();
-        const formView = new FormView();
+        const buttonView = new ButtonView();
         const url = new Url();
 
         const navbar = navbarView.create([
@@ -23,34 +23,30 @@ export default class CategoryForm {
             {
                 text: 'Category',
                 url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link active'
+                class: 'nav-link'
             },
             {
                 text: 'Balance',
                 url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link'
+                class: 'nav-link active'
             }
         ]);
-        const form = formView.create(
-            {
-                id: 'form-category',
-                name: 'category',
-                fields: [
-                    {
-                        name: 'category',
-                        type: 'text',
-                        label: 'Category',
-                    }
-                ],
-                buttonText: 'Save'
-            }
-        );
+        const replenishButton = buttonView.create({
+            text: 'Replenish',
+            url: url.createUrl({action: 'balance/replenish'}),
+            id: 'btn-replenish',
+            class: 'btn btn-primary mt-4'
+        })
+
 
         this.body.innerHTML = `
             ${navbar}
-            <div class="container mt-4">
-                <h2>${title}</h2>
-                ${form}  
+            <div class="container">
+                <h2 class="mt-4">Balance</h2>
+                <div class="mt-4">
+                    <span class="px-2 border border-1 border-primary fs-4">${value}</span>
+                </div>
+                ${replenishButton}
             </div>
         `;
     }

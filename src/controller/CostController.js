@@ -70,8 +70,11 @@ export default class CostController {
 
     index() {
         const url = new URL(window.location.href);
+        const sort = url.searchParams.get('sort') || 'date_desc';
+        const orderBy = sort.split('_').join(' ');
 
-        this.view.render(Cost.getAllAsArray());
+        this.view.render('Costs', Cost.getAllAsArray(orderBy));
+
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
@@ -79,7 +82,7 @@ export default class CostController {
     }
 
     create() {
-        this.view.render();
+        this.view.render('Create cost');
         this.addNavbarButtonsEventHandler();
 
         const form = document.getElementById('form-cost');
@@ -101,7 +104,7 @@ export default class CostController {
     }
 
     update() {
-        this.view.render();
+        this.view.render('Update cost');
         this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);

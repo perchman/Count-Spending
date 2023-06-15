@@ -70,8 +70,11 @@ export default class CategoryController {
 
     index() {
         const url = new URL(window.location.href);
+        const sort = url.searchParams.get('sort') || 'id_desc';
+        const orderBy = sort.split('_').join(' ');
 
-        this.view.render(Category.getAllAsArray());
+        this.view.render('Categories', Category.getAllAsArray(orderBy));
+
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
@@ -79,7 +82,7 @@ export default class CategoryController {
     }
 
     create() {
-        this.view.render();
+        this.view.render('Create category');
         this.addNavbarButtonsEventHandler();
 
         const form = document.getElementById('form-category');
@@ -95,7 +98,7 @@ export default class CategoryController {
     }
 
     update() {
-        this.view.render();
+        this.view.render('Update category');
         this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);

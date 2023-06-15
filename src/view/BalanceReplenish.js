@@ -4,12 +4,12 @@ import NavbarView from "../framework/NavbarView";
 import FormView from "../framework/FormView";
 import Url from "../framework/URL";
 
-export default class CategoryForm {
+export default class BalanceReplenish {
     constructor() {
         this.body = document.body;
     }
 
-    render(title) {
+    render() {
         const navbarView = new NavbarView();
         const formView = new FormView();
         const url = new Url();
@@ -23,34 +23,32 @@ export default class CategoryForm {
             {
                 text: 'Category',
                 url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link active'
+                class: 'nav-link'
             },
             {
                 text: 'Balance',
                 url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link'
+                class: 'nav-link active'
             }
         ]);
-        const form = formView.create(
-            {
-                id: 'form-category',
-                name: 'category',
-                fields: [
-                    {
-                        name: 'category',
-                        type: 'text',
-                        label: 'Category',
-                    }
-                ],
-                buttonText: 'Save'
-            }
-        );
+        const form = formView.create({
+            id: 'form-balance',
+            name: 'balance',
+            fields: [
+                {
+                    name: 'replenish',
+                    type: 'number',
+                    label: 'Amount',
+                }
+            ],
+            buttonText: 'Add'
+        })
 
         this.body.innerHTML = `
             ${navbar}
             <div class="container mt-4">
-                <h2>${title}</h2>
-                ${form}  
+                <h2>Replenish balance</h2>
+                ${form}
             </div>
         `;
     }

@@ -8,6 +8,9 @@ import CostForm from "./view/CostForm";
 import CategoryController from "./controller/CategoryController";
 import CategoryTable from "./view/CategoryTable";
 import CategoryForm from "./view/CategoryForm";
+import BalanceController from "./controller/BalanceController";
+import BalanceIndex from "./view/BalanceIndex";
+import BalanceReplenish from "./view/BalanceReplenish";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,6 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const controller = new CategoryController(updateView, route);
 
         controller.update();
+    });
+
+    route.addRoute('balance/index', () => {
+        const balanceView = new BalanceIndex();
+        const controller = new BalanceController(balanceView, route);
+
+        controller.index();
+    });
+
+    route.addRoute('balance/replenish', () => {
+        const balanceReplenish = new BalanceReplenish();
+        const controller = new BalanceController(balanceReplenish, route);
+
+        controller.replenish();
     });
 
     route.route();

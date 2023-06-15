@@ -1,6 +1,7 @@
 "use strict"
 
-import View from "../framework/View";
+import NavbarView from "../framework/NavbarView";
+import FormView from "../framework/FormView";
 import Url from "../framework/URL";
 
 export default class CostForm {
@@ -8,11 +9,12 @@ export default class CostForm {
         this.body = document.body;
     }
 
-    render() {
-        const view = new View();
+    render(title) {
+        const navbarView = new NavbarView();
+        const formView = new FormView();
         const url = new Url();
 
-        const navbar = view.createNavbar([
+        const navbar = navbarView.create([
             {
                 text: 'Cost',
                 url: url.createUrl({action: 'cost/index'}),
@@ -22,9 +24,14 @@ export default class CostForm {
                 text: 'Category',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
+            },
+            {
+                text: 'Balance',
+                url: url.createUrl({action: 'balance/index'}),
+                class: 'nav-link'
             }
         ]);
-        const form = view.createForm(
+        const form = formView.create(
             {
                 id: 'form-cost',
                 name: 'cost',
@@ -44,13 +51,15 @@ export default class CostForm {
                         type: 'text',
                         label: 'Description',
                     }
-                ]
+                ],
+                buttonText: 'Save'
             }
         );
 
         this.body.innerHTML = `
             ${navbar}
             <div class="container mt-4">
+                <h2>${title}</h2>
                 ${form}  
             </div>
         `;

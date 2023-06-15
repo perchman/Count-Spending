@@ -15,11 +15,46 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static getAllRaw() {
+        /*
+        orderBy = 'id desc';
+
+
+         */
         return JSON.parse(localStorage.getItem(this.getEntityName())) || {};
     }
 
-    static getAllAsArray() {
-        return Object.values(this.getAllRaw(this.getEntityName())) || [];
+    static getAllAsArray(orderBy) {
+        const key = orderBy.split(' ')[0];
+        const direction = orderBy.split(' ')[1];
+
+        let data = Object.values(this.getAllRaw(this.getEntityName())) || [];
+        data = this.sort(data, key, direction);
+
+        return data;
+    }
+
+    static sort(data, key, direction) {
+        for (let i = data.length - 1; i > 0; i--) {
+            for (let a = 0; a < i; a++) {
+                let compare;
+                let next = a + 1;
+
+                if (direction === 'asc') {
+                    compare = (a, b) => a > b;
+                } else if (direction === 'desc') {
+                    compare = (a, b) => a < b;
+                } else {
+                    throw new Error('Invalid sort directory');
+                }
+
+                if (compare(parseInt(data[a][key]), parseInt(data[next][key]))) {
+                    let tmp  = data[a];
+                    data[a] = data[next];
+                    data[next] = tmp;
+                }
+            }
+        }
+        return data;
     }
 
     static getNextId() {

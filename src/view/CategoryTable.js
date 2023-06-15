@@ -1,6 +1,8 @@
 "use strict"
 
-import View from "../framework/View";
+import NavbarView from "../framework/NavbarView";
+import ButtonView from "../framework/ButtonView";
+import GridView from "../framework/GridView";
 import Url from "../framework/URL";
 
 export default class CategoryTable {
@@ -8,11 +10,13 @@ export default class CategoryTable {
         this.body = document.body;
     }
 
-    render(data) {
-        const view = new View();
+    render(title, data) {
+        const navbarView = new NavbarView();
+        const buttonView = new ButtonView();
+        const gridView = new GridView();
         const url = new Url();
 
-        const navbar = view.createNavbar([
+        const navbar = navbarView.create([
             {
                 text: 'Cost',
                 url: url.createUrl({action: 'cost/index'}),
@@ -21,16 +25,21 @@ export default class CategoryTable {
             {
                 text: 'Category',
                 url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link  active'
+                class: 'nav-link active'
+            },
+            {
+                text: 'Balance',
+                url: url.createUrl({action: 'balance/index'}),
+                class: 'nav-link'
             }
         ]);
-        const addButton = view.createButton({
+        const addButton = buttonView.create({
             text: 'Add category',
             url: url.createUrl({action: 'category/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const table = view.createTable({
+        const table = gridView.createTable({
             headers: {
                 id: {
                     text: 'Id',
@@ -71,8 +80,11 @@ export default class CategoryTable {
         this.body.innerHTML = `
             ${navbar}
             <div class="container mt-4">
-                ${addButton}  
-                ${table}
+                <h2 class="">${title}</h2>
+                <div class="mt-4">
+                    ${addButton}  
+                    ${table}
+                </div>
             </div>
         `;
     }
