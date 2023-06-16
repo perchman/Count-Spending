@@ -36,6 +36,7 @@ export default class BalanceReplenish {
             name: 'balance',
             fields: [
                 {
+                    id: 'input-replenish',
                     name: 'replenish',
                     type: 'number',
                     label: 'Amount',

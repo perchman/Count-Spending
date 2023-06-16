@@ -1,6 +1,7 @@
 "use strict"
 
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
+import Balance from "../model/Balance";
 
 export default class Cost extends LocalStorageActiveRecordModel{
 
@@ -25,9 +26,20 @@ export default class Cost extends LocalStorageActiveRecordModel{
     }
 
     static create(date, price, description) {
-        const id = this.getNextId();
+        const balance = new Balance();
+        let balanceValue = balance.getValue();
 
-        return new Cost(id, date, price, description);
+        if (balanceValue - price < 0) {
+            alert('Not enough money on balance');
+        } else {
+            const id = this.getNextId();
+            const cost = new Cost(id, date, price, description);
+
+            cost.save();
+            balance.decrease(cost);
+
+            return cost;
+        }
     }
 
     toJSON() {

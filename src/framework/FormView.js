@@ -6,9 +6,12 @@ export default class FormView {
 
         params.fields.forEach((field) => {
             fields += `
-                <div class="col">
-                    <input type="${field.type}" class="form-control" \
+                <div class="col position-relative">
+                    <input id="${field.id}" type="${field.type}" class="form-control" \
                     name="${field.name}" placeholder="${field.label}">
+                    <div class="invalid-feedback">
+                        ${field.invalid}
+                    </div>
                 </div>
             `;
         })
@@ -18,7 +21,8 @@ export default class FormView {
                 <div class="row">
                     ${fields}
                     <div class="col-1">
-                        <button type="submit" id= "btnForm" class="btn btn-primary w-100">${params.buttonText}</button>
+                        <button type="submit" id= "btnForm" class="btn btn-primary w-100"> \ 
+                        ${params.buttonText}</button>
                     </div>
                 </div>
             </form>

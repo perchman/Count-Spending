@@ -7,12 +7,13 @@ export default class Balance {
     }
 
     increase(replenishment) {
-        const value = this.getValue() + replenishment;
+        const value = this.getValue() + parseInt(replenishment);
         this.#save(value);
     }
 
-    decrease(writeOff) {
-        const value = this.getValue() - writeOff;
+    decrease(cost) {
+        console.log(cost);
+        const value = this.getValue() - parseInt(cost.price);
         this.#save(value);
     }
 

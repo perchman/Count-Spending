@@ -37,16 +37,19 @@ export default class CostForm {
                 name: 'cost',
                 fields: [
                     {
+                        id: 'input-date',
                         name: 'date',
                         type: 'date',
                         label: 'Date',
                     },
                     {
+                        id: 'input-price',
                         name: 'price',
                         type: 'number',
                         label: 'Price',
                     },
                     {
+                        id: 'input-description',
                         name: 'description',
                         type: 'text',
                         label: 'Description',

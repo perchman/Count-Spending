@@ -37,6 +37,7 @@ export default class CategoryForm {
                 name: 'category',
                 fields: [
                     {
+                        id: 'input-category',
                         name: 'category',
                         type: 'text',
                         label: 'Category',

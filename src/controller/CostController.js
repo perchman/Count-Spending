@@ -97,8 +97,6 @@ export default class CostController {
                 formData.get('description')?.toString()
             );
 
-            cost.save();
-
             this.redirect({action: 'cost/index'});
         })
     }
