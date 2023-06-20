@@ -90,13 +90,7 @@ export default class CategoryController {
             e.preventDefault();
 
             const formData = new FormData(form);
-
-            try {
-                const category = Category.create(formData.get('name')?.toString());
-            } catch (error) {
-                alert(error);
-            }
-
+            const category = Category.create(formData.get('name')?.toString());
 
             this.redirect({action: 'category/index'});
         })

@@ -7,8 +7,7 @@ export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, name) {
         super(id);
         if (typeof name !== "string") {
-            console.log(name, typeof name);
-            throw new Error("Invalid data type for name. Type must be a string");
+            throw new Error("Invalid data type for name of category. Type must be a string");
         }
         this.name = name;
     }
@@ -26,7 +25,6 @@ export default class Category extends LocalStorageActiveRecordModel{
 
     static create(name) {
         const id = this.getNextId();
-        console.log(name);
         const category = this.makeModel({
             id: id,
             name: name
@@ -44,13 +42,15 @@ export default class Category extends LocalStorageActiveRecordModel{
         }
     }
 
-    changeName(category) {
-        this.name = category;
+    changeName(name) {
+        if (typeof name === "string") {
+            throw new Error("Invalid data type for name of category. Type must be a string");
+        }
+        this.name = name;
     }
 
     checkCanRemove() {
         const costs = Cost.getAllRaw();
-
         for (let cost in costs) {
             if (costs[cost].categoryId === this.id) {
                 throw new Error(`Can't delete category ${this.name}. The category has costs`);

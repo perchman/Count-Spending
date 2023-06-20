@@ -1,6 +1,5 @@
 "use strict"
 
-import Category from "../model/Category";
 import NavbarView from "../framework/NavbarView";
 import ButtonView from "../framework/ButtonView";
 import GridView from "../framework/GridView";
@@ -48,7 +47,7 @@ export default class CostTable {
                     url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold'
                 },
-                category: {
+                categoryName: {
                     text: 'Category',
                     sort: false
                 },
@@ -65,11 +64,11 @@ export default class CostTable {
             },
             rows: data.map((cost) => {
                 return {
-                    category: cost.getCategoryName(),
                     id: cost.id,
                     date: new Date(cost.date).toLocaleDateString(),
                     price: cost.price,
-                    description: cost.description
+                    description: cost.description,
+                    categoryName: cost.getCategoryName(),
                 }
             }),
             buttons: {
