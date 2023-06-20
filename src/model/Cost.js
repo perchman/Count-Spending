@@ -11,12 +11,12 @@ export default class Cost extends LocalStorageActiveRecordModel{
         // if (typeof date !== "string") {
         //     throw new Error("Invalid data type for date. Type must be a string");
         // }
-        // if (typeof price !== "number") {
-        //     throw new Error("Invalid data type for price. Type must be a number");
-        // }
-        // if (typeof description !== "string") {
-        //     throw new Error("Invalid data type for description. Type must be a string");
-        // }
+        if (typeof price !== "number") {
+            throw new Error("Invalid data type for price. Type must be a number");
+        }
+        if (typeof description !== "string") {
+            throw new Error("Invalid data type for description. Type must be a string");
+        }
         if (!category instanceof Category) {
             throw new Error("Invalid data type for category. Object must be an instance of the Category class");
         }
@@ -69,34 +69,30 @@ export default class Cost extends LocalStorageActiveRecordModel{
 
     changeDate(date) {
         if (typeof date === "string") {
-            this.date = date;
-        } else {
             throw new Error("Invalid data type for date. Type must be a string");
         }
+        this.date = date;
     }
 
     changePrice(price) {
         if (typeof price === "number") {
-            this.price = price;
-        } else {
             throw new Error("Invalid data type for price. Type must be a number");
         }
+        this.price = price;
     }
 
     changeDescription(description) {
         if (typeof description === "string") {
-            this.description = description;
-        } else {
             throw new Error("Invalid data type for description. Type must be a string");
         }
+        this.description = description;
     }
 
     changeCategory(category) {
-        if (category instanceof Category) {
-            this.category = category;
-        } else {
+        if (!category instanceof Category) {
             throw new Error("Invalid data type for category. Object must be an instance of the Category class");
         }
+        this.category = category;
     }
 
     getCategoryName() {
