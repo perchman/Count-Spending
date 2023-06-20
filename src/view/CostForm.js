@@ -9,19 +9,19 @@ export default class CostForm {
         this.body = document.body;
     }
 
-    render(title) {
+    render(title, categories) {
         const navbarView = new NavbarView();
         const formView = new FormView();
         const url = new Url();
 
         const navbar = navbarView.create([
             {
-                text: 'Cost',
+                text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
                 class: 'nav-link active'
             },
             {
-                text: 'Category',
+                text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
             },
@@ -37,18 +37,28 @@ export default class CostForm {
                 name: 'cost',
                 fields: [
                     {
+                        tag: 'select',
+                        disabledOption: 'Select a category',
+                        id: 'select-category',
+                        name: 'category',
+                        options: categories
+                    },
+                    {
+                        tag: 'input',
                         id: 'input-date',
                         name: 'date',
                         type: 'date',
                         label: 'Date',
                     },
                     {
+                        tag: 'input',
                         id: 'input-price',
                         name: 'price',
                         type: 'number',
                         label: 'Price',
                     },
                     {
+                        tag: 'input',
                         id: 'input-description',
                         name: 'description',
                         type: 'text',

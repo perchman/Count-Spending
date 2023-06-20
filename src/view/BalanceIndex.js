@@ -16,12 +16,12 @@ export default class BalanceIndex {
 
         const navbar = navbarView.create([
             {
-                text: 'Cost',
+                text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
                 class: 'nav-link'
             },
             {
-                text: 'Category',
+                text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
             },

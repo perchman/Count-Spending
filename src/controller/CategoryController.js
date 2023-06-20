@@ -73,7 +73,7 @@ export default class CategoryController {
         const sort = url.searchParams.get('sort') || 'id_desc';
         const orderBy = sort.split('_').join(' ');
 
-        this.view.render('Categories', Category.getAllAsArray(orderBy));
+        this.view.render('Categories', Category.getAll(orderBy));
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
@@ -90,8 +90,7 @@ export default class CategoryController {
             e.preventDefault();
 
             const formData = new FormData(form);
-            const category = Category.create(formData.get('category')?.toString());
-            category.save();
+            const category = Category.create(formData.get('name')?.toString());
 
             this.redirect({action: 'category/index'});
         })
@@ -106,13 +105,13 @@ export default class CategoryController {
         let category = Category.getById(id);
 
         const form = document.getElementById('form-category');
-        form.elements['category'].value = category.category;
+        form.elements['name'].value = category.name;
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const formData = new FormData(form);
-            category.changeCategory(formData.get('category')?.toString());
+            category.changeName(formData.get('name')?.toString());
             category.save();
 
             this.redirect({action: 'category/index'});
@@ -121,6 +120,10 @@ export default class CategoryController {
 
     delete(id) {
         const category = Category.getById(id);
-        category.delete();
+        try {
+            category.delete();
+        } catch (error) {
+            alert(error);
+        }
     }
 }

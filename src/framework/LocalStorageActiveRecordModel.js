@@ -15,22 +15,22 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static getAllRaw() {
-        /*
-        orderBy = 'id desc';
-
-
-         */
-        return JSON.parse(localStorage.getItem(this.getEntityName())) || {};
+        return  JSON.parse(localStorage.getItem(this.getEntityName())) || {};
     }
 
-    static getAllAsArray(orderBy) {
+    static getAll(orderBy) {
         const key = orderBy.split(' ')[0];
         const direction = orderBy.split(' ')[1];
 
-        let data = Object.values(this.getAllRaw(this.getEntityName())) || [];
-        data = this.sort(data, key, direction);
+        const data = this.getAllRaw() || {};
 
-        return data;
+        let result = [];
+        for (let key in data) {
+            result.push(this.makeModel(data[key]))
+        }
+        result = this.sort(result, key, direction);
+
+        return result;
     }
 
     static sort(data, key, direction) {

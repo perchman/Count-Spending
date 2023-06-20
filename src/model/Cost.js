@@ -2,14 +2,16 @@
 
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
 import Balance from "../model/Balance";
+import Category from "./Category";
 
 export default class Cost extends LocalStorageActiveRecordModel{
 
-    constructor(id, date, price, description) {
+    constructor(id, date, price, description, category) {
         super(id);
         this.date = date;
         this.price = price;
         this.description = description;
+        this.category = category;
     }
 
     static getEntityName() {
@@ -21,25 +23,26 @@ export default class Cost extends LocalStorageActiveRecordModel{
             data.id,
             data.date,
             data.price,
-            data.description
+            data.description,
+            Category.getById(data.categoryId),
         );
     }
 
-    static create(date, price, description) {
+    static create(date, price, description, category) {
+        const id = this.getNextId();
+        const cost = new Cost(
+            id,
+            date,
+            price,
+            description,
+            category
+        );
         const balance = new Balance();
-        let balanceValue = balance.getValue();
 
-        if (balanceValue - price < 0) {
-            alert('Not enough money on balance');
-        } else {
-            const id = this.getNextId();
-            const cost = new Cost(id, date, price, description);
+        balance.decrease(cost);
+        cost.save();
 
-            cost.save();
-            balance.decrease(cost);
-
-            return cost;
-        }
+        return cost;
     }
 
     toJSON() {
@@ -47,12 +50,17 @@ export default class Cost extends LocalStorageActiveRecordModel{
             id: this.id,
             date: new Date(this.date).getTime(),
             price: this.price,
-            description: this.description
+            description: this.description,
+            categoryId: this.category.id,
         };
     }
 
     changeDate(date) {
         this.date = date;
+    }
+
+    changeCategory(category) {
+        this.category = category;
     }
 
     changePrice(price) {
@@ -61,5 +69,13 @@ export default class Cost extends LocalStorageActiveRecordModel{
 
     changeDescription(description) {
         this.description = description;
+    }
+
+    getCategory() {
+        return Category.getById(this.category.id);
+    }
+
+    getCategoryName() {
+        return this.getCategory().name;
     }
 }

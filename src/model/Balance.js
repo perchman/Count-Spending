@@ -12,8 +12,10 @@ export default class Balance {
     }
 
     decrease(cost) {
-        console.log(cost);
         const value = this.getValue() - parseInt(cost.price);
+        if (value < 0) {
+            throw new Error("Not enough money on balance");
+        }
         this.#save(value);
     }
 

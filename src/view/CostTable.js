@@ -1,5 +1,6 @@
 "use strict"
 
+import Category from "../model/Category";
 import NavbarView from "../framework/NavbarView";
 import ButtonView from "../framework/ButtonView";
 import GridView from "../framework/GridView";
@@ -18,12 +19,12 @@ export default class CostTable {
 
         const navbar = navbarView.create([
             {
-                text: 'Cost',
+                text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
                 class: 'nav-link active',
             },
             {
-                text: 'Category',
+                text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link'
             },
@@ -47,6 +48,10 @@ export default class CostTable {
                     url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold'
                 },
+                category: {
+                    text: 'Category',
+                    sort: false
+                },
                 price: {
                     text: 'Price',
                     sort: true,
@@ -60,6 +65,7 @@ export default class CostTable {
             },
             rows: data.map((cost) => {
                 return {
+                    category: cost.getCategoryName(),
                     id: cost.id,
                     date: new Date(cost.date).toLocaleDateString(),
                     price: cost.price,

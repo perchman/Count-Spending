@@ -18,12 +18,12 @@ export default class CategoryTable {
 
         const navbar = navbarView.create([
             {
-                text: 'Cost',
+                text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
                 class: 'nav-link'
             },
             {
-                text: 'Category',
+                text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link active'
             },
@@ -47,7 +47,7 @@ export default class CategoryTable {
                     url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold'
                 },
-                category: {
+                name: {
                     text: 'Category',
                     sort: false
                 }

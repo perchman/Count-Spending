@@ -16,12 +16,12 @@ export default class CategoryForm {
 
         const navbar = navbarView.create([
             {
-                text: 'Cost',
+                text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
                 class: 'nav-link'
             },
             {
-                text: 'Category',
+                text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
                 class: 'nav-link active'
             },
@@ -37,8 +37,9 @@ export default class CategoryForm {
                 name: 'category',
                 fields: [
                     {
+                        tag: 'input',
                         id: 'input-category',
-                        name: 'category',
+                        name: 'name',
                         type: 'text',
                         label: 'Category',
                     }

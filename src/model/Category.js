@@ -1,11 +1,12 @@
 "use strict"
 
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
+import Cost from "./Cost";
 
 export default class Category extends LocalStorageActiveRecordModel{
-    constructor(id, category) {
+    constructor(id, name) {
         super(id);
-        this.category = category;
+        this.name = name;
     }
 
     static getEntityName() {
@@ -15,12 +16,15 @@ export default class Category extends LocalStorageActiveRecordModel{
     static makeModel(data) {
         return new Category(
             data.id,
-            data.category
+            data.name
         );
     }
 
-    static create(category) {
+    static create(name) {
         const id = this.getNextId();
+        const category = new Category(id, name);
+
+        category.save();
 
         return new Category(id, category);
     }
@@ -28,11 +32,25 @@ export default class Category extends LocalStorageActiveRecordModel{
     toJSON() {
         return {
             id: this.id,
-            category: this.category
+            name: this.name
         }
     }
 
-    changeCategory(category) {
-        this.category = category;
+    changeName(category) {
+        this.name = category;
+    }
+
+    checkCanRemove() {
+        const costs = Cost.getAllRaw();
+
+        for (let cost in costs) {
+            if (costs[cost].categoryId === this.id) {
+                throw new Error(`Can't delete category ${this.name}. The category has costs`);
+            }
+        }
+    }
+    delete() {
+        this.checkCanRemove();
+        super.delete();
     }
 }

@@ -1,6 +1,7 @@
 "use strict"
 
 import Cost from "../model/Cost";
+import Category from "../model/Category";
 import Url from "../framework/URL";
 
 export default class CostController {
@@ -73,7 +74,7 @@ export default class CostController {
         const sort = url.searchParams.get('sort') || 'date_desc';
         const orderBy = sort.split('_').join(' ');
 
-        this.view.render('Costs', Cost.getAllAsArray(orderBy));
+        this.view.render('Costs', Cost.getAll(orderBy));
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
@@ -82,7 +83,7 @@ export default class CostController {
     }
 
     create() {
-        this.view.render('Create cost');
+        this.view.render('Create cost', Category.getAll('id desc'));
         this.addNavbarButtonsEventHandler();
 
         const form = document.getElementById('form-cost');
@@ -91,26 +92,34 @@ export default class CostController {
 
             const formData = new FormData(form);
 
-            const cost = Cost.create(
-                formData.get('date')?.toString(),
-                parseInt(formData.get('price')?.toString()),
-                formData.get('description')?.toString()
-            );
+            try {
+                Cost.create(
+                    formData.get('date')?.toString(),
+                    parseInt(formData.get('price')),
+                    formData.get('description')?.toString(),
+                    Category.getById(
+                        parseInt(formData.get('category'))
+                    )
+                );
 
-            this.redirect({action: 'cost/index'});
+                this.redirect({action: 'cost/index'});
+            } catch (error) {
+                alert(error);
+            }
         })
     }
 
     update() {
-        this.view.render('Update cost');
+        this.view.render('Update cost', Category.getAll('id desc'));
         this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);
         const id = url.searchParams.get('id');
         let cost = Cost.getById(id);
-        console.log(cost);
+
         const form = document.getElementById('form-cost');
         form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
+        form.elements['category'].value = cost.category.id;
         form.elements['price'].value = cost.price;
         form.elements['description'].value = cost.description;
 
@@ -122,6 +131,9 @@ export default class CostController {
             cost.changeDate(new Date(formData.get('date')?.toString()));
             cost.changePrice(parseInt(formData.get('price')?.toString()));
             cost.changeDescription(formData.get('description')?.toString());
+            cost.changeCategory(Category.getById(
+                parseInt(formData.get('category'))
+            ));
 
             cost.save();
 
