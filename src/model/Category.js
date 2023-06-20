@@ -6,6 +6,10 @@ import Cost from "./Cost";
 export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, name) {
         super(id);
+        if (typeof name !== "string") {
+            console.log(name, typeof name);
+            throw new Error("Invalid data type for name. Type must be a string");
+        }
         this.name = name;
     }
 
@@ -22,11 +26,15 @@ export default class Category extends LocalStorageActiveRecordModel{
 
     static create(name) {
         const id = this.getNextId();
-        const category = new Category(id, name);
+        console.log(name);
+        const category = this.makeModel({
+            id: id,
+            name: name
+        })
 
         category.save();
 
-        return new Category(id, category);
+        return category;
     }
 
     toJSON() {

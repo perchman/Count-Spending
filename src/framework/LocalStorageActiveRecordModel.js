@@ -3,6 +3,9 @@
 export default class LocalStorageActiveRecordModel {
 
     constructor(id) {
+        if (typeof id !== "number") {
+            throw new Error("Invalid data type for id. Type must be a number");
+        }
         this.id = id;
     }
 
