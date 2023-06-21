@@ -8,18 +8,11 @@ export default class Cost extends LocalStorageActiveRecordModel{
 
     constructor(id, date, price, description, category) {
         super(id);
-        // if (typeof date !== "string") {
-        //     throw new Error("Invalid data type for date. Type must be a string");
-        // }
-        if (typeof price !== "number") {
-            throw new Error("Invalid data type for price. Type must be a number");
-        }
-        if (typeof description !== "string") {
-            throw new Error("Invalid data type for description. Type must be a string");
-        }
-        if (!category instanceof Category) {
-            throw new Error("Invalid data type for category. Object must be an instance of the Category class");
-        }
+        this.validationDate(date);
+        this.validationPrice(price);
+        this.validationDescription(description);
+        this.validationCategory(category);
+
         this.date = date;
         this.price = price;
         this.description = description;
@@ -57,6 +50,36 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return cost;
     }
 
+    validationDate(date) {
+        // if (typeof date !== "object") {
+        //     throw new Error("Invalid data type for date. Type must be a object");
+        // }
+        if (!date instanceof Date) {
+            throw new Error("Invalid data type for date. Object must be an instance of the Date object");
+        }
+    }
+
+    validationPrice(price) {
+        if (typeof price !== "number") {
+            throw new Error("Invalid data type for price. Type must be a number");
+        }
+    }
+
+    validationDescription(description) {
+        if (typeof description !== "string") {
+            throw new Error("Invalid data type for description. Type must be a string");
+        }
+    }
+
+    validationCategory(category) {
+        if (typeof category !== "object") {
+            throw new Error("Invalid data type for category. Type must be a object");
+        }
+        if (!category instanceof Category) {
+            throw new Error("Invalid data type for category. Object must be an instance of the Category class");
+        }
+    }
+
     toJSON() {
         return {
             id: this.id,
@@ -68,30 +91,22 @@ export default class Cost extends LocalStorageActiveRecordModel{
     }
 
     changeDate(date) {
-        if (typeof date === "string") {
-            throw new Error("Invalid data type for date. Type must be a string");
-        }
+        this.validationDate(date);
         this.date = date;
     }
 
     changePrice(price) {
-        if (typeof price === "number") {
-            throw new Error("Invalid data type for price. Type must be a number");
-        }
+        this.validationPrice(price);
         this.price = price;
     }
 
     changeDescription(description) {
-        if (typeof description === "string") {
-            throw new Error("Invalid data type for description. Type must be a string");
-        }
+        this.validationDescription(description);
         this.description = description;
     }
 
     changeCategory(category) {
-        if (!category instanceof Category) {
-            throw new Error("Invalid data type for category. Object must be an instance of the Category class");
-        }
+        this.validationCategory(category);
         this.category = category;
     }
 

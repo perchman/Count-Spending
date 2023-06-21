@@ -94,7 +94,7 @@ export default class CostController {
 
             try {
                 Cost.create(
-                    formData.get('date')?.toString(),
+                    new Date(formData.get('date')),
                     parseInt(formData.get('price')),
                     formData.get('description')?.toString(),
                     Category.getById(

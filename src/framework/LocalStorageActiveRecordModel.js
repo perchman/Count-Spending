@@ -25,14 +25,13 @@ export default class LocalStorageActiveRecordModel {
         const key = orderBy.split(' ')[0];
         const direction = orderBy.split(' ')[1];
 
-        const data = this.getAllRaw() || {};
+        let data = this.getAllRaw() || {};
 
         let result = [];
         for (let key in data) {
             result.push(this.makeModel(data[key]))
         }
         result = this.sort(result, key, direction);
-
         return result;
     }
 
@@ -49,7 +48,7 @@ export default class LocalStorageActiveRecordModel {
                 } else {
                     throw new Error('Invalid sort directory');
                 }
-
+                console.log(compare);
                 if (compare(parseInt(data[a][key]), parseInt(data[next][key]))) {
                     let tmp  = data[a];
                     data[a] = data[next];

@@ -6,9 +6,7 @@ import Cost from "./Cost";
 export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, name) {
         super(id);
-        if (typeof name !== "string") {
-            throw new Error("Invalid data type for name of category. Type must be a string");
-        }
+        this.validationName(name);
         this.name = name;
     }
 
@@ -35,6 +33,12 @@ export default class Category extends LocalStorageActiveRecordModel{
         return category;
     }
 
+    validationName(name) {
+        if (typeof name !== "string") {
+            throw new Error("Invalid data type for name of category. Type must be a string");
+        }
+    }
+
     toJSON() {
         return {
             id: this.id,
@@ -43,9 +47,7 @@ export default class Category extends LocalStorageActiveRecordModel{
     }
 
     changeName(name) {
-        if (typeof name === "string") {
-            throw new Error("Invalid data type for name of category. Type must be a string");
-        }
+        this.validationName(name);
         this.name = name;
     }
 
