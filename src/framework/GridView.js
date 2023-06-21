@@ -5,7 +5,7 @@ import ButtonView from "./ButtonView";
 export default class GridView {
     create(data) {
         const buttonView = new ButtonView();
-
+        console.log(data.model.getAll('date desc'));
         let thead = '';
         let tbody = '';
 
@@ -21,7 +21,7 @@ export default class GridView {
             thead += `<th class="col">${content}</th>`;
         }
 
-        for (let row of data.rows) {
+        for (let row of data.model.getAll('date desc')) {
             tbody += '<tr>';
 
             for (let header in data.headers) {

@@ -11,7 +11,7 @@ export default class CostTable {
         this.body = document.body;
     }
 
-    render(params) {
+    render(data) {
         const navbarView = new NavbarView();
         const buttonView = new ButtonView();
         const gridView = new GridView();
@@ -64,15 +64,7 @@ export default class CostTable {
                     sort: false
                 }
             },
-            rows: params.data.splice(params.firstElem, params.lastElem).map((cost) => {
-                return {
-                    id: cost.id,
-                    date: cost.date.toLocaleDateString(),
-                    price: cost.price,
-                    description: cost.description,
-                    categoryName: cost.getCategoryName(),
-                }
-            }),
+            model: data.model,
             buttons: {
                 update: {
                     text: '<i class="bi bi-pencil-fill pe-none"></i>',
@@ -98,17 +90,17 @@ export default class CostTable {
         });
         const pagination = paginationView.create({
             id: 'pagination-cost',
-            firstElem: params.firstElem + 1,
-            lastElem: params.lastElem,
-            quantityAll: params.quantityAll,
-            quantityInPage: params.quantityInPage,
+            firstElem: data.firstElem + 1,
+            lastElem: data.lastElem,
+            quantityAll: data.quantityAll,
+            quantityInPage: data.quantityInPage,
             buttons: {
                 prevButton: {
                     text: 'Previous',
                     url: url.createUrlPagination({
-                        pageNum: params.pageNum - 1,
-                        quantityAll: params.quantityAll,
-                        quantityInPage: params.quantityInPage
+                        pageNum: data.pageNum - 1,
+                        quantityAll: data.quantityAll,
+                        quantityInPage: data.quantityInPage
                     }),
                     class: 'btn btn-pagination table-link border btn-outline-secondary'
                 },
@@ -116,8 +108,8 @@ export default class CostTable {
                     url: (num) => {
                         return url.createUrlPagination({
                             pageNum: num,
-                            quantityAll: params.quantityAll,
-                            quantityInPage: params.quantityInPage
+                            quantityAll: data.quantityAll,
+                            quantityInPage: data.quantityInPage
                         });
                     },
                     class: 'btn btn-pagination table-link border btn-outline-secondary'
@@ -125,9 +117,9 @@ export default class CostTable {
                 nextButton: {
                     text: 'Next',
                     url: url.createUrlPagination({
-                        pageNum: params.pageNum + 1,
-                        quantityAllElems: params.quantityAll,
-                        quantityElemsInPage: params.quantityInPage
+                        pageNum: data.pageNum + 1,
+                        quantityAllElems: data.quantityAll,
+                        quantityElemsInPage: data.quantityInPage
                     }),
                     class: 'btn btn-pagination table-link border btn-outline-secondary'
                 }
@@ -137,7 +129,7 @@ export default class CostTable {
         this.body.innerHTML = `
             ${navbar}
             <div class="container mt-4">
-                <h2>${params.title}</h2>
+                <h2>${data.title}</h2>
                 <div class="mt-4">
                     ${addButton}  
                     ${table}

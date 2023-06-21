@@ -8,7 +8,6 @@ export default class CostController {
     constructor(view, route) {
         this.view = view;
         this.route = route;
-        this.quantityElemsInPage = 5;
     }
 
     addNavbarButtonsEventHandler() {
@@ -93,15 +92,26 @@ export default class CostController {
         );
         const orderBy = sort.split('_').join(' ');
 
-        this.view.render({
+        const gridViewConfig = {
+            sort: {
+                defaultOrder: {
+                    date: 'desc'
+                }
+            },
+            pagination: {
+                pageSize: 10 // quantityInPage
+            },
+            model: Cost,
             title: 'Costs',
             data: Cost.getAll(orderBy),
             pageNum: pageNum,
             quantityAll: Cost.getCount(),
-            quantityInPage: this.quantityElemsInPage,
+            quantityInPage: 10,
             firstElem: start,
             lastElem: end
-        });
+        }
+
+        this.view.render(gridViewConfig);
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
