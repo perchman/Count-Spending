@@ -72,5 +72,5 @@ document.addEventListener('DOMContentLoaded', () => {
         controller.replenish();
     });
 
-    route.route();
+    route.routing();
 });

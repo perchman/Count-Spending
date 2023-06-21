@@ -8,6 +8,7 @@ export default class CostController {
     constructor(view, route) {
         this.view = view;
         this.route = route;
+        this.quantityElemsInPage = 5;
     }
 
     addNavbarButtonsEventHandler() {
@@ -17,7 +18,7 @@ export default class CostController {
                 e.preventDefault();
                 window.history.pushState({}, "", e.target.href);
 
-                this.route.route();
+                this.route.routing();
             });
         }
     }
@@ -28,25 +29,25 @@ export default class CostController {
             e.preventDefault();
             window.history.pushState({}, "", e.target.href);
 
-            this.route.route();
+            this.route.routing();
         });
     }
 
     addUpdateButtonsEventHandler() {
         const updateButtons = document.getElementsByClassName('btn-update');
-        for (const button of updateButtons) {
+        for (let button of updateButtons) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 window.history.pushState({}, "", e.target.href);
 
-                this.route.route();
+                this.route.routing();
             });
         }
     }
 
     addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
-        for (const button of deleteButtons) {
+        for (let button of deleteButtons) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 const url = new URL(window.location.href);
@@ -56,7 +57,19 @@ export default class CostController {
                 this.delete(id);
 
                 window.history.pushState({}, "", url);
-                this.route.route();
+                this.route.routing();
+            });
+        }
+    }
+
+    addPaginationButtonsEventHandler() {
+        const paginationButtons = document.getElementsByClassName('btn-pagination');
+        for (let button of paginationButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.routing();
             });
         }
     }
@@ -72,14 +85,29 @@ export default class CostController {
     index() {
         const url = new URL(window.location.href);
         const sort = url.searchParams.get('sort') || 'date_desc';
+        const pageNum = parseInt(url.searchParams.get('page')) || 1;
+        const start = (pageNum - 1) * this.quantityElemsInPage;
+        const end = Math.min(
+            start + this.quantityElemsInPage,
+            Cost.getCount()
+        );
         const orderBy = sort.split('_').join(' ');
 
-        this.view.render('Costs', Cost.getAll(orderBy));
+        this.view.render({
+            title: 'Costs',
+            data: Cost.getAll(orderBy),
+            pageNum: pageNum,
+            quantityAll: Cost.getCount(),
+            quantityInPage: this.quantityElemsInPage,
+            firstElem: start,
+            lastElem: end
+        });
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
         this.addDeleteButtonsEventHandler();
+        this.addPaginationButtonsEventHandler();
     }
 
     create() {
@@ -118,7 +146,7 @@ export default class CostController {
         let cost = Cost.getById(id);
 
         const form = document.getElementById('form-cost');
-        form.elements['date'].value = new Date(cost.date).toISOString().split('T')[0];
+        form.elements['date'].value = cost.date.toISOString().split('T')[0];
         form.elements['category'].value = cost.category.id;
         form.elements['price'].value = cost.price;
         form.elements['description'].value = cost.description;
@@ -128,8 +156,8 @@ export default class CostController {
 
             const formData = new FormData(form);
 
-            cost.changeDate(new Date(formData.get('date')?.toString()));
-            cost.changePrice(parseInt(formData.get('price')?.toString()));
+            cost.changeDate(new Date(formData.get('date')));
+            cost.changePrice(parseInt(formData.get('price')));
             cost.changeDescription(formData.get('description')?.toString());
             cost.changeCategory(Category.getById(
                 parseInt(formData.get('category'))

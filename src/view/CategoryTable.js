@@ -39,7 +39,7 @@ export default class CategoryTable {
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const table = gridView.createTable({
+        const table = gridView.create({
             headers: {
                 id: {
                     text: 'Id',

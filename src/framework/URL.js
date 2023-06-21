@@ -21,16 +21,16 @@ export default class Url {
         return url.toString();
     }
 
-    createUrlPagination(pageNum, length) {
+    createUrlPagination(params) {
         let url = new URL(window.location.href);
         let search = url.searchParams;
 
-        if (pageNum === 0) {
+        if (params.pageNum === 0) {
             search.set('page', 1);
-        } else if (pageNum > Math.ceil(length / quantityElems)) {
-            search.set('page', pageNum - 1);
+        } else if (params.pageNum > Math.ceil(params.quantityAllElems / params.quantityElemsPerPage)) {
+            search.set('page', params.pageNum - 1);
         } else {
-            search.set('page', pageNum);
+            search.set('page', params.pageNum);
         }
 
         return url.toString();

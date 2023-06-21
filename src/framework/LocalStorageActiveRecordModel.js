@@ -7,6 +7,7 @@ export default class LocalStorageActiveRecordModel {
             throw new Error("Invalid data type for id. Type must be a number");
         }
         this.id = id;
+        this.quantityElemsInPage = 5;
     }
 
     static getEntityName() {
@@ -32,6 +33,7 @@ export default class LocalStorageActiveRecordModel {
             result.push(this.makeModel(data[key]))
         }
         result = this.sort(result, key, direction);
+
         return result;
     }
 
@@ -48,7 +50,6 @@ export default class LocalStorageActiveRecordModel {
                 } else {
                     throw new Error('Invalid sort directory');
                 }
-                console.log(compare);
                 if (compare(parseInt(data[a][key]), parseInt(data[next][key]))) {
                     let tmp  = data[a];
                     data[a] = data[next];
@@ -71,6 +72,11 @@ export default class LocalStorageActiveRecordModel {
     static getById(id) {
         const data = this.getAllRaw(this.getEntityName())[id];
         return this.makeModel(data);
+    }
+
+    static getCount() {
+        const data = Object.values(this.getAllRaw());
+        return data.length;
     }
 
     toJSON() {

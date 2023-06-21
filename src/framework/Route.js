@@ -5,7 +5,7 @@ export default class Route {
         this.routes = {};
     }
 
-    route() {
+    routing() {
         const url = new URL(window.location.href);
         const action = url.searchParams.get('action') || 'cost/index';
         const handler = this.routes[action];

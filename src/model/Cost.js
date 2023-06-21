@@ -8,10 +8,10 @@ export default class Cost extends LocalStorageActiveRecordModel{
 
     constructor(id, date, price, description, category) {
         super(id);
-        this.validationDate(date);
-        this.validationPrice(price);
-        this.validationDescription(description);
-        this.validationCategory(category);
+        this.validateDate(date);
+        this.validatePrice(price);
+        this.validateDescription(description);
+        this.validateCategory(category);
 
         this.date = date;
         this.price = price;
@@ -26,7 +26,7 @@ export default class Cost extends LocalStorageActiveRecordModel{
     static makeModel(data) {
         return new Cost(
             data.id,
-            data.date,
+            new Date(data.date),
             data.price,
             data.description,
             Category.getById(data.categoryId)
@@ -50,7 +50,17 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return cost;
     }
 
-    validationDate(date) {
+    static existsCostsHasCategory(categoryId) {
+        const costs = Cost.getAllRaw();
+        for (let cost in costs) {
+            if (costs[cost].categoryId === categoryId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    validateDate(date) {
         // if (typeof date !== "object") {
         //     throw new Error("Invalid data type for date. Type must be a object");
         // }
@@ -59,19 +69,19 @@ export default class Cost extends LocalStorageActiveRecordModel{
         }
     }
 
-    validationPrice(price) {
+    validatePrice(price) {
         if (typeof price !== "number") {
             throw new Error("Invalid data type for price. Type must be a number");
         }
     }
 
-    validationDescription(description) {
+    validateDescription(description) {
         if (typeof description !== "string") {
             throw new Error("Invalid data type for description. Type must be a string");
         }
     }
 
-    validationCategory(category) {
+    validateCategory(category) {
         if (typeof category !== "object") {
             throw new Error("Invalid data type for category. Type must be a object");
         }
@@ -91,22 +101,22 @@ export default class Cost extends LocalStorageActiveRecordModel{
     }
 
     changeDate(date) {
-        this.validationDate(date);
+        this.validateDate(date);
         this.date = date;
     }
 
     changePrice(price) {
-        this.validationPrice(price);
+        this.validatePrice(price);
         this.price = price;
     }
 
     changeDescription(description) {
-        this.validationDescription(description);
+        this.validateDescription(description);
         this.description = description;
     }
 
     changeCategory(category) {
-        this.validationCategory(category);
+        this.validateCategory(category);
         this.category = category;
     }
 

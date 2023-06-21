@@ -16,7 +16,7 @@ export default class CategoryController {
                 e.preventDefault();
                 window.history.pushState({}, "", e.target.href);
 
-                this.route.route();
+                this.route.routing();
             });
         }
     }
@@ -27,25 +27,25 @@ export default class CategoryController {
             e.preventDefault();
             window.history.pushState({}, "", e.target.href);
 
-            this.route.route();
+            this.route.routing();
         });
     }
 
     addUpdateButtonsEventHandler() {
         const updateButtons = document.getElementsByClassName('btn-update');
-        for (const button of updateButtons) {
+        for (let button of updateButtons) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 window.history.pushState({}, "", e.target.href);
 
-                this.route.route();
+                this.route.routing();
             });
         }
     }
 
     addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
-        for (const button of deleteButtons) {
+        for (let button of deleteButtons) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 const url = new URL(window.location.href);
@@ -55,7 +55,7 @@ export default class CategoryController {
                 this.delete(id);
 
                 window.history.pushState({}, "", url);
-                this.route.route();
+                this.route.routing();
             });
         }
     }

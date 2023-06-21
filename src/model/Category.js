@@ -6,7 +6,7 @@ import Cost from "./Cost";
 export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, name) {
         super(id);
-        this.validationName(name);
+        this.validateName(name);
         this.name = name;
     }
 
@@ -33,7 +33,7 @@ export default class Category extends LocalStorageActiveRecordModel{
         return category;
     }
 
-    validationName(name) {
+    validateName(name) {
         if (typeof name !== "string") {
             throw new Error("Invalid data type for name of category. Type must be a string");
         }
@@ -47,16 +47,13 @@ export default class Category extends LocalStorageActiveRecordModel{
     }
 
     changeName(name) {
-        this.validationName(name);
+        this.validateName(name);
         this.name = name;
     }
 
     checkCanRemove() {
-        const costs = Cost.getAllRaw();
-        for (let cost in costs) {
-            if (costs[cost].categoryId === this.id) {
-                throw new Error(`Can't delete category ${this.name}. The category has costs`);
-            }
+        if (Cost.existsCostsHasCategory(this.id)) {
+            throw new Error(`Can't delete category ${this.name}. The category has costs`);
         }
     }
     delete() {

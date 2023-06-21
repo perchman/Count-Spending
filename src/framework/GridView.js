@@ -3,7 +3,7 @@
 import ButtonView from "./ButtonView";
 
 export default class GridView {
-    createTable(data) {
+    create(data) {
         const buttonView = new ButtonView();
 
         let thead = '';

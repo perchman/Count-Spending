@@ -16,7 +16,7 @@ export default class BalanceController {
                 e.preventDefault();
                 window.history.pushState({}, "", e.target.href);
 
-                this.route.route();
+                this.route.routing();
             });
         }
     }
@@ -27,7 +27,7 @@ export default class BalanceController {
             e.preventDefault();
             window.history.pushState({}, "", e.target.href);
 
-            this.route.route();
+            this.route.routing();
         });
     }
 
