@@ -76,7 +76,7 @@ export default class CostController {
     redirect(action) {
         const url = new Url();
 
-        window.addEventListener('popstate', (e) => this.route.route());
+        window.addEventListener('popstate', (e) => this.route.routing());
         window.history.pushState({}, "", url.createUrl(action));
         window.dispatchEvent(new Event('popstate'));
     }
@@ -84,31 +84,19 @@ export default class CostController {
     index() {
         const url = new URL(window.location.href);
         const sort = url.searchParams.get('sort') || 'date_desc';
-        const pageNum = parseInt(url.searchParams.get('page')) || 1;
-        const start = (pageNum - 1) * this.quantityElemsInPage;
-        const end = Math.min(
-            start + this.quantityElemsInPage,
-            Cost.getCount()
-        );
         const orderBy = sort.split('_').join(' ');
 
         const gridViewConfig = {
+            title: 'Costs',
             sort: {
                 defaultOrder: {
                     date: 'desc'
                 }
             },
-            pagination: {
-                pageSize: 10 // quantityInPage
-            },
             model: Cost,
-            title: 'Costs',
-            data: Cost.getAll(orderBy),
-            pageNum: pageNum,
-            quantityAll: Cost.getCount(),
-            quantityInPage: 10,
-            firstElem: start,
-            lastElem: end
+            pagination: {
+                pageSize: 5
+            }
         }
 
         this.view.render(gridViewConfig);
@@ -142,6 +130,7 @@ export default class CostController {
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {
+                console.log(error);
                 alert(error);
             }
         })
@@ -153,7 +142,7 @@ export default class CostController {
 
         const url = new URL(window.location.href);
         const id = url.searchParams.get('id');
-        let cost = Cost.getById(id);
+        let cost = Cost.getById(parseInt(id));
 
         const form = document.getElementById('form-cost');
         form.elements['date'].value = cost.date.toISOString().split('T')[0];

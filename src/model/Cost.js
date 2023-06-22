@@ -61,9 +61,9 @@ export default class Cost extends LocalStorageActiveRecordModel{
     }
 
     validateDate(date) {
-        // if (typeof date !== "object") {
-        //     throw new Error("Invalid data type for date. Type must be a object");
-        // }
+        if (typeof date !== "object") {
+            throw new Error("Invalid data type for date. Type must be a object");
+        }
         if (!date instanceof Date) {
             throw new Error("Invalid data type for date. Object must be an instance of the Date object");
         }

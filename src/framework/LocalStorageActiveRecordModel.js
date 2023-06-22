@@ -7,7 +7,6 @@ export default class LocalStorageActiveRecordModel {
             throw new Error("Invalid data type for id. Type must be a number");
         }
         this.id = id;
-        this.quantityElemsInPage = 5;
     }
 
     static getEntityName() {
@@ -19,22 +18,23 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static getAllRaw() {
-        return  JSON.parse(localStorage.getItem(this.getEntityName())) || {};
+        return  JSON.parse(localStorage.getItem(this.getEntityName())) || [];
     }
 
     static getAll(orderBy) {
         const key = orderBy.split(' ')[0];
         const direction = orderBy.split(' ')[1];
 
-        let data = this.getAllRaw() || {};
+        let data = this.getAllRaw();
+        data = this.sort(data, key, direction);
 
-        let result = [];
-        for (let key in data) {
-            result.push(this.makeModel(data[key]))
-        }
-        result = this.sort(result, key, direction);
+        return data.map((item) => {
+            return this.makeModel(item)
+        });
+    }
 
-        return result;
+    static getPart(orderBy, start, end) {
+        return this.getAll(orderBy).slice(start, end);
     }
 
     static sort(data, key, direction) {
@@ -60,6 +60,15 @@ export default class LocalStorageActiveRecordModel {
         return data;
     }
 
+    static getIndex(data, id) {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].id === id) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     static getNextId() {
         let id = parseInt(localStorage.getItem(`${this.getEntityName()}Id`)) || 0;
         id += 1;
@@ -70,13 +79,14 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static getById(id) {
-        const data = this.getAllRaw(this.getEntityName())[id];
-        return this.makeModel(data);
+        const data = this.getAllRaw();
+        const index = this.getIndex(data, id);
+
+        return data[index];
     }
 
     static getCount() {
-        const data = Object.values(this.getAllRaw());
-        return data.length;
+        return this.getAllRaw().length;
     }
 
     toJSON() {
@@ -85,14 +95,15 @@ export default class LocalStorageActiveRecordModel {
 
     save() {
         let data = this.constructor.getAllRaw();
-        data[this.id] = this.toJSON();
+        data.push(this.toJSON());
 
         localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
     }
 
     delete() {
         let data = this.constructor.getAllRaw();
-        delete data[this.id];
+        const index = this.constructor.getIndex(data, this.id);
+        data.splice(index, 1);
 
         localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
     }

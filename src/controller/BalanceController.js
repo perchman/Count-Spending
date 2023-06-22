@@ -34,7 +34,7 @@ export default class BalanceController {
     redirect(action) {
         const url = new Url();
 
-        window.addEventListener('popstate', (e) => this.route.route());
+        window.addEventListener('popstate', (e) => this.route.routing());
         window.history.pushState({}, "", url.createUrl(action));
         window.dispatchEvent(new Event('popstate'));
     }

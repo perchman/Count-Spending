@@ -3,26 +3,31 @@
 import ButtonView from "./ButtonView";
 
 export default class PaginationView {
-    create(params) {
+    create(data) {
+        console.log(data);
         const buttonView = new ButtonView();
 
+        const url = new URL(window.location.href);
+        const pageNum = url.searchParams.get('page') || 1;
+
+
         const info = `
-            Showing <b>${params.firstElem}</b> to \<b>${params.lastElem}</b> \
-            of <b>${params.quantityAll}</b> results
+            Showing <b>${data.firstElem}</b> to \<b>${data.lastElem}</b> \
+            of <b>${data.quantityAll}</b> results
         `;
 
-        const prevButton = buttonView.create(params.buttons.prevButton);
-        const nextButton = buttonView.create(params.buttons.nextButton);
+        const prevButton = buttonView.create(data.buttons.prevButton);
+        const nextButton = buttonView.create(data.buttons.nextButton);
 
         let buttons = '';
-        for (let i = 0; i < Math.ceil(params.quantityAll / params.quantityInPage); i++) {
+        for (let i = 0; i < Math.ceil(data.quantityAll / data.quantityInPage); i++) {
             buttons += buttonView.create({
                 text: i + 1,
-                url: params.buttons.pageButton.url(i + 1),
-                class: params.buttons.pageButton.class
+                url: data.buttons.pageButton.url(i + 1),
+                class: data.buttons.pageButton.class
             })
         }
-        console.log(buttons);
+
         return `
             <div id="pagination" class="flex d-flex align-items-center justify-content-between">
                 <div id="infoPagination">${info}</div>

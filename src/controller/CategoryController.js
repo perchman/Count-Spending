@@ -63,7 +63,7 @@ export default class CategoryController {
     redirect(action) {
         const url = new Url();
 
-        window.addEventListener('popstate', (e) => this.route.route());
+        window.addEventListener('popstate', (e) => this.route.routing());
         window.history.pushState({}, "", url.createUrl(action));
         window.dispatchEvent(new Event('popstate'));
     }
@@ -73,7 +73,20 @@ export default class CategoryController {
         const sort = url.searchParams.get('sort') || 'id_desc';
         const orderBy = sort.split('_').join(' ');
 
-        this.view.render('Categories', Category.getAll(orderBy));
+        const gridViewConfig = {
+            sort: {
+                defaultOrder: {
+                    date: 'desc'
+                }
+            },
+            pagination: {
+                pageSize: 10
+            },
+            model: Category,
+            title: 'Categories',
+        }
+
+        this.view.render(gridViewConfig);
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();

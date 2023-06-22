@@ -10,7 +10,7 @@ export default class CategoryTable {
         this.body = document.body;
     }
 
-    render(title, data) {
+    render(data) {
         const navbarView = new NavbarView();
         const buttonView = new ButtonView();
         const gridView = new GridView();
@@ -39,20 +39,26 @@ export default class CategoryTable {
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const table = gridView.create({
-            headers: {
+        const grid = gridView.create({
+            fields: {
                 id: {
                     text: 'Id',
                     sort: true,
                     url: url.createUrlSort(),
-                    class: 'btn p-0 fw-bold'
+                    class: 'btn p-0 fw-bold',
+                    value: (category) => {
+                        return category.id
+                    }
                 },
                 name: {
                     text: 'Category',
-                    sort: false
+                    sort: false,
+                    value: (category) => {
+                        return category.name
+                    }
                 }
             },
-            rows: data,
+            model: data.model,
             buttons: {
                 update: {
                     text: '<i class="bi bi-pencil-fill pe-none"></i>',
@@ -74,16 +80,19 @@ export default class CategoryTable {
                     },
                     class: 'btn btn-delete btn-danger px-1 py-0'
                 }
+            },
+            pagination: {
+                pageSize: data.pagination.pageSize
             }
         });
 
         this.body.innerHTML = `
             ${navbar}
             <div class="container mt-4">
-                <h2 class="">${title}</h2>
+                <h2 class="">${data.title}</h2>
                 <div class="mt-4">
                     ${addButton}  
-                    ${table}
+                    ${grid}
                 </div>
             </div>
         `;

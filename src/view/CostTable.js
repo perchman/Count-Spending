@@ -3,7 +3,6 @@
 import NavbarView from "../framework/NavbarView";
 import ButtonView from "../framework/ButtonView";
 import GridView from "../framework/GridView";
-import PaginationView from "../framework/PaginationView";
 import Url from "../framework/URL";
 
 export default class CostTable {
@@ -15,7 +14,6 @@ export default class CostTable {
         const navbarView = new NavbarView();
         const buttonView = new ButtonView();
         const gridView = new GridView();
-        const paginationView = new PaginationView();
         const url = new Url();
 
         const navbar = navbarView.create([
@@ -41,27 +39,39 @@ export default class CostTable {
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const table = gridView.create({
-            headers: {
+        const grid = gridView.create({
+            fields: {
                 date: {
                     text: 'Date',
                     sort: true,
                     url: url.createUrlSort(),
-                    class: 'btn p-0 fw-bold'
+                    class: 'btn p-0 fw-bold',
+                    value: (cost) => {
+                        return cost.date.toLocaleDateString();
+                    }
                 },
-                categoryName: {
+                category: {
                     text: 'Category',
-                    sort: false
+                    sort: false,
+                    value: (cost) => {
+                        return cost.getCategoryName();
+                    }
                 },
                 price: {
                     text: 'Price',
                     sort: true,
                     url: url.createUrlSort(),
-                    class: 'btn p-0 fw-bold'
+                    class: 'btn p-0 fw-bold',
+                    value: (cost) => {
+                        return cost.price;
+                    }
                 },
                 description: {
                     text: 'Description',
-                    sort: false
+                    sort: false,
+                    value: (cost) => {
+                        return cost.description;
+                    }
                 }
             },
             model: data.model,
@@ -86,42 +96,40 @@ export default class CostTable {
                     },
                     class: 'btn btn-delete btn-danger px-1 py-0'
                 }
-            }
-        });
-        const pagination = paginationView.create({
-            id: 'pagination-cost',
-            firstElem: data.firstElem + 1,
-            lastElem: data.lastElem,
-            quantityAll: data.quantityAll,
-            quantityInPage: data.quantityInPage,
-            buttons: {
-                prevButton: {
-                    text: 'Previous',
-                    url: url.createUrlPagination({
-                        pageNum: data.pageNum - 1,
-                        quantityAll: data.quantityAll,
-                        quantityInPage: data.quantityInPage
-                    }),
-                    class: 'btn btn-pagination table-link border btn-outline-secondary'
-                },
-                pageButton: {
-                    url: (num) => {
-                        return url.createUrlPagination({
-                            pageNum: num,
-                            quantityAll: data.quantityAll,
-                            quantityInPage: data.quantityInPage
-                        });
+            },
+            pagination: {
+                id: 'pagination-cost',
+                count: data.model.getCount(),
+                pageSize: data.pagination.pageSize,
+                buttons: {
+                    prevButton: {
+                        text: 'Previous',
+                        url: url.createUrlPagination({
+                            pageNum: data.pageNum - 1,
+                            all: data.quantityAll,
+                            pageSize: data.quantityInPage
+                        }),
+                        class: 'btn btn-pagination table-link border btn-outline-secondary'
                     },
-                    class: 'btn btn-pagination table-link border btn-outline-secondary'
-                },
-                nextButton: {
-                    text: 'Next',
-                    url: url.createUrlPagination({
-                        pageNum: data.pageNum + 1,
-                        quantityAllElems: data.quantityAll,
-                        quantityElemsInPage: data.quantityInPage
-                    }),
-                    class: 'btn btn-pagination table-link border btn-outline-secondary'
+                    pageButton: {
+                        url: (num) => {
+                            return url.createUrlPagination({
+                                pageNum: num,
+                                all: data.quantityAll,
+                                pageSize: data.quantityInPage
+                            });
+                        },
+                        class: 'btn btn-pagination table-link border btn-outline-secondary'
+                    },
+                    nextButton: {
+                        text: 'Next',
+                        url: url.createUrlPagination({
+                            pageNum: data.pageNum + 1,
+                            all: data.quantityAll,
+                            pageSize: data.quantityInPage
+                        }),
+                        class: 'btn btn-pagination table-link border btn-outline-secondary'
+                    }
                 }
             }
         });
@@ -132,8 +140,7 @@ export default class CostTable {
                 <h2>${data.title}</h2>
                 <div class="mt-4">
                     ${addButton}  
-                    ${table}
-                    ${pagination}
+                    ${grid}
                 </div>
             </div>
         `;
