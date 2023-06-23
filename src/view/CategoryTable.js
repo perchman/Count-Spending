@@ -58,7 +58,7 @@ export default class CategoryTable {
                     }
                 }
             },
-            model: data.model,
+            dataProvider: data.dataProvider,
             buttons: {
                 update: {
                     text: '<i class="bi bi-pencil-fill pe-none"></i>',
@@ -81,9 +81,6 @@ export default class CategoryTable {
                     class: 'btn btn-delete btn-danger px-1 py-0'
                 }
             },
-            pagination: {
-                pageSize: data.pagination.pageSize
-            }
         });
 
         this.body.innerHTML = `

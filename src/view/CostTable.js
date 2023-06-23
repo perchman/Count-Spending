@@ -74,7 +74,7 @@ export default class CostTable {
                     }
                 }
             },
-            model: data.model,
+            dataProvider: data.dataProvider,
             buttons: {
                 update: {
                     text: '<i class="bi bi-pencil-fill pe-none"></i>',
@@ -95,41 +95,6 @@ export default class CostTable {
                         })
                     },
                     class: 'btn btn-delete btn-danger px-1 py-0'
-                }
-            },
-            pagination: {
-                id: 'pagination-cost',
-                count: data.model.getCount(),
-                pageSize: data.pagination.pageSize,
-                buttons: {
-                    prevButton: {
-                        text: 'Previous',
-                        url: url.createUrlPagination({
-                            pageNum: data.pageNum - 1,
-                            all: data.quantityAll,
-                            pageSize: data.quantityInPage
-                        }),
-                        class: 'btn btn-pagination table-link border btn-outline-secondary'
-                    },
-                    pageButton: {
-                        url: (num) => {
-                            return url.createUrlPagination({
-                                pageNum: num,
-                                all: data.quantityAll,
-                                pageSize: data.quantityInPage
-                            });
-                        },
-                        class: 'btn btn-pagination table-link border btn-outline-secondary'
-                    },
-                    nextButton: {
-                        text: 'Next',
-                        url: url.createUrlPagination({
-                            pageNum: data.pageNum + 1,
-                            all: data.quantityAll,
-                            pageSize: data.quantityInPage
-                        }),
-                        class: 'btn btn-pagination table-link border btn-outline-secondary'
-                    }
                 }
             }
         });

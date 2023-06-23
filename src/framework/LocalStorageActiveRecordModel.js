@@ -33,8 +33,8 @@ export default class LocalStorageActiveRecordModel {
         });
     }
 
-    static getPart(orderBy, start, end) {
-        return this.getAll(orderBy).slice(start, end);
+    static getPart(orderBy, limit) {
+        return this.getAll(orderBy).slice(limit.start, limit.end);
     }
 
     static sort(data, key, direction) {

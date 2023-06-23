@@ -1,18 +1,11 @@
 "use strict"
 
-import PaginationView from "./PaginationView";
+import Pagination from "./Pagination";
 import ButtonView from "./ButtonView";
 
 export default class GridView {
     create(data) {
         const buttonView = new ButtonView();
-        const paginationView = new PaginationView();
-
-        const url = new URL(window.location.href);
-        const pageNum = url.searchParams.get('page') || 1;
-        const dataCount = data.model.getCount()
-        const start = (pageNum - 1) * data.pagination.pageSize;
-        const end = Math.min(start + data.pagination.pageSize, dataCount);
 
         let thead = '';
         let tbody = '';
@@ -29,7 +22,7 @@ export default class GridView {
             thead += `<th class="col">${content}</th>`;
         }
 
-        for (let item of data.model.getPart('date desc', start, end)) {
+        for (let item of data.dataProvider.getDataForPage()) {
             tbody += '<tr>';
 
             for (let field in data.fields) {
@@ -52,7 +45,12 @@ export default class GridView {
             `;
         }
 
-        const pagination = paginationView.create(data.pagination);
+        const pagination = new Pagination(
+            data.dataProvider.getLimit(),
+            data.dataProvider.config.pagination.pageSize,
+            data.dataProvider.getPageNum(),
+        );
+        const paginationView = pagination.create();
 
         return `
             <div>
@@ -67,7 +65,7 @@ export default class GridView {
                         ${tbody}
                     </tbody>
                 </table>
-                ${pagination}
+                ${paginationView}
             </div>
         `;
     }

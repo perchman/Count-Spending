@@ -2,6 +2,8 @@
 
 import Category from "../model/Category";
 import Url from "../framework/URL";
+import DataProvider from "../framework/DataProvider";
+import Cost from "../model/Cost";
 
 export default class CategoryController {
     constructor(view, route) {
@@ -73,20 +75,22 @@ export default class CategoryController {
         const sort = url.searchParams.get('sort') || 'id_desc';
         const orderBy = sort.split('_').join(' ');
 
-        const gridViewConfig = {
+        const dataProvider = new DataProvider({
             sort: {
                 defaultOrder: {
-                    date: 'desc'
+                    id: 'desc'
                 }
             },
-            pagination: {
-                pageSize: 10
-            },
             model: Category,
-            title: 'Categories',
-        }
+            pagination: {
+                pageSize: 5
+            }
+        });
 
-        this.view.render(gridViewConfig);
+        this.view.render({
+            title: 'Categories',
+            dataProvider: dataProvider
+        });
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();

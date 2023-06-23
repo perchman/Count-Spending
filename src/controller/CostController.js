@@ -3,6 +3,7 @@
 import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
+import DataProvider from "../framework/DataProvider";
 
 export default class CostController {
     constructor(view, route) {
@@ -86,8 +87,7 @@ export default class CostController {
         const sort = url.searchParams.get('sort') || 'date_desc';
         const orderBy = sort.split('_').join(' ');
 
-        const gridViewConfig = {
-            title: 'Costs',
+        const dataProvider = new DataProvider({
             sort: {
                 defaultOrder: {
                     date: 'desc'
@@ -97,9 +97,12 @@ export default class CostController {
             pagination: {
                 pageSize: 5
             }
-        }
+        });
 
-        this.view.render(gridViewConfig);
+        this.view.render({
+            title: 'Costs',
+            dataProvider: dataProvider
+        });
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
