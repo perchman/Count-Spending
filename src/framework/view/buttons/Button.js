@@ -2,7 +2,6 @@
 
 export default class Button {
     constructor(params) {
-        console.log(params);
         this.href = params.url ? `href="${params.url}"` : '';
         this.id = params.id ? `id="${params.id}"` : '';
         this.class = params.class ? `class="${params.class}"` : '';

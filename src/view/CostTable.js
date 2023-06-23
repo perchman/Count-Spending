@@ -1,7 +1,7 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Button from "../framework/view/Button";
+import Button from "../framework/view/buttons/Button";
 import Grid from "../framework/view/Grid";
 import Url from "../framework/URL";
 
@@ -77,24 +77,20 @@ export default class CostTable {
             dataProvider: data.dataProvider,
             buttons: {
                 update: {
-                    text: '<i class="bi bi-pencil-fill pe-none"></i>',
-                    url: (cost) => {
+                    callbackUrl: (cost) => {
                         return url.createUrl({
                             action: 'cost/update',
                             id: cost.id
                         })
                     },
-                    class: 'btn btn-update btn-warning px-1 py-0'
                 },
                 delete: {
-                    text: '<i class="bi bi-trash-fill pe-none"></i>',
-                    url: (cost) => {
+                    callbackUrl: (cost) => {
                         return url.createUrl({
                             action: 'cost/delete',
                             id: cost.id
                         })
                     },
-                    class: 'btn btn-delete btn-danger px-1 py-0'
                 }
             }
         });

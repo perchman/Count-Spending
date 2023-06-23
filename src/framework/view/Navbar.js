@@ -1,6 +1,6 @@
 "use strict"
 
-import Button from "./Button";
+import Button from "./buttons/Button";
 
 export default class Navbar {
     create(data) {

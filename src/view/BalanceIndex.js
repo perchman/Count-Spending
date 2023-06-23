@@ -1,7 +1,7 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Button from "../framework/view/Button";
+import Button from "../framework/view/buttons/Button";
 import Url from "../framework/URL";
 
 export default class BalanceIndex {

@@ -1,6 +1,6 @@
 "use strict"
 
-import Button from "./Button";
+import ButtonPagination from "./buttons/ButtonPagination";
 
 export default class Pagination {
     constructor(limit, pageSize, pageNum) {
@@ -30,23 +30,20 @@ export default class Pagination {
             of <b>${this.limit.count}</b> results
         `;
 
-        const prevButton = new Button({
+        const buttonPrev = new ButtonPagination({
             text: 'Previous',
             url: this.createUrl(this.pageNum - 1),
-            class: 'btn btn-pagination table-link border btn-outline-secondary'
         });
-        const nextButton = new Button({
+        const buttonNext = new ButtonPagination({
             text: 'Next',
             url: this.createUrl(this.pageNum + 1),
-            class: 'btn btn-pagination table-link border btn-outline-secondary'
-        })
+        });
 
         let buttons = '';
         for (let i = 0; i < Math.ceil(this.limit.count / this.pageSize); i++) {
-            const button = new Button({
+            const button = new ButtonPagination({
                 text: i + 1,
-                url: this.createUrl(i + 1),
-                class: 'btn btn-pagination table-link border btn-outline-secondary'
+                url: this.createUrl(i + 1)
             })
             buttons += button.render();
         }
@@ -55,9 +52,9 @@ export default class Pagination {
             <div id="pagination" class="flex d-flex align-items-center justify-content-between">
                 <div id="infoPagination">${info}</div>
                 <div id="btnPagination" class="btn-group">
-                    ${prevButton.render()}
+                    ${buttonPrev.render()}
                     ${buttons}
-                    ${nextButton.render()}
+                    ${buttonNext.render()}
                 </div>
             </div>
         `;

@@ -1,7 +1,9 @@
 "use strict"
 
 import Pagination from "./Pagination";
-import Button from "./Button";
+import Button from "./buttons/Button";
+import ButtonUpdate from "./buttons/ButtonUpdate";
+import ButtonDelete from "./buttons/ButtonDelete";
 
 export default class Grid {
     create(data) {
@@ -28,15 +30,11 @@ export default class Grid {
                 tbody += `<td>${data.fields[field].value(item)}</td>`;
             }
 
-            const buttonUpdate = new Button({
-                text: data.buttons.update.text,
-                url: data.buttons.update.url(item),
-                class: data.buttons.update.class
+            const buttonUpdate = new ButtonUpdate({
+                url: data.buttons.update.callbackUrl(item)
             });
-            const buttonDelete = new Button({
-                text: data.buttons.delete.text,
-                url: data.buttons.delete.url(item),
-                class: data.buttons.delete.class
+            const buttonDelete = new ButtonDelete({
+                url: data.buttons.delete.callbackUrl(item)
             })
             tbody += `
                 <td>
