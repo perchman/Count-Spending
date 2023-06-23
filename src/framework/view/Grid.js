@@ -5,8 +5,6 @@ import Button from "./Button";
 
 export default class Grid {
     create(data) {
-        const buttonView = new Button();
-
         let thead = '';
         let tbody = '';
 
@@ -14,7 +12,8 @@ export default class Grid {
             let content;
 
             if (data.fields[header].sort) {
-                content = buttonView.create(data.fields[header]);
+                const button = new Button((data.fields[header]));
+                content = button.render();
             } else {
                 content = data.fields[header].text;
             }
@@ -29,18 +28,20 @@ export default class Grid {
                 tbody += `<td>${data.fields[field].value(item)}</td>`;
             }
 
-            tbody += `
-                <td>
-                    ${buttonView.create({
+            const buttonUpdate = new Button({
                 text: data.buttons.update.text,
                 url: data.buttons.update.url(item),
                 class: data.buttons.update.class
-            })}
-                    ${buttonView.create({
+            });
+            const buttonDelete = new Button({
                 text: data.buttons.delete.text,
                 url: data.buttons.delete.url(item),
                 class: data.buttons.delete.class
-            })}
+            })
+            tbody += `
+                <td>
+                    ${buttonUpdate.render()}
+                    ${buttonDelete.render()}
                 </td></tr>
             `;
         }

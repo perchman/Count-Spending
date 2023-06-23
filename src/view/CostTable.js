@@ -12,7 +12,6 @@ export default class CostTable {
 
     render(data) {
         const navbarView = new Navbar();
-        const buttonView = new Button();
         const gridView = new Grid();
         const url = new Url();
 
@@ -33,12 +32,13 @@ export default class CostTable {
                 class: 'nav-link'
             }
         ]);
-        const addButton = buttonView.create({
+        const button = new Button({
             text: 'Add cost',
             url: url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
+        const addButton = button.render();
         const grid = gridView.create({
             fields: {
                 date: {

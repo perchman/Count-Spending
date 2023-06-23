@@ -25,40 +25,39 @@ export default class Pagination {
     }
 
     create(data) {
-        const buttonView = new Button();
-
         const info = `
             Showing <b>${this.limit.start + 1}</b> to \<b>${this.limit.end}</b> \
             of <b>${this.limit.count}</b> results
         `;
 
-        const prevButton = buttonView.create({
+        const prevButton = new Button({
             text: 'Previous',
             url: this.createUrl(this.pageNum - 1),
             class: 'btn btn-pagination table-link border btn-outline-secondary'
         });
-        const nextButton = buttonView.create({
+        const nextButton = new Button({
             text: 'Next',
             url: this.createUrl(this.pageNum + 1),
             class: 'btn btn-pagination table-link border btn-outline-secondary'
-        });
+        })
 
         let buttons = '';
         for (let i = 0; i < Math.ceil(this.limit.count / this.pageSize); i++) {
-            buttons += buttonView.create({
+            const button = new Button({
                 text: i + 1,
                 url: this.createUrl(i + 1),
                 class: 'btn btn-pagination table-link border btn-outline-secondary'
             })
+            buttons += button.render();
         }
 
         return `
             <div id="pagination" class="flex d-flex align-items-center justify-content-between">
                 <div id="infoPagination">${info}</div>
                 <div id="btnPagination" class="btn-group">
-                    ${prevButton}
+                    ${prevButton.render()}
                     ${buttons}
-                    ${nextButton}
+                    ${nextButton.render()}
                 </div>
             </div>
         `;

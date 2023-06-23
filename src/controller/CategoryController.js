@@ -131,7 +131,7 @@ export default class CategoryController {
         this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);
-        const id = url.searchParams.get('id');
+        const id = parseInt(url.searchParams.get('id'));
         let category = Category.getById(id);
 
         const form = document.getElementById('form-category');

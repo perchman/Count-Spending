@@ -1,11 +1,15 @@
 "use strict"
 
 export default class Button {
-    create(params) {
-        params = params || {};
-        let href = params.url ? `href="${params.url}"` : '';
-        let id = params.id ? `id="${params.id}"` : '';
+    constructor(params) {
+        console.log(params);
+        this.href = params.url ? `href="${params.url}"` : '';
+        this.id = params.id ? `id="${params.id}"` : '';
+        this.class = params.class ? `class="${params.class}"` : '';
+        this.text = params.text ? params.text : '';
+    }
 
-        return `<a ${href} ${id} class="${params.class}">${params.text}</a>`;
+    render() {
+        return `<a ${this.href} ${this.id} ${this.class}>${this.text}</a>`;
     }
 }

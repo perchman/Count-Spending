@@ -3,14 +3,13 @@
 import Button from "./Button";
 
 export default class Navbar {
-    create(params) {
-        const buttonView = new Button();
-
+    create(data) {
         let buttons = '';
-        params.forEach((param) => {
+        data.forEach((item) => {
+            const button = new Button(item);
             buttons += `
             <li class="nav-item">
-                ${buttonView.create(param)}
+                ${button.render()}
             </li>
             `;
         })

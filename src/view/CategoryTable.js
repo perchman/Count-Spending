@@ -12,7 +12,6 @@ export default class CategoryTable {
 
     render(data) {
         const navbarView = new Navbar();
-        const buttonView = new Button();
         const gridView = new Grid();
         const url = new Url();
 
@@ -33,7 +32,7 @@ export default class CategoryTable {
                 class: 'nav-link'
             }
         ]);
-        const addButton = buttonView.create({
+        const addButton = new Button({
             text: 'Add category',
             url: url.createUrl({action: 'category/create'}),
             id: 'btn-add',
@@ -88,7 +87,7 @@ export default class CategoryTable {
             <div class="container mt-4">
                 <h2 class="">${data.title}</h2>
                 <div class="mt-4">
-                    ${addButton}  
+                    ${addButton.render()}  
                     ${grid}
                 </div>
             </div>
