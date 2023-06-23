@@ -52,7 +52,7 @@ export default class CostController {
                 e.preventDefault();
                 const url = new URL(window.location.href);
                 const targetUrl = new URL(e.target.href);
-                const id = targetUrl.searchParams.get('id');
+                const id = parseInt(targetUrl.searchParams.get('id'));
 
                 this.delete(id);
 
@@ -144,8 +144,8 @@ export default class CostController {
         this.addNavbarButtonsEventHandler();
 
         const url = new URL(window.location.href);
-        const id = url.searchParams.get('id');
-        let cost = Cost.getById(parseInt(id));
+        const id = parseInt(url.searchParams.get('id'));
+        let cost = Cost.getById(id);
 
         const form = document.getElementById('form-cost');
         form.elements['date'].value = cost.date.toISOString().split('T')[0];
@@ -165,7 +165,7 @@ export default class CostController {
                 parseInt(formData.get('category'))
             ));
 
-            cost.save();
+            cost.update();
 
             this.redirect({action: 'cost/index'});
         })

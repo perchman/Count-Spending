@@ -82,7 +82,7 @@ export default class LocalStorageActiveRecordModel {
         const data = this.getAllRaw();
         const index = this.getIndex(data, id);
 
-        return data[index];
+        return this.makeModel(data[index]);
     }
 
     static getCount() {
@@ -96,6 +96,14 @@ export default class LocalStorageActiveRecordModel {
     save() {
         let data = this.constructor.getAllRaw();
         data.push(this.toJSON());
+
+        localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
+    }
+
+    update() {
+        let data = this.constructor.getAllRaw();
+        const index = this.constructor.getIndex(data, this.id);
+        data[index] = this.toJSON();
 
         localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
     }

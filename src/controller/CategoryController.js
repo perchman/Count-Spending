@@ -62,6 +62,18 @@ export default class CategoryController {
         }
     }
 
+    addPaginationButtonsEventHandler() {
+        const paginationButtons = document.getElementsByClassName('btn-pagination');
+        for (let button of paginationButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.routing();
+            });
+        }
+    }
+
     redirect(action) {
         const url = new Url();
 
@@ -96,6 +108,7 @@ export default class CategoryController {
         this.addCreateButtonEventHandler();
         this.addUpdateButtonsEventHandler();
         this.addDeleteButtonsEventHandler();
+        this.addPaginationButtonsEventHandler();
     }
 
     create() {
@@ -129,7 +142,7 @@ export default class CategoryController {
 
             const formData = new FormData(form);
             category.changeName(formData.get('name')?.toString());
-            category.save();
+            category.update();
 
             this.redirect({action: 'category/index'});
         })
