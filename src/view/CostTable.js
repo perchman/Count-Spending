@@ -1,8 +1,8 @@
 "use strict"
 
-import Navbar from "../framework/View/Navbar";
-import Button from "../framework/View/Button";
-import Grid from "../framework/View/Grid";
+import Navbar from "../framework/view/Navbar";
+import Button from "../framework/view/Button";
+import Grid from "../framework/view/Grid";
 import Url from "../framework/URL";
 
 export default class CostTable {

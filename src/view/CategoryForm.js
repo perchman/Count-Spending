@@ -1,7 +1,7 @@
 "use strict"
 
-import Navbar from "../framework/View/Navbar";
-import Form from "../framework/View/Form";
+import Navbar from "../framework/view/Navbar";
+import Form from "../framework/view/Form";
 import Url from "../framework/URL";
 
 export default class CategoryForm {
