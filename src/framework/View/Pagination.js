@@ -1,6 +1,6 @@
 "use strict"
 
-import ButtonView from "./ButtonView";
+import Button from "./Button";
 
 export default class Pagination {
     constructor(limit, pageSize, pageNum) {
@@ -25,7 +25,7 @@ export default class Pagination {
     }
 
     create(data) {
-        const buttonView = new ButtonView();
+        const buttonView = new Button();
 
         const info = `
             Showing <b>${this.limit.start + 1}</b> to \<b>${this.limit.end}</b> \

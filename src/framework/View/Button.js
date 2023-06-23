@@ -1,6 +1,6 @@
 "use strict"
 
-export default class ButtonView {
+export default class Button {
     create(params) {
         params = params || {};
         let href = params.url ? `href="${params.url}"` : '';

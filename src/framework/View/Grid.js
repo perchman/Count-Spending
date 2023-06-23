@@ -1,11 +1,11 @@
 "use strict"
 
 import Pagination from "./Pagination";
-import ButtonView from "./ButtonView";
+import Button from "./Button";
 
-export default class GridView {
+export default class Grid {
     create(data) {
-        const buttonView = new ButtonView();
+        const buttonView = new Button();
 
         let thead = '';
         let tbody = '';
@@ -22,7 +22,7 @@ export default class GridView {
             thead += `<th class="col">${content}</th>`;
         }
 
-        for (let item of data.dataProvider.getDataForPage()) {
+        for (let item of data.dataProvider.getData()) {
             tbody += '<tr>';
 
             for (let field in data.fields) {

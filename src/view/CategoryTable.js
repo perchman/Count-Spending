@@ -1,8 +1,8 @@
 "use strict"
 
-import NavbarView from "../framework/NavbarView";
-import ButtonView from "../framework/ButtonView";
-import GridView from "../framework/GridView";
+import Navbar from "../framework/View/Navbar";
+import Button from "../framework/View/Button";
+import Grid from "../framework/View/Grid";
 import Url from "../framework/URL";
 
 export default class CategoryTable {
@@ -11,9 +11,9 @@ export default class CategoryTable {
     }
 
     render(data) {
-        const navbarView = new NavbarView();
-        const buttonView = new ButtonView();
-        const gridView = new GridView();
+        const navbarView = new Navbar();
+        const buttonView = new Button();
+        const gridView = new Grid();
         const url = new Url();
 
         const navbar = navbarView.create([

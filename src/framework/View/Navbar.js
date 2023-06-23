@@ -1,10 +1,10 @@
 "use strict"
 
-import ButtonView from "./ButtonView";
+import Button from "./Button";
 
-export default class NavbarView {
+export default class Navbar {
     create(params) {
-        const buttonView = new ButtonView();
+        const buttonView = new Button();
 
         let buttons = '';
         params.forEach((param) => {

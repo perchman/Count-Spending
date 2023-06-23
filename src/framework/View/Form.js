@@ -1,6 +1,6 @@
 "use strict"
 
-export default class FormView {
+export default class Form {
     create(params) {
         let fields = '';
 

@@ -1,7 +1,7 @@
 "use strict"
 
-import NavbarView from "../framework/NavbarView";
-import ButtonView from "../framework/ButtonView";
+import Navbar from "../framework/View/Navbar";
+import Button from "../framework/View/Button";
 import Url from "../framework/URL";
 
 export default class BalanceIndex {
@@ -10,8 +10,8 @@ export default class BalanceIndex {
     }
 
     render(value) {
-        const navbarView = new NavbarView();
-        const buttonView = new ButtonView();
+        const navbarView = new Navbar();
+        const buttonView = new Button();
         const url = new Url();
 
         const navbar = navbarView.create([

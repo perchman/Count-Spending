@@ -1,7 +1,7 @@
 "use strict"
 
-import NavbarView from "../framework/NavbarView";
-import FormView from "../framework/FormView";
+import Navbar from "../framework/View/Navbar";
+import Form from "../framework/View/Form";
 import Url from "../framework/URL";
 
 export default class BalanceReplenish {
@@ -10,8 +10,8 @@ export default class BalanceReplenish {
     }
 
     render() {
-        const navbarView = new NavbarView();
-        const formView = new FormView();
+        const navbarView = new Navbar();
+        const formView = new Form();
         const url = new Url();
 
         const navbar = navbarView.create([

@@ -29,7 +29,7 @@ export default class DataProvider {
         return key + ' ' + value;
     }
 
-    getDataForPage() {
+    getData() {
         return this.config.model.getPart(
             this.getOrderBy(),
             this.getLimit()
