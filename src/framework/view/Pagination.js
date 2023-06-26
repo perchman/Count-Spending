@@ -25,19 +25,21 @@ export default class Pagination {
     }
 
     create(data) {
+        const buttonFactory = new ButtonFactory();
+
         const info = `
             Showing <b>${this.limit.start + 1}</b> to \<b>${this.limit.end}</b> \
             of <b>${this.limit.count}</b> results
         `;
 
-        const buttonPrev = ButtonFactory.factory(
+        const buttonPrev = buttonFactory.factory(
             'pagination',
             {
                 text: 'Previous',
                 url: this.createUrl(this.pageNum - 1),
             }
         );
-        const buttonNext = ButtonFactory.factory(
+        const buttonNext = buttonFactory.factory(
             'pagination',
             {
                 text: 'Next',
@@ -47,7 +49,7 @@ export default class Pagination {
 
         let buttons = '';
         for (let i = 0; i < Math.ceil(this.limit.count / this.pageSize); i++) {
-            const button = ButtonFactory.factory(
+            const button = buttonFactory.factory(
                 'pagination',
                 {
                     text: i + 1,

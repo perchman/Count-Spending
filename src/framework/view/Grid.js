@@ -6,6 +6,8 @@ import ButtonFactory from "./button/ButtonFactory";
 
 export default class Grid {
     create(data) {
+        const buttonFactory = new ButtonFactory();
+
         let thead = '';
         let tbody = '';
 
@@ -31,11 +33,11 @@ export default class Grid {
 
             let buttons = '';
             for (let button in data.buttons) {
-                const factory = ButtonFactory.factory(
+                const btn = buttonFactory.factory(
                     button,
                     {url: data.buttons[button].url(item)}
                 );
-                buttons += factory.render();
+                buttons += btn.render();
             }
 
             tbody += `

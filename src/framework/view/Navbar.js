@@ -4,12 +4,13 @@ import ButtonFactory from "./button/ButtonFactory";
 
 export default class Navbar {
     create(data) {
+        const buttonFactory = new ButtonFactory();
         let buttons = '';
         data.forEach((item) => {
             if (item.hasOwnProperty('active')) {
                 item.class = 'nav-link active';
             }
-            const button = ButtonFactory.factory('navbar', item);
+            const button = buttonFactory.factory('navbar', item);
             buttons += `
             <li class="nav-item">
                 ${button.render()}

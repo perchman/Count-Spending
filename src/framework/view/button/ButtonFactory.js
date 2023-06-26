@@ -3,7 +3,7 @@
 import Button from "./Button";
 
 export default class ButtonFactory {
-    static factory(type, params) {
+    factory(type, params) {
         const types = {
             update: {
                 text: '<i class="bi bi-pencil-fill pe-none"></i>',
