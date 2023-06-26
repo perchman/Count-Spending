@@ -11,8 +11,8 @@ export default class Balance {
         this.#save(value);
     }
 
-    decrease(cost) {
-        const value = this.getValue() - parseInt(cost.price);
+    decrease(depletion) {
+        const value = this.getValue() - parseInt(depletion);
         if (value < 0) {
             throw new Error("Not enough money on balance");
         }

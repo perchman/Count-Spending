@@ -44,7 +44,7 @@ export default class Cost extends LocalStorageActiveRecordModel{
         )
         const balance = new Balance();
 
-        balance.decrease(cost);
+        balance.decrease(cost.price);
         cost.save();
 
         return cost;
@@ -100,6 +100,10 @@ export default class Cost extends LocalStorageActiveRecordModel{
         };
     }
 
+    getCategoryName() {
+        return this.category.name;
+    }
+
     changeDate(date) {
         this.validateDate(date);
         this.date = date;
@@ -107,7 +111,16 @@ export default class Cost extends LocalStorageActiveRecordModel{
 
     changePrice(price) {
         this.validatePrice(price);
-        this.price = price;
+
+        const balance = new Balance();
+
+        if (this.price < price) {
+            balance.decrease(price - this.price);
+            this.price = price;
+        } else {
+            balance.increase(this.price - price);
+            this.price = price;
+        }
     }
 
     changeDescription(description) {
@@ -120,7 +133,9 @@ export default class Cost extends LocalStorageActiveRecordModel{
         this.category = category;
     }
 
-    getCategoryName() {
-        return this.category.name;
+    delete() {
+        const balance = new Balance();
+        balance.increase(this.price);
+        super.delete();
     }
 }

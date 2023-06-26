@@ -133,7 +133,6 @@ export default class CostController {
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {
-                console.log(error);
                 alert(error);
             }
         })
@@ -158,16 +157,21 @@ export default class CostController {
 
             const formData = new FormData(form);
 
-            cost.changeDate(new Date(formData.get('date')));
-            cost.changePrice(parseInt(formData.get('price')));
-            cost.changeDescription(formData.get('description')?.toString());
-            cost.changeCategory(Category.getById(
-                parseInt(formData.get('category'))
-            ));
+            try {
+                cost.changeDate(new Date(formData.get('date')));
+                cost.changePrice(parseInt(formData.get('price')));
+                cost.changeDescription(formData.get('description')?.toString());
+                cost.changeCategory(Category.getById(
+                    parseInt(formData.get('category'))
+                ));
 
-            cost.update();
+                cost.update();
 
-            this.redirect({action: 'cost/index'});
+                this.redirect({action: 'cost/index'});
+            } catch (error) {
+                alert(error);
+            }
+
         })
     }
 
