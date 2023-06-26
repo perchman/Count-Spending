@@ -12,7 +12,6 @@ export default class CategoryTable {
 
     render(data) {
         const navbarView = new Navbar();
-        const gridView = new Grid();
         const url = new Url();
 
         const navbar = navbarView.create([
@@ -36,7 +35,7 @@ export default class CategoryTable {
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const grid = gridView.create({
+        const grid = new Grid({
             fields: {
                 id: {
                     text: 'Id',
@@ -86,7 +85,7 @@ export default class CategoryTable {
                 <h2 class="">${data.title}</h2>
                 <div class="mt-4">
                     ${addButton.render()}  
-                    ${grid}
+                    ${grid.render()}
                 </div>
             </div>
         `;
