@@ -1,7 +1,7 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Button from "../framework/view/buttons/Button";
+import Button from "../framework/view/button/Button";
 import Grid from "../framework/view/Grid";
 import Url from "../framework/URL";
 
@@ -18,18 +18,16 @@ export default class CategoryTable {
         const navbar = navbarView.create([
             {
                 text: 'Costs',
-                url: url.createUrl({action: 'cost/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'cost/index'})
             },
             {
                 text: 'Categories',
                 url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link active'
+                active: true
             },
             {
                 text: 'Balance',
-                url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'balance/index'})
             }
         ]);
         const addButton = new Button({

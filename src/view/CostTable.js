@@ -1,7 +1,7 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Button from "../framework/view/buttons/Button";
+import Button from "../framework/view/button/Button";
 import Grid from "../framework/view/Grid";
 import Url from "../framework/URL";
 
@@ -19,26 +19,23 @@ export default class CostTable {
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
-                class: 'nav-link active',
+                active: true
             },
             {
                 text: 'Categories',
-                url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'category/index'})
             },
             {
                 text: 'Balance',
-                url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'balance/index'})
             }
         ]);
-        const button = new Button({
+        const addButton = new Button({
             text: 'Add cost',
             url: url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const addButton = button.render();
         const grid = gridView.create({
             fields: {
                 date: {
@@ -77,7 +74,7 @@ export default class CostTable {
             dataProvider: data.dataProvider,
             buttons: {
                 update: {
-                    callbackUrl: (cost) => {
+                    url: (cost) => {
                         return url.createUrl({
                             action: 'cost/update',
                             id: cost.id
@@ -85,7 +82,7 @@ export default class CostTable {
                     },
                 },
                 delete: {
-                    callbackUrl: (cost) => {
+                    url: (cost) => {
                         return url.createUrl({
                             action: 'cost/delete',
                             id: cost.id
@@ -100,7 +97,7 @@ export default class CostTable {
             <div class="container mt-4">
                 <h2>${data.title}</h2>
                 <div class="mt-4">
-                    ${addButton}  
+                    ${addButton.render()}  
                     ${grid}
                 </div>
             </div>

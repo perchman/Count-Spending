@@ -18,17 +18,15 @@ export default class CostForm {
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
-                class: 'nav-link active'
+                active: true
             },
             {
                 text: 'Categories',
-                url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'category/index'})
             },
             {
                 text: 'Balance',
-                url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'balance/index'})
             }
         ]);
         const form = formView.create(

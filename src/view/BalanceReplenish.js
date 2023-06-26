@@ -17,18 +17,16 @@ export default class BalanceReplenish {
         const navbar = navbarView.create([
             {
                 text: 'Costs',
-                url: url.createUrl({action: 'cost/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'cost/index'})
             },
             {
                 text: 'Categories',
-                url: url.createUrl({action: 'category/index'}),
-                class: 'nav-link'
+                url: url.createUrl({action: 'category/index'})
             },
             {
                 text: 'Balance',
                 url: url.createUrl({action: 'balance/index'}),
-                class: 'nav-link active'
+                active: true
             }
         ]);
         const form = formView.create({

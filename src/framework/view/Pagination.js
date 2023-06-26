@@ -1,6 +1,6 @@
 "use strict"
 
-import ButtonPagination from "./buttons/ButtonPagination";
+import ButtonFactory from "./button/ButtonFactory";
 
 export default class Pagination {
     constructor(limit, pageSize, pageNum) {
@@ -30,21 +30,30 @@ export default class Pagination {
             of <b>${this.limit.count}</b> results
         `;
 
-        const buttonPrev = new ButtonPagination({
-            text: 'Previous',
-            url: this.createUrl(this.pageNum - 1),
-        });
-        const buttonNext = new ButtonPagination({
-            text: 'Next',
-            url: this.createUrl(this.pageNum + 1),
-        });
+        const buttonPrev = ButtonFactory.factory(
+            'pagination',
+            {
+                text: 'Previous',
+                url: this.createUrl(this.pageNum - 1),
+            }
+        );
+        const buttonNext = ButtonFactory.factory(
+            'pagination',
+            {
+                text: 'Next',
+                url: this.createUrl(this.pageNum + 1),
+            }
+        );
 
         let buttons = '';
         for (let i = 0; i < Math.ceil(this.limit.count / this.pageSize); i++) {
-            const button = new ButtonPagination({
-                text: i + 1,
-                url: this.createUrl(i + 1)
-            })
+            const button = ButtonFactory.factory(
+                'pagination',
+                {
+                    text: i + 1,
+                    url: this.createUrl(i + 1)
+                }
+            );
             buttons += button.render();
         }
 

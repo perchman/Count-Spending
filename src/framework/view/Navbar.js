@@ -1,12 +1,15 @@
 "use strict"
 
-import Button from "./buttons/Button";
+import ButtonFactory from "./button/ButtonFactory";
 
 export default class Navbar {
     create(data) {
         let buttons = '';
         data.forEach((item) => {
-            const button = new Button(item);
+            if (item.hasOwnProperty('active')) {
+                item.class = 'nav-link active';
+            }
+            const button = ButtonFactory.factory('navbar', item);
             buttons += `
             <li class="nav-item">
                 ${button.render()}
