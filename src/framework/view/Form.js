@@ -12,6 +12,8 @@ export default class Form {
         this.fields.forEach((field) => {
             if (field.tag === 'input') {
                 fields += this.createInput(field);
+            } else if (field.tag === 'textarea') {
+                fields += this.createTextArea(field);
             } else if (field.tag === 'select') {
                 fields += this.createSelect(field);
             } else {
@@ -20,13 +22,12 @@ export default class Form {
         })
 
         return `
-            <form id="${this.id}" class="form-label mt-4" name="${this.name}">
-                <div class="row">
+            <form id="${this.id}" class=" mt-4" name="${this.name}">
                     ${fields}
-                    <div class="col-1">
-                        <button type="submit" id= "btnForm" class="btn btn-primary w-100"> \ 
-                        ${this.buttonText}</button>
-                    </div>
+                <div class="w-25 mt-3">
+                    <button type="submit" id= "btnForm" class="btn btn-primary w-100">
+                        ${this.buttonText}
+                    </button>
                 </div>
             </form>
         `;
@@ -34,9 +35,24 @@ export default class Form {
 
     createInput(field) {
         return `
-            <div class="col position-relative">
-                <input id="${field.id}" type="${field.type}" class="form-control" \
+            <div class="d-flex w-50 mt-2">
+                <input id="${field.id}" type="${field.type}" class="form-control w-50" \
                 name="${field.name}" placeholder="${field.label}">
+                <div class="invalid-feedback w-50 ps-3">
+                    Please choose a username.
+                </div>
+            </div>
+        `;
+    }
+
+    createTextArea(field) {
+        return `
+            <div class="d-flex w-50 mt-2">
+                <textarea id="${field.id}" type="${field.type}" class="form-control w-50" \
+                name="${field.name}" placeholder="${field.label}"></textarea>
+                <div class="invalid-feedback w-50 ps-3">
+                    Please choose a username.
+                </div>
             </div>
         `;
     }
@@ -48,11 +64,14 @@ export default class Form {
         });
 
         return `
-            <div class="col">
-                <select id="${field.id}" class="form-select" name="${field.name}">
+            <div class="d-flex w-50 mt-2">
+                <select id="${field.id}" class="form-select w-50" name="${field.name}">
                     <option disabled selected hidden>${field.disabledOption}</option>
                     ${options}
                 </select>
+                <div class="invalid-feedback w-50 ps-3">
+                    Please choose a username.
+                </div>
             </div>
         `;
     }

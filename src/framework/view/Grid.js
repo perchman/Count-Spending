@@ -53,7 +53,7 @@ export default class Grid {
         }
 
         const pagination = new Pagination(
-            this.dataProvider.getLimit(),
+            this.dataProvider.computeLimit(),
             this.dataProvider.config.pagination.pageSize,
             this.dataProvider.getPageNum(),
         );

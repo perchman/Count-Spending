@@ -10,11 +10,9 @@ export default class BalanceReplenish {
     }
 
     render() {
-        const navbarView = new Navbar();
-        const formView = new Form();
         const url = new Url();
 
-        const navbar = navbarView.render([
+        const navbar = new Navbar ([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'})
@@ -29,7 +27,7 @@ export default class BalanceReplenish {
                 active: true
             }
         ]);
-        const form = formView.render({
+        const form = new Form ({
             id: 'form-balance',
             name: 'balance',
             fields: [
@@ -45,10 +43,10 @@ export default class BalanceReplenish {
         })
 
         this.body.innerHTML = `
-            ${navbar}
+            ${navbar.render()}
             <div class="container mt-4">
                 <h2>Replenish balance</h2>
-                ${form}
+                ${form.render()}
             </div>
         `;
     }

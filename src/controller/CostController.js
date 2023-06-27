@@ -4,6 +4,7 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
+import ValidatorFactory from "../framework/validate/ValidatorFactory";
 
 export default class CostController {
     constructor(view, route) {
@@ -112,9 +113,66 @@ export default class CostController {
     }
 
     create() {
-        this.view.render('Create cost', Category.getAll('id desc'));
+        const view = this.view;
+        const form = new Form('cost', {
+            fields: [
+                {
+                    tag: 'select',
+                    disabledOption: 'Select a category',
+                    id: 'select-category',
+                    name: 'category',
+                    options: categories,
+                },
+                {
+                    name: 'date',
+                    type: 'date',
+                    label: 'Date',
+                    validators: ['required']
+                },
+                {
+                    tag: 'input',
+                    id: 'input-price',
+                    name: 'price',
+                    type: 'number',
+                    label: 'Price',
+                },
+                {
+                    tag: 'textarea',
+                    id: 'input-description',
+                    name: 'description',
+                    type: 'text',
+                    label: 'Description',
+                }
+            ],
+        });
+
+        // view.render('Create cost', Category.getAll('id desc'));
+        view.render({
+            title: 'Create cost',
+            categories: Category.getAll('id desc'),
+            form: form
+        });
         this.addNavbarButtonsEventHandler();
 
+        form.onSuccessSubmit((data) => {
+            try {
+                Cost.create(
+                    new Date(data.date),
+                    parseInt(data.price),
+                    data.description,
+                    Category.getById(
+                        parseInt(data.category)
+                    )
+                );
+
+                this.redirect({action: 'cost/index'});
+            } catch (error) {
+                alert(error);
+            }
+        });
+
+
+        /*
         const form = document.getElementById('form-cost');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -136,6 +194,7 @@ export default class CostController {
                 alert(error);
             }
         })
+        */
     }
 
     update() {

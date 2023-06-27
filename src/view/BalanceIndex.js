@@ -10,10 +10,9 @@ export default class BalanceIndex {
     }
 
     render(value) {
-        const navbarView = new Navbar();
         const url = new Url();
 
-        const navbar = navbarView.render([
+        const navbar = new Navbar ([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
@@ -37,7 +36,7 @@ export default class BalanceIndex {
 
 
         this.body.innerHTML = `
-            ${navbar}
+            ${navbar.render()}
             <div class="container">
                 <h2 class="mt-4">Balance</h2>
                 <div class="mt-4">

@@ -10,7 +10,7 @@ export default class DataProvider {
         return parseInt(url.searchParams.get('page')) || 1;
     }
 
-    getLimit() {
+    computeLimit() {
         const count = this.config.model.getCount()
         const start = (this.getPageNum() - 1) * this.config.pagination.pageSize;
         const end = Math.min(start + this.config.pagination.pageSize, count);
@@ -22,7 +22,7 @@ export default class DataProvider {
         }
     }
 
-    getOrderBy() {
+    computeOrderBy() {
         const key = Object.keys(this.config.sort.defaultOrder).toString();
         const value = this.config.sort.defaultOrder[key];
 
@@ -31,8 +31,8 @@ export default class DataProvider {
 
     getData() {
         return this.config.model.getPart(
-            this.getOrderBy(),
-            this.getLimit()
+            this.computeOrderBy(),
+            this.computeLimit()
         );
     }
 }
