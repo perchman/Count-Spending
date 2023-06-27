@@ -10,11 +10,9 @@ export default class CategoryForm {
     }
 
     render(title) {
-        const navbarView = new Navbar();
-        const formView = new Form();
         const url = new Url();
 
-        const navbar = navbarView.create([
+        const navbar = new Navbar ([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'})
@@ -29,7 +27,7 @@ export default class CategoryForm {
                 url: url.createUrl({action: 'balance/index'})
             }
         ]);
-        const form = formView.create(
+        const form = new Form (
             {
                 id: 'form-category',
                 name: 'category',
@@ -47,10 +45,10 @@ export default class CategoryForm {
         );
 
         this.body.innerHTML = `
-            ${navbar}
+            ${navbar.render()}
             <div class="container mt-4">
                 <h2>${title}</h2>
-                ${form}  
+                ${form.render()}  
             </div>
         `;
     }

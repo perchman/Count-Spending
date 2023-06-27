@@ -13,7 +13,7 @@ export default class BalanceIndex {
         const navbarView = new Navbar();
         const url = new Url();
 
-        const navbar = navbarView.create([
+        const navbar = navbarView.render([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),

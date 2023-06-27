@@ -1,10 +1,15 @@
 "use strict"
 
 export default class Form {
-    create(params) {
+    constructor(data) {
+        this.id = data.id;
+        this.name = data.name;
+        this.fields = data.fields;
+        this.buttonText = data.buttonText;
+    }
+    render() {
         let fields = '';
-
-        params.fields.forEach((field) => {
+        this.fields.forEach((field) => {
             if (field.tag === 'input') {
                 fields += this.createInput(field);
             } else if (field.tag === 'select') {
@@ -15,12 +20,12 @@ export default class Form {
         })
 
         return `
-            <form id="${params.id}" class="form-label mt-4" name="${params.name}">
+            <form id="${this.id}" class="form-label mt-4" name="${this.name}">
                 <div class="row">
                     ${fields}
                     <div class="col-1">
                         <button type="submit" id= "btnForm" class="btn btn-primary w-100"> \ 
-                        ${params.buttonText}</button>
+                        ${this.buttonText}</button>
                     </div>
                 </div>
             </form>

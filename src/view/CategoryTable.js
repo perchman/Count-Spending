@@ -11,10 +11,9 @@ export default class CategoryTable {
     }
 
     render(data) {
-        const navbarView = new Navbar();
         const url = new Url();
 
-        const navbar = navbarView.create([
+        const navbar = new Navbar([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'})
@@ -80,7 +79,7 @@ export default class CategoryTable {
         });
 
         this.body.innerHTML = `
-            ${navbar}
+            ${navbar.render()}
             <div class="container mt-4">
                 <h2 class="">${data.title}</h2>
                 <div class="mt-4">

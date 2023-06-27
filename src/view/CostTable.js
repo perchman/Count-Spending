@@ -14,7 +14,7 @@ export default class CostTable {
         const navbarView = new Navbar();
         const url = new Url();
 
-        const navbar = navbarView.create([
+        const navbar = new Navbar ([
             {
                 text: 'Costs',
                 url: url.createUrl({action: 'cost/index'}),
@@ -29,13 +29,13 @@ export default class CostTable {
                 url: url.createUrl({action: 'balance/index'})
             }
         ]);
-        const addButton = new Button({
+        const addButton = new Button ({
             text: 'Add cost',
             url: url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
-        const grid = new Grid({
+        const grid = new Grid ({
             fields: {
                 date: {
                     text: 'Date',
@@ -92,7 +92,7 @@ export default class CostTable {
         });
 
         this.body.innerHTML = `
-            ${navbar}
+            ${navbar.render()}
             <div class="container mt-4">
                 <h2>${data.title}</h2>
                 <div class="mt-4">
