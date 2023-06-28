@@ -1,7 +1,6 @@
 "use strict"
 
-import ValidatorFactory from "./validate/ValidatorFactory";
-import {validate} from "schema-utils";
+import ValidatorFactory from "./validators/ValidatorFactory";
 
 export default class FormHandler {
     constructor(name, fields) {
@@ -38,7 +37,7 @@ export default class FormHandler {
 
             }
 
-            if (Object.keys(errors).length > 1) {
+            if (Object.keys(errors).length > 0) {
                 for (let error in errors) {
                     const elem = document.getElementById('error-' + error);
                     elem.textContent = errors[error];

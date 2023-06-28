@@ -2,8 +2,8 @@
 
 export default class RequiredValidator {
     validate(value) {
-        if (value === null || value.length === 0 ) {
-            return "Required field"
+        if (!value) {
+            return "Required field";
         }
         return null;
     }

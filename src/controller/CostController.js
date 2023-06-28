@@ -4,7 +4,7 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import ValidatorFactory from "../framework/validate/ValidatorFactory";
+import ValidatorFactory from "../framework/validators/ValidatorFactory";
 import FormHandler from "../framework/FormHandler";
 
 export default class CostController {
