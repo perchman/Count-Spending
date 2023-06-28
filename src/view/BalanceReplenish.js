@@ -1,7 +1,7 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Form from "../framework/view/Form";
+import Form from "../framework/view/form/Form";
 import Url from "../framework/URL";
 
 export default class BalanceReplenish {

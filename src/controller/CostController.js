@@ -5,6 +5,7 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import ValidatorFactory from "../framework/validate/ValidatorFactory";
+import FormHandler from "../framework/FormHandler";
 
 export default class CostController {
     constructor(view, route) {
@@ -114,46 +115,35 @@ export default class CostController {
 
     create() {
         const view = this.view;
-        const form = new Form('cost', {
-            fields: [
-                {
-                    tag: 'select',
-                    disabledOption: 'Select a category',
-                    id: 'select-category',
-                    name: 'category',
-                    options: categories,
-                },
-                {
-                    name: 'date',
-                    type: 'date',
-                    label: 'Date',
-                    validators: ['required']
-                },
-                {
-                    tag: 'input',
-                    id: 'input-price',
-                    name: 'price',
-                    type: 'number',
-                    label: 'Price',
-                },
-                {
-                    tag: 'textarea',
-                    id: 'input-description',
-                    name: 'description',
-                    type: 'text',
-                    label: 'Description',
-                }
-            ],
-        });
 
         // view.render('Create cost', Category.getAll('id desc'));
         view.render({
             title: 'Create cost',
-            categories: Category.getAll('id desc'),
-            form: form
+            categories: Category.getAll('id desc')
         });
         this.addNavbarButtonsEventHandler();
 
+        const form = new FormHandler(
+            'cost',
+            [
+                {
+                    name: 'date',
+                    validators: ['required']
+                },
+                {
+                    name: 'category',
+                    validators: ['required']
+                },
+                {
+                    name: 'price',
+                    validators: ['required']
+                },
+                {
+                    name: 'description',
+                    validators: ['required']
+                }
+            ]
+        );
         form.onSuccessSubmit((data) => {
             try {
                 Cost.create(

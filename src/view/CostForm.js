@@ -1,15 +1,20 @@
 "use strict"
 
 import Navbar from "../framework/view/Navbar";
-import Form from "../framework/view/Form";
+import Form from "../framework/view/form/Form";
+import DateField from "../framework/view/form/DateField";
+import DropdownField from "../framework/view/form/DropdownField";
+import TextField from "../framework/view/form/TextField";
+import NumberField from "../framework/view/form/NumberField";
 import Url from "../framework/URL";
+import FormButton from "../framework/view/form/FormButton";
 
 export default class CostForm {
     constructor() {
         this.body = document.body;
     }
 
-    render(title, categories) {
+    render(data) {
         const url = new Url();
 
         const navbar = new Navbar ([
@@ -66,38 +71,41 @@ export default class CostForm {
         //     }
         // );
 
-        const form = new FormView(name);
-        const categoryField = new DropdownField({
-            name: 'category',
-            label: 'Category',
-            // value: 1
-            data: categories,
-            disabledOption: 'Select a category',
-        });
+        const form = new Form('cost');
         const dateField = new DateField({
             name: 'date',
             label: 'Date',
-            value: value,
+            // value: data.cost.date
         });
+        const categoryField = new DropdownField({
+            name: 'category',
+            label: 'Category',
+            data: data.categories,
+            // value: data.cost.category.name,
+            disabledOption: 'Select a category',
+        });
+        const priceField = new NumberField({
+            name: 'price',
+            label: 'Price',
+            // value: data.cost.price
+        })
+        const descriptionField = new TextField({
+            name: 'description',
+            label: 'Description',
+            // value: data.cost.description
+        })
+        const saveButton = new FormButton('Save');
 
-        /*
         this.body.innerHTML = `
             ${navbar.render()}
             <div class="container mt-4">
-                <h2>${title}</h2>
-                ${form.render()}  
-            </div>
-        `;
-
-         */
-
-        this.body.innerHTML = `
-            ${navbar.render()}
-            <div class="container mt-4">
-                <h2>${title}</h2>
+                <h2>${data.title}</h2>
                 ${form.begin()}
-                    ${categoryField.render()}
                     ${dateField.render()}
+                    ${categoryField.render()}
+                    ${priceField.render()}
+                    ${descriptionField.render()}
+                    ${saveButton.render()}
                 ${form.end()}
             </div>
         `;

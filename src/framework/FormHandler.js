@@ -1,6 +1,7 @@
 "use strict"
 
 import ValidatorFactory from "./validate/ValidatorFactory";
+import {validate} from "schema-utils";
 
 export default class FormHandler {
     constructor(name, fields) {
@@ -21,19 +22,28 @@ export default class FormHandler {
             let data = {};
             let errors = {};
             const formData = new FormData(form);
+
             for (let field of this.fields) {
-                // {
-                //     name: 'date',
-                //         type: 'date',
-                //     label: 'Date',
-                //     validators: ['required']
-                // },
+                const value = formData.get(field.name);
+
+                field.validators.forEach((type) => {
+                    const validator = validatorFactory.factory(type);
+                    const validationResult = validator.validate(value);
+                    if (!validationResult) {
+                        data[field.name] = value;
+                    } else {
+                        errors[field.name] = validationResult;
+                    }
+                })
 
             }
 
-            if (errors) {
-                console.log(errors);
-                // render errors
+            if (Object.keys(errors).length > 1) {
+                for (let error in errors) {
+                    const elem = document.getElementById('error-' + error);
+                    elem.textContent = errors[error];
+                    elem.style.display = 'block';
+                }
             } else {
                 callback(data);
             }
