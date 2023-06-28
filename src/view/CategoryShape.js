@@ -4,7 +4,7 @@ import Navbar from "../framework/view/Navbar";
 import Form from "../framework/view/form/Form";
 import Url from "../framework/URL";
 
-export default class CategoryForm {
+export default class CategoryShape {
     constructor() {
         this.body = document.body;
     }

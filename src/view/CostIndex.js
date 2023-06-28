@@ -5,7 +5,7 @@ import Button from "../framework/view/button/Button";
 import Grid from "../framework/view/Grid";
 import Url from "../framework/URL";
 
-export default class CostTable {
+export default class CostIndex {
     constructor() {
         this.body = document.body;
     }

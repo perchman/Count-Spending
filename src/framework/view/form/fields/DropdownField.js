@@ -2,7 +2,7 @@
 
 export default class DropdownField {
     constructor(params) {
-        console.log(params);
+        console.log(params)
         this.name = params.name;
         this.disabledOption = params.disabledOption;
         this.data = params.data;

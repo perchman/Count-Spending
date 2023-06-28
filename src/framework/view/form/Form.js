@@ -1,84 +1,55 @@
 "use strict"
 
+import ValidatorFactory from "../../validators/ValidatorFactory";
+
 export default class Form {
-    constructor(name) {
+    constructor(name, fields) {
         this.name = name;
+        this.fields = fields;
     }
 
-    begin() {
-        return `<form id="form-${this.name}" class=" mt-4" name="${this.name}">`;
+    render() {
+        throw new Error("this method in not incremented");
     }
 
-    end() {
-        return `</form>`;
+    getId() {
+        return 'form-' + this.name;
     }
 
-    // render() {
-    //     let fields = '';
-    //     this.fields.forEach((field) => {
-    //         if (field.tag === 'input') {
-    //             fields += this.createInput(field);
-    //         } else if (field.tag === 'textarea') {
-    //             fields += this.createTextArea(field);
-    //         } else if (field.tag === 'select') {
-    //             fields += this.createSelect(field);
-    //         } else {
-    //             throw new Error(field.tag + " tag not supported");
-    //         }
-    //     })
-    //
-    //     return `
-    //         <form id="${this.id}" class=" mt-4" name="${this.name}">
-    //                 ${fields}
-    //             <div class="w-25 mt-3">
-    //                 <button type="submit" id= "btnForm" class="btn btn-primary w-100">
-    //                     ${this.buttonText}
-    //                 </button>
-    //             </div>
-    //         </form>
-    //     `;
-    // }
-    //
-    // createInput(field) {
-    //     return `
-    //         <div class="d-flex w-50 mt-2">
-    //             <input id="${field.id}" type="${field.type}" class="form-control w-50" \
-    //             name="${field.name}" placeholder="${field.label}">
-    //             <div class="invalid-feedback w-50 ps-3">
-    //                 Please choose a username.
-    //             </div>
-    //         </div>
-    //     `;
-    // }
-    //
-    // createTextArea(field) {
-    //     return `
-    //         <div class="d-flex w-50 mt-2">
-    //             <textarea id="${field.id}" type="${field.type}" class="form-control w-50" \
-    //             name="${field.name}" placeholder="${field.label}"></textarea>
-    //             <div class="invalid-feedback w-50 ps-3">
-    //                 Please choose a username.
-    //             </div>
-    //         </div>
-    //     `;
-    // }
-    //
-    // createSelect(field) {
-    //     let options = '';
-    //     field.options.forEach((option) => {
-    //         options += `<option value="${option.id}">${option.name}</option>`;
-    //     });
-    //
-    //     return `
-    //         <div class="d-flex w-50 mt-2">
-    //             <select id="${field.id}" class="form-select w-50" name="${field.name}">
-    //                 <option disabled selected hidden>${field.disabledOption}</option>
-    //                 ${options}
-    //             </select>
-    //             <div class="invalid-feedback w-50 ps-3">
-    //                 Please choose a username.
-    //             </div>
-    //         </div>
-    //     `;
-    // }
+    onSuccessSubmit(callback) {
+        const form = document.getElementById(this.getId());
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const validatorFactory = new ValidatorFactory();
+            let data = {};
+            let errors = {};
+            const formData = new FormData(form);
+
+            for (let field in this.fields) {
+                const value = formData.get(this.fields[field].name);
+
+                this.fields[field].validators.forEach((type) => {
+                    const validator = validatorFactory.factory(type);
+                    const validationResult = validator.validate(value);
+                    if (!validationResult) {
+                        data[this.fields[field].name] = value;
+                    } else {
+                        errors[this.fields[field].name] = validationResult;
+                    }
+                })
+
+            }
+
+            if (Object.keys(errors).length > 0) {
+                for (let error in errors) {
+                    const elem = document.getElementById('error-' + error);
+                    elem.textContent = errors[error];
+                    elem.style.display = 'block';
+                }
+            } else {
+                callback(data);
+            }
+        })
+    }
 }

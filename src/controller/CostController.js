@@ -4,8 +4,7 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import ValidatorFactory from "../framework/validators/ValidatorFactory";
-import FormHandler from "../framework/FormHandler";
+import CostForm from "../framework/view/form/CostForm";
 
 export default class CostController {
     constructor(view, route) {
@@ -115,35 +114,39 @@ export default class CostController {
 
     create() {
         const view = this.view;
-
-        // view.render('Create cost', Category.getAll('id desc'));
-        view.render({
-            title: 'Create cost',
-            categories: Category.getAll('id desc')
-        });
-        this.addNavbarButtonsEventHandler();
-
-        const form = new FormHandler(
-            'cost',
-            [
-                {
+        const form = new CostForm(
+            {
+                date: {
                     name: 'date',
+                    label: 'Date',
                     validators: ['required']
                 },
-                {
+                category: {
                     name: 'category',
+                    data: Category.getAll('id desc'),
+                    disabledOption: 'Select a category',
                     validators: ['required']
                 },
-                {
+                price: {
                     name: 'price',
+                    label: 'Price',
                     validators: ['required']
                 },
-                {
+                description: {
                     name: 'description',
+                    label: 'Description',
                     validators: ['required']
                 }
-            ]
+            }
         );
+
+        view.render({
+            title: 'Create cost',
+            form: form
+        });
+
+        this.addNavbarButtonsEventHandler();
+
         form.onSuccessSubmit((data) => {
             try {
                 Cost.create(
@@ -170,7 +173,7 @@ export default class CostController {
             const formData = new FormData(form);
 
             try {
-                Cost.create(
+                CostShape.create(
                     new Date(formData.get('date')),
                     parseInt(formData.get('price')),
                     formData.get('description')?.toString(),
