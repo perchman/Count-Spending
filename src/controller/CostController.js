@@ -4,7 +4,8 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import CostForm from "../view/CostForm";
+import CostCreate from "../view/cost/CostCreate";
+import CostUpdate from "../view/cost/CostUpdate";
 
 export default class CostController {
     constructor(view, route) {
@@ -113,34 +114,9 @@ export default class CostController {
     }
 
     create() {
-        const view = this.view;
-        const form = new CostForm(
-            {
-                date: {
-                    name: 'date',
-                    label: 'Date',
-                    validators: ['required']
-                },
-                category: {
-                    name: 'category',
-                    data: Category.getAll('id desc'),
-                    disabledOption: 'Select a category',
-                    validators: ['required']
-                },
-                price: {
-                    name: 'price',
-                    label: 'Price',
-                    validators: ['required', 'positiveNumber']
-                },
-                description: {
-                    name: 'description',
-                    label: 'Description',
-                    validators: ['required', 'maxLength']
-                }
-            }
-        );
+        const form = new CostCreate();
 
-        view.render({
+        this.view.render({
             title: 'Create cost',
             form: form
         });
@@ -163,58 +139,29 @@ export default class CostController {
                 alert(error);
             }
         });
-
-
-        /*
-        const form = document.getElementById('form-cost');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(form);
-
-            try {
-                CostShape.create(
-                    new Date(formData.get('date')),
-                    parseInt(formData.get('price')),
-                    formData.get('description')?.toString(),
-                    Category.getById(
-                        parseInt(formData.get('category'))
-                    )
-                );
-
-                this.redirect({action: 'cost/index'});
-            } catch (error) {
-                alert(error);
-            }
-        })
-        */
     }
 
     update() {
-        this.view.render('Update cost', Category.getAll('id desc'));
-        this.addNavbarButtonsEventHandler();
-
         const url = new URL(window.location.href);
         const id = parseInt(url.searchParams.get('id'));
         let cost = Cost.getById(id);
 
-        const form = document.getElementById('form-cost');
-        form.elements['date'].value = cost.date.toISOString().split('T')[0];
-        form.elements['category'].value = cost.category.id;
-        form.elements['price'].value = cost.price;
-        form.elements['description'].value = cost.description;
+        const form = new CostUpdate(cost);
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+        this.view.render({
+            title: 'Update cost',
+            form: form
+        });
 
-            const formData = new FormData(form);
+        this.addNavbarButtonsEventHandler();
 
+        form.onSuccessSubmit((data) => {
             try {
-                cost.changeDate(new Date(formData.get('date')));
-                cost.changePrice(parseInt(formData.get('price')));
-                cost.changeDescription(formData.get('description')?.toString());
+                cost.changeDate(new Date(data.date));
+                cost.changePrice(parseInt(data.price));
+                cost.changeDescription(data.description);
                 cost.changeCategory(Category.getById(
-                    parseInt(formData.get('category'))
+                    parseInt(data.category)
                 ));
 
                 cost.update();
@@ -223,7 +170,6 @@ export default class CostController {
             } catch (error) {
                 alert(error);
             }
-
         })
     }
 

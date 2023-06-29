@@ -5,13 +5,18 @@ export default class DropdownField {
         console.log(params)
         this.name = params.name;
         this.disabledOption = params.disabledOption;
+        this.selected = params.selected;
         this.data = params.data;
     }
 
     render() {
         let options = '';
         this.data.forEach((item) => {
-            options += `<option value="${item.id}">${item.name}</option>`;
+            if (this.selected === item.id) {
+                options += `<option value="${item.id}" selected>${item.name}</option>`;
+            } else {
+                options += `<option value="${item.id}">${item.name}</option>`;
+            }
         });
 
         return `

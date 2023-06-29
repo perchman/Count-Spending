@@ -3,14 +3,14 @@
 import './bootstrap.css';
 import Route from "./framework/Route";
 import CostController from "./controller/CostController";
-import CostIndex from "./view/CostIndex";
-import CostShape from "./view/CostShape";
+import CostIndex from "./view/cost/CostIndex";
+import CostShape from "./view/cost/CostShape";
 import CategoryController from "./controller/CategoryController";
-import CategoryIndex from "./view/CategoryIndex";
-import CategoryShape from "./view/CategoryShape";
+import CategoryIndex from "./view/category/CategoryIndex";
+import CategoryShape from "./view/category/CategoryShape";
 import BalanceController from "./controller/BalanceController";
-import BalanceIndex from "./view/BalanceIndex";
-import BalanceReplenish from "./view/BalanceReplenish";
+import BalanceIndex from "./view/balance/BalanceIndex";
+import BalanceShape from "./view/balance/BalanceShape";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     route.addRoute('balance/replenish', () => {
-        const balanceReplenish = new BalanceReplenish();
+        const balanceReplenish = new BalanceShape();
         const controller = new BalanceController(balanceReplenish, route);
 
         controller.replenish();

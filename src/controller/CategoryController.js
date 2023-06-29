@@ -4,6 +4,8 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import Cost from "../model/Cost";
+import CategoryCreate from "../view/category/CategoryCreate";
+import CategoryUpdate from "../view/category/CategoryUpdate";
 
 export default class CategoryController {
     constructor(view, route) {
@@ -52,7 +54,7 @@ export default class CategoryController {
                 e.preventDefault();
                 const url = new URL(window.location.href);
                 const targetUrl = new URL(e.target.href);
-                const id = targetUrl.searchParams.get('id');
+                const id = parseInt(targetUrl.searchParams.get('id'));
 
                 this.delete(id);
 
@@ -112,36 +114,37 @@ export default class CategoryController {
     }
 
     create() {
-        this.view.render('Create category');
+        const form = new CategoryCreate();
+
+        this.view.render({
+            title: 'Create category',
+            form: form
+        });
+
         this.addNavbarButtonsEventHandler();
 
-        const form = document.getElementById('form-category');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(form);
-            const category = Category.create(formData.get('name')?.toString());
-
+        form.onSuccessSubmit((data) => {
+            Category.create(data.categoryName);
             this.redirect({action: 'category/index'});
         })
     }
 
     update() {
-        this.view.render('Update category');
-        this.addNavbarButtonsEventHandler();
-
         const url = new URL(window.location.href);
         const id = parseInt(url.searchParams.get('id'));
         let category = Category.getById(id);
 
-        const form = document.getElementById('form-category');
-        form.elements['name'].value = category.name;
+        const form = new CategoryUpdate(category);
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+        this.view.render({
+            title: 'Create category',
+            form: form
+        });
 
-            const formData = new FormData(form);
-            category.changeName(formData.get('name')?.toString());
+        this.addNavbarButtonsEventHandler();
+
+        form.onSuccessSubmit((data) => {
+            category.changeName(data.categoryName);
             category.update();
 
             this.redirect({action: 'category/index'});

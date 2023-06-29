@@ -2,6 +2,7 @@
 
 import Balance from "../model/Balance";
 import Url from "../framework/URL";
+import BalanceReplenish from "../view/balance/BalanceReplenish";
 
 export default class BalanceController {
     constructor(view, route) {
@@ -48,15 +49,16 @@ export default class BalanceController {
     }
 
     replenish() {
-        this.view.render();
+        const form = new BalanceReplenish();
+        this.view.render({
+            title: 'Replenish balance',
+            form: form
+        });
         this.addNavbarButtonsEventHandler();
 
-        const form = document.getElementById('form-balance');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
+        form.onSuccessSubmit((data) => {
             const balance = new Balance();
-            balance.increase(parseInt(formData.get('replenish')));
+            balance.increase(parseInt(data.replenish));
 
             this.redirect({action: 'balance/index'});
         });

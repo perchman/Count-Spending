@@ -28,7 +28,7 @@ export default class Form {
 
             for (let field in this.fields) {
                 const value = formData.get(field);
-
+                console.log(this.fields);
                 this.fields[field].validators.forEach((type) => {
                     const validator = validatorFactory.factory(type);
                     const validationResult = validator.validate(value);

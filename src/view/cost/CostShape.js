@@ -1,8 +1,7 @@
 "use strict"
 
-import Navbar from "../framework/view/Navbar";
-import CostForm from "./CostForm";
-import Url from "../framework/URL";
+import Navbar from "../../framework/view/Navbar";
+import Url from "../../framework/URL";
 
 export default class CostShape {
     constructor() {

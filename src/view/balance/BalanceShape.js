@@ -1,15 +1,14 @@
 "use strict"
 
-import Navbar from "../framework/view/Navbar";
-import Form from "../framework/view/form/Form";
-import Url from "../framework/URL";
+import Navbar from "../../framework/view/Navbar";
+import Url from "../../framework/URL";
 
-export default class BalanceReplenish {
+export default class BalanceShape {
     constructor() {
         this.body = document.body;
     }
 
-    render() {
+    render(data) {
         const url = new Url();
 
         const navbar = new Navbar ([
@@ -27,26 +26,12 @@ export default class BalanceReplenish {
                 active: true
             }
         ]);
-        const form = new Form ({
-            id: 'form-balance',
-            name: 'balance',
-            fields: [
-                {
-                    tag: 'input',
-                    id: 'input-replenish',
-                    name: 'replenish',
-                    type: 'number',
-                    label: 'Amount',
-                }
-            ],
-            buttonText: 'Add'
-        })
 
         this.body.innerHTML = `
             ${navbar.render()}
             <div class="container mt-4">
-                <h2>Replenish balance</h2>
-                ${form.render()}
+                <h2>${data.title}</h2>
+                ${data.form.render()}
             </div>
         `;
     }

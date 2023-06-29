@@ -1,15 +1,14 @@
 "use strict"
 
-import Navbar from "../framework/view/Navbar";
-import Form from "../framework/view/form/Form";
-import Url from "../framework/URL";
+import Navbar from "../../framework/view/Navbar";
+import Url from "../../framework/URL";
 
 export default class CategoryShape {
     constructor() {
         this.body = document.body;
     }
 
-    render(title) {
+    render(data) {
         const url = new Url();
 
         const navbar = new Navbar ([
@@ -27,28 +26,12 @@ export default class CategoryShape {
                 url: url.createUrl({action: 'balance/index'})
             }
         ]);
-        const form = new Form (
-            {
-                id: 'form-category',
-                name: 'category',
-                fields: [
-                    {
-                        tag: 'input',
-                        id: 'input-category',
-                        name: 'name',
-                        type: 'text',
-                        label: 'Category',
-                    }
-                ],
-                buttonText: 'Save'
-            }
-        );
 
         this.body.innerHTML = `
             ${navbar.render()}
             <div class="container mt-4">
-                <h2>${title}</h2>
-                ${form.render()}  
+                <h2>${data.title}</h2>
+                ${data.form.render()}  
             </div>
         `;
     }

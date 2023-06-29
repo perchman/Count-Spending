@@ -1,9 +1,9 @@
 "use strict"
 
-import Navbar from "../framework/view/Navbar";
-import Button from "../framework/view/button/Button";
-import Grid from "../framework/view/Grid";
-import Url from "../framework/URL";
+import Navbar from "../../framework/view/Navbar";
+import Button from "../../framework/view/button/Button";
+import Grid from "../../framework/view/Grid";
+import Url from "../../framework/URL";
 
 export default class CostIndex {
     constructor() {
