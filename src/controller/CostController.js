@@ -4,7 +4,7 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import CostForm from "../framework/view/form/CostForm";
+import CostForm from "../view/CostForm";
 
 export default class CostController {
     constructor(view, route) {
@@ -130,12 +130,12 @@ export default class CostController {
                 price: {
                     name: 'price',
                     label: 'Price',
-                    validators: ['required']
+                    validators: ['required', 'positiveNumber']
                 },
                 description: {
                     name: 'description',
                     label: 'Description',
-                    validators: ['required']
+                    validators: ['required', 'maxLength']
                 }
             }
         );

@@ -27,15 +27,16 @@ export default class Form {
             const formData = new FormData(form);
 
             for (let field in this.fields) {
-                const value = formData.get(this.fields[field].name);
+                const value = formData.get(field);
 
                 this.fields[field].validators.forEach((type) => {
                     const validator = validatorFactory.factory(type);
                     const validationResult = validator.validate(value);
                     if (!validationResult) {
-                        data[this.fields[field].name] = value;
+                        data[field] = value;
                     } else {
-                        errors[this.fields[field].name] = validationResult;
+                        errors[field] = validationResult;
+                        return false;
                     }
                 })
 

@@ -1,11 +1,11 @@
 "use strict"
 
-import Form from "./Form";
-import DateField from "./fields/DateField";
-import DropdownField from "./fields/DropdownField";
-import TextField from "./fields/TextField";
-import NumberField from "./fields/NumberField";
-import FormButton from "./fields/FormButton";
+import Form from "../framework/view/form/Form";
+import DateField from "../framework/view/form/fields/DateField";
+import DropdownField from "../framework/view/form/fields/DropdownField";
+import TextField from "../framework/view/form/fields/TextField";
+import NumberField from "../framework/view/form/fields/NumberField";
+import FormButton from "../framework/view/form/fields/FormButton";
 
 export default class CostForm extends Form {
     constructor(fields) {
