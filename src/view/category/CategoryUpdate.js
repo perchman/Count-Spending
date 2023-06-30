@@ -1,32 +1,48 @@
 "use strict"
 
-import Form from "../../framework/view/form/Form";
 import TextField from "../../framework/view/form/fields/TextField";
 import FormButton from "../../framework/view/form/fields/FormButton";
+import Url from "../../framework/URL";
+import Navbar from "../../framework/view/Navbar";
 
-export default class CategoryUpdate extends Form {
-    constructor(category) {
-        super(
-            'category',
-            {
-                categoryName: {
-                    name: 'categoryName',
-                    label: 'Category Name',
-                    value: category.name,
-                    validators: ['required', 'maxLength']
-                }
-            }
-        );
+export default class CategoryUpdate{
+    constructor() {
+        this.body = document.body;
     }
-    render() {
-        const categoryNameField = new TextField(this.fields.categoryName);
-        const saveButton = new FormButton('Save');
 
-        return `
-            <form id="${this.getId()}" class="form-label mt-4" name="${this.name}">
-                ${categoryNameField.render()}
-                ${saveButton.render()}
-            </form>
+    render(data) {
+        const url = new Url();
+
+        const navbar = new Navbar ([
+            {
+                text: 'Costs',
+                url: url.createUrl({action: 'cost/index'})
+            },
+            {
+                text: 'Categories',
+                url: url.createUrl({action: 'category/index'}),
+                active: true
+            },
+            {
+                text: 'Balance',
+                url: url.createUrl({action: 'balance/index'})
+            }
+        ]);
+
+        const form = data.form;
+        const fields = form.getFields();
+        const categoryNameField = new TextField(form, fields.categoryName);
+        const saveButton = new FormButton(form, 'Save');
+
+        this.body.innerHTML = `
+            ${navbar.render()}
+            <div class="container mt-4">
+                <h2>${data.title}</h2>
+                ${form.before()}
+                    ${categoryNameField.render()}
+                    ${saveButton.render()}
+                ${form.end()}  
+            </div>
         `;
     }
 }

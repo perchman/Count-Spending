@@ -1,32 +1,48 @@
 "use strict"
 
-import Form from "../../framework/view/form/Form";
+import Navbar from "../../framework/view/Navbar";
+import Url from "../../framework/URL";
 import NumberField from "../../framework/view/form/fields/NumberField";
 import FormButton from "../../framework/view/form/fields/FormButton";
 
-export default class BalanceReplenish extends Form {
+export default class BalanceReplenish {
     constructor() {
-        super(
-            'balance',
-            {
-                replenish: {
-                    name: 'replenish',
-                    label: 'Amount',
-                    validators: ['required', 'positiveNumber']
-                }
-            }
-        );
+        this.body = document.body;
     }
 
-    render() {
-        const replenish = new NumberField(this.fields.replenish);
-        const replenishButton = new FormButton('Add');
+    render(data) {
+        const url = new Url();
 
-        return `
-            <form id="${this.getId()}" class="form-label mt-4" name="${this.name}">
-                ${replenish.render()}
-                ${replenishButton.render()}
-            </form>
+        const navbar = new Navbar ([
+            {
+                text: 'Costs',
+                url: url.createUrl({action: 'cost/index'})
+            },
+            {
+                text: 'Categories',
+                url: url.createUrl({action: 'category/index'})
+            },
+            {
+                text: 'Balance',
+                url: url.createUrl({action: 'balance/index'}),
+                active: true
+            }
+        ]);
+
+        const form = data.form;
+        const fields = form.getFields();
+        const replenishField = new NumberField(form, fields.replenish);
+        const replenishButton = new FormButton(form, 'Add');
+
+        this.body.innerHTML = `
+            ${navbar.render()}
+            <div class="container mt-4">
+                <h2>${data.title}</h2>
+                ${form.before()}
+                    ${replenishField.render()}
+                    ${replenishButton.render()}
+                ${form.end()}
+            </div>
         `;
     }
 }

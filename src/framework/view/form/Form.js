@@ -3,17 +3,24 @@
 import ValidatorFactory from "../../validators/ValidatorFactory";
 
 export default class Form {
-    constructor(name, fields) {
+    constructor(name) {
         this.name = name;
-        this.fields = fields;
     }
 
-    render() {
+    getFields() {
         throw new Error("this method in not incremented");
     }
 
     getId() {
-        return 'form-' + this.name;
+        return this.name + '-form';
+    }
+
+    before() {
+        return `<form id="${this.getId()}" class="form-label mt-4" name="${this.name}">`;
+    }
+
+    end() {
+        return '</form>';
     }
 
     onSuccessSubmit(callback) {
@@ -21,24 +28,24 @@ export default class Form {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const fields = this.getFields();
             const validatorFactory = new ValidatorFactory();
             let data = {};
             let errors = {};
             const formData = new FormData(form);
 
-            for (let field in this.fields) {
+            for (let field in fields) {
                 const value = formData.get(field);
-                console.log(this.fields);
-                this.fields[field].validators.forEach((type) => {
+
+                fields[field].validators.forEach((type) => {
                     const validator = validatorFactory.factory(type);
-                    const validationResult = validator.validate(value);
-                    if (!validationResult) {
-                        data[field] = value;
-                    } else {
-                        errors[field] = validationResult;
-                        return false;
+                    const error = validator.validate(value);
+                    if (error) {
+                        errors[field] = error;
+                        return;
                     }
-                })
+                    data[field] = value;
+                });
 
             }
 

@@ -1,7 +1,8 @@
 "use strict"
 
 export default class FormButton {
-    constructor(text) {
+    constructor(form, text) {
+        this.form = form;
         this.text = text;
     }
 

@@ -4,7 +4,7 @@ import Cost from "../model/Cost";
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import CostCreate from "../view/cost/CostCreate";
+import CostForm from "../forms/CostForm";
 import CostUpdate from "../view/cost/CostUpdate";
 
 export default class CostController {
@@ -114,7 +114,7 @@ export default class CostController {
     }
 
     create() {
-        const form = new CostCreate();
+        const form = new CostForm();
 
         this.view.render({
             title: 'Create cost',
@@ -146,7 +146,7 @@ export default class CostController {
         const id = parseInt(url.searchParams.get('id'));
         let cost = Cost.getById(id);
 
-        const form = new CostUpdate(cost);
+        const form = new CostForm(cost);
 
         this.view.render({
             title: 'Update cost',

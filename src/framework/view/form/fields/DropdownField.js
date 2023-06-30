@@ -1,8 +1,8 @@
 "use strict"
 
 export default class DropdownField {
-    constructor(params) {
-        console.log(params)
+    constructor(form, params) {
+        this.form = form;
         this.name = params.name;
         this.disabledOption = params.disabledOption;
         this.selected = params.selected;

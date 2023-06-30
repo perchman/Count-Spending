@@ -2,7 +2,7 @@
 
 import Balance from "../model/Balance";
 import Url from "../framework/URL";
-import BalanceReplenish from "../view/balance/BalanceReplenish";
+import BalanceForm from "../forms/BalanceForm";
 
 export default class BalanceController {
     constructor(view, route) {
@@ -49,7 +49,7 @@ export default class BalanceController {
     }
 
     replenish() {
-        const form = new BalanceReplenish();
+        const form = new BalanceForm();
         this.view.render({
             title: 'Replenish balance',
             form: form

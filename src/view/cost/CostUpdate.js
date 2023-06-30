@@ -1,61 +1,59 @@
 "use strict"
 
-import Form from "../../framework/view/form/Form";
+"use strict"
+
+import Navbar from "../../framework/view/Navbar";
+import Url from "../../framework/URL";
 import DateField from "../../framework/view/form/fields/DateField";
 import DropdownField from "../../framework/view/form/fields/DropdownField";
-import TextField from "../../framework/view/form/fields/TextField";
 import NumberField from "../../framework/view/form/fields/NumberField";
+import TextField from "../../framework/view/form/fields/TextField";
 import FormButton from "../../framework/view/form/fields/FormButton";
-import Category from "../../model/Category";
 
-export default class CostUpdate extends Form {
-    constructor(cost) {
-        console.log(cost.category.id);
-        super(
-            'cost',
-            {
-                date: {
-                    name: 'date',
-                    label: 'Date',
-                    value: cost.date.toISOString().split('T')[0],
-                    validators: ['required']
-                },
-                category: {
-                    name: 'category',
-                    data: Category.getAll('id desc'),
-                    selected: cost.category.id,
-                    validators: ['required']
-                },
-                price: {
-                    name: 'price',
-                    label: 'Price',
-                    value: cost.price,
-                    validators: ['required', 'positiveNumber']
-                },
-                description: {
-                    name: 'description',
-                    label: 'Description',
-                    value: cost.description,
-                    validators: ['required', 'maxLength']
-                }
-            }
-        );
+export default class CostCreate {
+    constructor() {
+        this.body = document.body;
     }
-    render() {
-        const dateField = new DateField(this.fields.date);
-        const categoryField = new DropdownField(this.fields.category);
-        const priceField = new NumberField(this.fields.price);
-        const descriptionField = new TextField(this.fields.description);
-        const saveButton = new FormButton('Save');
 
-        return `
-            <form id="${this.getId()}" class="form-label mt-4" name="${this.name}">
-                ${dateField.render()}
-                ${categoryField.render()}
-                ${priceField.render()}
-                ${descriptionField.render()}
-                ${saveButton.render()}
-            </form>
+    render(data) {
+        const url = new Url();
+
+        const navbar = new Navbar ([
+            {
+                text: 'Costs',
+                url: url.createUrl({action: 'cost/index'}),
+                active: true
+            },
+            {
+                text: 'Categories',
+                url: url.createUrl({action: 'category/index'})
+            },
+            {
+                text: 'Balance',
+                url: url.createUrl({action: 'balance/index'})
+            }
+        ]);
+
+        const form = data.form;
+        const fields = form.getFields();
+        const dateField = new DateField(form, fields.date);
+        const categoryField = new DropdownField(form, fields.category);
+        const priceField = new NumberField(form, fields.price);
+        const descriptionField = new TextField(form, fields.description);
+        const saveButton = new FormButton(form, 'Save');
+
+        this.body.innerHTML = `
+            ${navbar.render()}
+            <div class="container mt-4">
+                <h2>${data.title}</h2>
+                ${form.before()}
+                    ${dateField.render()}
+                    ${categoryField.render()}
+                    ${priceField.render()}
+                    ${descriptionField.render()}
+                    ${saveButton.render()}
+                ${form.end()}
+            </div>
         `;
     }
 }

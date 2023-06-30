@@ -4,13 +4,15 @@ import './bootstrap.css';
 import Route from "./framework/Route";
 import CostController from "./controller/CostController";
 import CostIndex from "./view/cost/CostIndex";
-import CostShape from "./view/cost/CostShape";
+import CostCreate from "./view/cost/CostCreate";
+import CostUpdate from "./view/cost/CostUpdate";
 import CategoryController from "./controller/CategoryController";
 import CategoryIndex from "./view/category/CategoryIndex";
-import CategoryShape from "./view/category/CategoryShape";
+import CategoryCreate from "./view/category/CategoryCreate";
+import CategoryUpdate from "./view/category/CategoryUpdate";
 import BalanceController from "./controller/BalanceController";
 import BalanceIndex from "./view/balance/BalanceIndex";
-import BalanceShape from "./view/balance/BalanceShape";
+import BalanceReplenish from "./view/balance/BalanceReplenish";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,14 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     route.addRoute('cost/create', () => {
-        const createView = new CostShape();
+        const createView = new CostCreate();
         const controller = new CostController(createView, route);
 
         controller.create();
     });
 
     route.addRoute('cost/update', () => {
-        const updateView = new CostShape();
+        const updateView = new CostUpdate();
         const controller = new CostController(updateView, route);
 
         controller.update();
@@ -45,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     route.addRoute('category/create', () => {
-        const createView = new CategoryShape();
+        const createView = new CategoryCreate();
         const controller = new CategoryController(createView, route);
 
         controller.create();
     });
 
     route.addRoute('category/update', () => {
-        const updateView = new CategoryShape();
+        const updateView = new CategoryUpdate();
         const controller = new CategoryController(updateView, route);
 
         controller.update();
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     route.addRoute('balance/replenish', () => {
-        const balanceReplenish = new BalanceShape();
+        const balanceReplenish = new BalanceReplenish();
         const controller = new BalanceController(balanceReplenish, route);
 
         controller.replenish();

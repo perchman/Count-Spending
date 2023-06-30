@@ -3,8 +3,7 @@
 import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
-import Cost from "../model/Cost";
-import CategoryCreate from "../view/category/CategoryCreate";
+import CategoryForm from "../forms/CategoryForm";
 import CategoryUpdate from "../view/category/CategoryUpdate";
 
 export default class CategoryController {
@@ -114,7 +113,7 @@ export default class CategoryController {
     }
 
     create() {
-        const form = new CategoryCreate();
+        const form = new CategoryForm();
 
         this.view.render({
             title: 'Create category',
@@ -134,7 +133,7 @@ export default class CategoryController {
         const id = parseInt(url.searchParams.get('id'));
         let category = Category.getById(id);
 
-        const form = new CategoryUpdate(category);
+        const form = new CategoryForm(category);
 
         this.view.render({
             title: 'Create category',

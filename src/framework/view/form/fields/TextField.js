@@ -1,7 +1,8 @@
 "use strict"
 
 export default class TextField {
-    constructor(params) {
+    constructor(form, params) {
+        this.form = form;
         this.name = params.name;
         this.label = params.label;
         this.value = params.value || '';
