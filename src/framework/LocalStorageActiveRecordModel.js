@@ -3,9 +3,6 @@
 export default class LocalStorageActiveRecordModel {
 
     constructor(id) {
-        if (typeof id !== "number") {
-            throw new Error("Invalid data type for id. Type must be a number");
-        }
         this.id = id;
     }
 
@@ -89,21 +86,28 @@ export default class LocalStorageActiveRecordModel {
         return this.getAllRaw().length;
     }
 
+    validate() {
+        throw new Error("this method in not incremented");
+    }
+
     toJSON() {
         throw new Error("this method in not incremented");
     }
 
     save() {
+        this.validate();
         let data = this.constructor.getAllRaw();
-        data.push(this.toJSON());
 
-        localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
-    }
-
-    update() {
-        let data = this.constructor.getAllRaw();
-        const index = this.constructor.getIndex(data, this.id);
-        data[index] = this.toJSON();
+        if (!this.id) {
+            this.id = this.constructor.getNextId();
+            data.push(this.toJSON());
+        } else {
+            const index = this.constructor.getIndex(data, this.id);
+            if (!index) {
+                throw new Error("Entity not exist");
+            }
+            data[index] = this.toJSON()
+        }
 
         localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
     }

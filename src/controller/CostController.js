@@ -5,7 +5,6 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import CostForm from "../forms/CostForm";
-import CostUpdate from "../view/cost/CostUpdate";
 
 export default class CostController {
     constructor(view, route) {
@@ -157,14 +156,14 @@ export default class CostController {
 
         form.onSuccessSubmit((data) => {
             try {
-                cost.changeDate(new Date(data.date));
-                cost.changePrice(parseInt(data.price));
-                cost.changeDescription(data.description);
-                cost.changeCategory(Category.getById(
+                cost.date = new Date(data.date);
+                cost.price = parseInt(data.price);
+                cost.description = data.description;
+                cost.category = Category.getById(
                     parseInt(data.category)
-                ));
+                );
 
-                cost.update();
+                cost.save();
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {

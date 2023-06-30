@@ -143,8 +143,8 @@ export default class CategoryController {
         this.addNavbarButtonsEventHandler();
 
         form.onSuccessSubmit((data) => {
-            category.changeName(data.categoryName);
-            category.update();
+            category.name = data.categoryName;
+            category.save();
 
             this.redirect({action: 'category/index'});
         })

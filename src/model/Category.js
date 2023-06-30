@@ -6,8 +6,8 @@ import Cost from "./Cost";
 export default class Category extends LocalStorageActiveRecordModel{
     constructor(id, name) {
         super(id);
-        this.validateName(name);
         this.name = name;
+        this.validate(name);
     }
 
     static getEntityName() {
@@ -22,19 +22,18 @@ export default class Category extends LocalStorageActiveRecordModel{
     }
 
     static create(name) {
-        const id = this.getNextId();
-        const category = this.makeModel({
-            id: id,
-            name: name
-        })
+        const category = new Category(
+            null,
+            name
+        )
 
         category.save();
 
         return category;
     }
 
-    validateName(name) {
-        if (typeof name !== "string") {
+    validate() {
+        if (typeof this.name !== "string") {
             throw new Error("Invalid data type for name of category. Type must be a string");
         }
     }
@@ -44,11 +43,6 @@ export default class Category extends LocalStorageActiveRecordModel{
             id: this.id,
             name: this.name
         }
-    }
-
-    changeName(name) {
-        this.validateName(name);
-        this.name = name;
     }
 
     checkCanRemove() {

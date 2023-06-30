@@ -5,18 +5,21 @@ import Balance from "../model/Balance";
 import Category from "./Category";
 
 export default class Cost extends LocalStorageActiveRecordModel{
-
     constructor(id, date, price, description, category) {
         super(id);
-        this.validateDate(date);
-        this.validatePrice(price);
-        this.validateDescription(description);
-        this.validateCategory(category);
-
         this.date = date;
         this.price = price;
         this.description = description;
         this.category = category;
+
+        this.validate();
+
+        this.initData = {
+            date: date,
+            price: price,
+            description: description,
+            category: category
+        }
     }
 
     static getEntityName() {
@@ -34,9 +37,8 @@ export default class Cost extends LocalStorageActiveRecordModel{
     }
 
     static create(date, price, description, category) {
-        const id = this.getNextId();
         const cost = new Cost(
-            id,
+            null,
             date,
             price,
             description,
@@ -60,32 +62,39 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return false;
     }
 
-    validateDate(date) {
-        if (typeof date !== "object") {
+    validate() {
+        this.validateDate();
+        this.validateCategory();
+        this.validatePrice();
+        this.validateDescription();
+    }
+
+    validateDate() {
+        if (typeof this.date !== "object") {
             throw new Error("Invalid data type for date. Type must be a object");
         }
-        if (!date instanceof Date) {
+        if (!this.date instanceof Date) {
             throw new Error("Invalid data type for date. Object must be an instance of the Date object");
         }
     }
 
-    validatePrice(price) {
-        if (typeof price !== "number") {
+    validatePrice() {
+        if (typeof this.price !== "number") {
             throw new Error("Invalid data type for price. Type must be a number");
         }
     }
 
-    validateDescription(description) {
-        if (typeof description !== "string") {
+    validateDescription() {
+        if (typeof this.description !== "string") {
             throw new Error("Invalid data type for description. Type must be a string");
         }
     }
 
-    validateCategory(category) {
-        if (typeof category !== "object") {
+    validateCategory() {
+        if (typeof this.category !== "object") {
             throw new Error("Invalid data type for category. Type must be a object");
         }
-        if (!category instanceof Category) {
+        if (!this.category instanceof Category) {
             throw new Error("Invalid data type for category. Object must be an instance of the Category class");
         }
     }
@@ -104,33 +113,15 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return this.category.name;
     }
 
-    changeDate(date) {
-        this.validateDate(date);
-        this.date = date;
-    }
-
-    changePrice(price) {
-        this.validatePrice(price);
-
+    save() {
+        super.save();
         const balance = new Balance();
 
-        if (this.price < price) {
-            balance.decrease(price - this.price);
-            this.price = price;
+        if (this.initData.price < this.price) {
+            balance.decrease(this.price - this.initData.price);
         } else {
-            balance.increase(this.price - price);
-            this.price = price;
+            balance.increase(this.initData.price - this.price);
         }
-    }
-
-    changeDescription(description) {
-        this.validateDescription(description);
-        this.description = description;
-    }
-
-    changeCategory(category) {
-        this.validateCategory(category);
-        this.category = category;
     }
 
     delete() {
