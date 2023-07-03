@@ -10,8 +10,8 @@ export default class DataProvider {
         return parseInt(url.searchParams.get('page')) || 1;
     }
 
-    computeLimit() {
-        const count = this.config.model.getCount()
+    async computeLimit() {
+        const count = await this.config.model.getCount()
         const start = (this.getPageNum() - 1) * this.config.pagination.pageSize;
         const end = Math.min(start + this.config.pagination.pageSize, count);
 
@@ -29,8 +29,12 @@ export default class DataProvider {
         return key + ' ' + value;
     }
 
-    getData() {
-        return this.config.model.getPart(
+    async getData() {
+        console.log(await this.config.model.getPart(
+            this.computeOrderBy(),
+            this.computeLimit()
+        ));
+        return await this.config.model.getPart(
             this.computeOrderBy(),
             this.computeLimit()
         );

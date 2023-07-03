@@ -96,10 +96,13 @@ export default class CostIndex {
             <div class="container mt-4">
                 <h2>${data.title}</h2>
                 <div class="mt-4">
-                    ${addButton.render()}  
-                    ${grid.render()}
+                    ${addButton.render()}
+                    <div id="content">
+                    </div>  
                 </div>
             </div>
         `;
+        grid.render();
+        console.log('1');
     }
 }

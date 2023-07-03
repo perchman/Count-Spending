@@ -14,24 +14,25 @@ export default class LocalStorageActiveRecordModel {
         throw new Error("this method in not incremented");
     }
 
-    static getAllRaw() {
-        return  JSON.parse(localStorage.getItem(this.getEntityName())) || [];
+    static async getAllRaw() {
+        return JSON.parse(localStorage.getItem(this.getEntityName())) || [];
     }
 
-    static getAll(orderBy) {
+    static async getAll(orderBy) {
+        console.log(orderBy);
         const key = orderBy.split(' ')[0];
         const direction = orderBy.split(' ')[1];
 
-        let data = this.getAllRaw();
+        let data = await this.getAllRaw();
         data = this.sort(data, key, direction);
-
         return data.map((item) => {
             return this.makeModel(item)
         });
     }
 
-    static getPart(orderBy, limit) {
-        return this.getAll(orderBy).slice(limit.start, limit.end);
+    static async getPart(orderBy, limit) {
+        const data = await this.getAll(orderBy);
+        return data.slice(limit.start, limit.end);
     }
 
     static sort(data, key, direction) {
@@ -75,15 +76,16 @@ export default class LocalStorageActiveRecordModel {
         return id;
     }
 
-    static getById(id) {
-        const data = this.getAllRaw();
+    static async getById(id) {
+        const data = await this.getAllRaw();
         const index = this.getIndex(data, id);
 
         return this.makeModel(data[index]);
     }
 
-    static getCount() {
-        return this.getAllRaw().length;
+    static async getCount() {
+        const data = await this.getAllRaw()
+        return data.length;
     }
 
     validate() {

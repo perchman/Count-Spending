@@ -10,7 +10,7 @@ export default class Grid {
         this.dataProvider = data.dataProvider;
         this.buttons = data.buttons;
     }
-    render() {
+    async render() {
         const buttonFactory = new ButtonFactory();
 
         let thead = '';
@@ -28,19 +28,19 @@ export default class Grid {
 
             thead += `<th class="col">${content}</th>`;
         }
-
-        for (let item of this.dataProvider.getData()) {
+        console.log(await this.dataProvider.getData());
+        for (let item of await this.dataProvider.getData()) {
             tbody += '<tr>';
-
+            const result = await item;
             for (let field in this.fields) {
-                tbody += `<td>${this.fields[field].value(item)}</td>`;
+                tbody += `<td>${await this.fields[field].value(result)}</td>`;
             }
 
             let buttons = '';
             for (let button in this.buttons) {
                 const btn = buttonFactory.factory(
                     button,
-                    {url: this.buttons[button].url(item)}
+                    {url: this.buttons[button].url(result)}
                 );
                 buttons += btn.render();
             }
@@ -53,13 +53,14 @@ export default class Grid {
         }
 
         const pagination = new Pagination(
-            this.dataProvider.computeLimit(),
+            await this.dataProvider.computeLimit(),
             this.dataProvider.config.pagination.pageSize,
             this.dataProvider.getPageNum(),
         );
         const paginationView = pagination.create();
+        const content = document.getElementById('content');
 
-        return `
+        content.innerHTML = `
             <div>
                 <table id="table" class="table table-hover table-bordered mt-4">
                     <thead>

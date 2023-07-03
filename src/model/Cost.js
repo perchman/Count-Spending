@@ -26,13 +26,13 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return 'cost';
     }
 
-    static makeModel(data) {
+    static async makeModel(data) {
         return new Cost(
             data.id,
             new Date(data.date),
             data.price,
             data.description,
-            Category.getById(data.categoryId)
+            await Category.getById(data.categoryId)
         );
     }
 
