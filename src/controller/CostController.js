@@ -49,13 +49,13 @@ export default class CostController {
     addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
         for (let button of deleteButtons) {
-            button.addEventListener('click', (e) => {
+            button.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const url = new URL(window.location.href);
                 const targetUrl = new URL(e.target.href);
                 const id = parseInt(targetUrl.searchParams.get('id'));
 
-                this.delete(id);
+                await this.delete(id);
 
                 window.history.pushState({}, "", url);
                 this.route.routing();
@@ -83,7 +83,7 @@ export default class CostController {
         window.dispatchEvent(new Event('popstate'));
     }
 
-    index() {
+    async index() {
         const url = new URL(window.location.href);
         const sort = url.searchParams.get('sort') || 'date_desc';
         const orderBy = sort.split('_').join(' ');
@@ -100,7 +100,7 @@ export default class CostController {
             }
         });
 
-        this.view.render({
+        await this.view.render({
             title: 'Costs',
             dataProvider: dataProvider
         });
@@ -112,23 +112,23 @@ export default class CostController {
         this.addPaginationButtonsEventHandler();
     }
 
-    create() {
+    async create() {
         const form = new CostForm();
 
-        this.view.render({
+        await this.view.render({
             title: 'Create cost',
             form: form
         });
 
         this.addNavbarButtonsEventHandler();
 
-        form.onSuccessSubmit((data) => {
+        await form.onSuccessSubmit(async (data) => {
             try {
-                Cost.create(
+                await Cost.create(
                     new Date(data.date),
                     parseInt(data.price),
                     data.description,
-                    Category.getById(
+                    await Category.getById(
                         parseInt(data.category)
                     )
                 );
@@ -140,30 +140,30 @@ export default class CostController {
         });
     }
 
-    update() {
+    async update() {
         const url = new URL(window.location.href);
         const id = parseInt(url.searchParams.get('id'));
-        let cost = Cost.getById(id);
+        let cost = await Cost.getById(id);
 
         const form = new CostForm(cost);
 
-        this.view.render({
+        await this.view.render({
             title: 'Update cost',
             form: form
         });
 
         this.addNavbarButtonsEventHandler();
 
-        form.onSuccessSubmit((data) => {
+        await form.onSuccessSubmit(async (data) => {
             try {
                 cost.date = new Date(data.date);
                 cost.price = parseInt(data.price);
                 cost.description = data.description;
-                cost.category = Category.getById(
+                cost.category = await Category.getById(
                     parseInt(data.category)
                 );
 
-                cost.save();
+                await cost.save();
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {
@@ -172,8 +172,8 @@ export default class CostController {
         })
     }
 
-    delete(id) {
-        const cost = Cost.getById(id);
-        cost.delete();
+    async delete(id) {
+        const cost = await Cost.getById(id);
+        await cost.delete();
     }
 }

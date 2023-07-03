@@ -21,13 +21,13 @@ export default class Category extends LocalStorageActiveRecordModel{
         );
     }
 
-    static create(name) {
+    static async create(name) {
         const category = new Category(
             null,
             name
         )
 
-        category.save();
+        await category.save();
 
         return category;
     }
@@ -45,13 +45,13 @@ export default class Category extends LocalStorageActiveRecordModel{
         }
     }
 
-    checkCanRemove() {
-        if (Cost.existsCostsHasCategory(this.id)) {
+    async checkCanRemove() {
+        if (await Cost.existsCostsHasCategory(this.id)) {
             throw new Error(`Can't delete category ${this.name}. The category has costs`);
         }
     }
-    delete() {
-        this.checkCanRemove();
-        super.delete();
+    async delete() {
+        await this.checkCanRemove();
+        await super.delete();
     }
 }

@@ -10,7 +10,7 @@ export default class CategoryIndex {
         this.body = document.body;
     }
 
-    render(data) {
+    async render(data) {
         const url = new Url();
 
         const navbar = new Navbar([
@@ -84,7 +84,7 @@ export default class CategoryIndex {
                 <h2 class="">${data.title}</h2>
                 <div class="mt-4">
                     ${addButton.render()}  
-                    ${grid.render()}
+                    ${await grid.render()}
                 </div>
             </div>
         `;

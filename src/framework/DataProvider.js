@@ -30,13 +30,9 @@ export default class DataProvider {
     }
 
     async getData() {
-        console.log(await this.config.model.getPart(
-            this.computeOrderBy(),
-            this.computeLimit()
-        ));
         return await this.config.model.getPart(
             this.computeOrderBy(),
-            this.computeLimit()
-        );
+            await this.computeLimit()
+        );;
     }
 }

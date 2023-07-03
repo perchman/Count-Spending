@@ -2,24 +2,24 @@
 
 export default class Balance {
 
-    getValue() {
+    async getValue() {
         return parseInt(localStorage.getItem('balance')) || 0;
     }
 
-    increase(replenishment) {
-        const value = this.getValue() + parseInt(replenishment);
-        this.#save(value);
+    async increase(replenishment) {
+        const value = await this.getValue() + parseInt(replenishment);
+        await this.#save(value);
     }
 
-    decrease(depletion) {
-        const value = this.getValue() - parseInt(depletion);
+    async decrease(depletion) {
+        const value = await this.getValue() - parseInt(depletion);
         if (value < 0) {
             throw new Error("Not enough money on balance");
         }
-        this.#save(value);
+        await this.#save(value);
     }
 
-    #save(value) {
+    async #save(value) {
         localStorage.setItem('balance', value);
     }
 }

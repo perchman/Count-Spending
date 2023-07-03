@@ -16,15 +16,4 @@ export default class BalanceForm extends Form {
             }
         }
     }
-
-    render() {
-
-
-        return `
-            <form id="${this.getId()}" class="form-label mt-4" name="${this.name}">
-                ${replenish.render()}
-                ${replenishButton.render()}
-            </form>
-        `;
-    }
 }

@@ -49,13 +49,13 @@ export default class CategoryController {
     addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
         for (let button of deleteButtons) {
-            button.addEventListener('click', (e) => {
+            button.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const url = new URL(window.location.href);
                 const targetUrl = new URL(e.target.href);
                 const id = parseInt(targetUrl.searchParams.get('id'));
 
-                this.delete(id);
+                await this.delete(id);
 
                 window.history.pushState({}, "", url);
                 this.route.routing();
@@ -83,7 +83,7 @@ export default class CategoryController {
         window.dispatchEvent(new Event('popstate'));
     }
 
-    index() {
+    async index() {
         const url = new URL(window.location.href);
         const sort = url.searchParams.get('sort') || 'id_desc';
         const orderBy = sort.split('_').join(' ');
@@ -100,7 +100,7 @@ export default class CategoryController {
             }
         });
 
-        this.view.render({
+        await this.view.render({
             title: 'Categories',
             dataProvider: dataProvider
         });
@@ -112,7 +112,7 @@ export default class CategoryController {
         this.addPaginationButtonsEventHandler();
     }
 
-    create() {
+    async create() {
         const form = new CategoryForm();
 
         this.view.render({
@@ -122,38 +122,39 @@ export default class CategoryController {
 
         this.addNavbarButtonsEventHandler();
 
-        form.onSuccessSubmit((data) => {
-            Category.create(data.categoryName);
+        await form.onSuccessSubmit(async (data) => {
+            await Category.create(data.categoryName);
             this.redirect({action: 'category/index'});
         })
     }
 
-    update() {
+    async update() {
         const url = new URL(window.location.href);
         const id = parseInt(url.searchParams.get('id'));
-        let category = Category.getById(id);
+        let category = await Category.getById(id);
 
         const form = new CategoryForm(category);
 
         this.view.render({
-            title: 'Create category',
+            title: 'Update category',
             form: form
         });
 
         this.addNavbarButtonsEventHandler();
 
-        form.onSuccessSubmit((data) => {
+        await form.onSuccessSubmit(async (data) => {
             category.name = data.categoryName;
-            category.save();
+            console.log(category, data);
+            await category.save();
 
             this.redirect({action: 'category/index'});
         })
     }
 
-    delete(id) {
-        const category = Category.getById(id);
+    async delete(id) {
+        const category = await Category.getById(id);
         try {
-            category.delete();
+            await category.delete();
         } catch (error) {
             alert(error);
         }

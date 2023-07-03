@@ -1,7 +1,5 @@
 "use strict"
 
-"use strict"
-
 import Navbar from "../../framework/view/Navbar";
 import Url from "../../framework/URL";
 import DateField from "../../framework/view/form/fields/DateField";
@@ -15,7 +13,7 @@ export default class CostCreate {
         this.body = document.body;
     }
 
-    render(data) {
+    async render(data) {
         const url = new Url();
 
         const navbar = new Navbar ([
@@ -35,7 +33,7 @@ export default class CostCreate {
         ]);
 
         const form = data.form;
-        const fields = form.getFields();
+        const fields = await form.getFields();
         const dateField = new DateField(form, fields.date);
         const categoryField = new DropdownField(form, fields.category);
         const priceField = new NumberField(form, fields.price);

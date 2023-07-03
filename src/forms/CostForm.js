@@ -9,7 +9,7 @@ export default class CostForm extends Form {
         this.cost = cost;
     }
 
-    getFields() {
+    async getFields() {
         const cost = this.cost || {};
 
         return {
@@ -21,7 +21,7 @@ export default class CostForm extends Form {
             },
             category: {
                 name: 'category',
-                data: Category.getAll('id desc'),
+                data: await Category.getAll('id desc'),
                 disabledOption: 'Select a category',
                 selected: cost.category ? cost.category.id : null,
                 validators: ['required']

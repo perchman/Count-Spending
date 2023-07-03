@@ -19,7 +19,6 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static async getAll(orderBy) {
-        console.log(orderBy);
         const key = orderBy.split(' ')[0];
         const direction = orderBy.split(' ')[1];
 
@@ -67,7 +66,7 @@ export default class LocalStorageActiveRecordModel {
         return null;
     }
 
-    static getNextId() {
+    static async getNextId() {
         let id = parseInt(localStorage.getItem(`${this.getEntityName()}Id`)) || 0;
         id += 1;
 
@@ -96,16 +95,16 @@ export default class LocalStorageActiveRecordModel {
         throw new Error("this method in not incremented");
     }
 
-    save() {
+    async save() {
         this.validate();
-        let data = this.constructor.getAllRaw();
+        let data = await this.constructor.getAllRaw();
 
         if (!this.id) {
-            this.id = this.constructor.getNextId();
+            this.id = await this.constructor.getNextId();
             data.push(this.toJSON());
         } else {
             const index = this.constructor.getIndex(data, this.id);
-            if (!index) {
+            if (index === null) {
                 throw new Error("Entity not exist");
             }
             data[index] = this.toJSON()
@@ -114,8 +113,8 @@ export default class LocalStorageActiveRecordModel {
         localStorage.setItem(this.constructor.getEntityName(), JSON.stringify(data));
     }
 
-    delete() {
-        let data = this.constructor.getAllRaw();
+    async delete() {
+        let data = await this.constructor.getAllRaw();
         const index = this.constructor.getIndex(data, this.id);
         data.splice(index, 1);
 

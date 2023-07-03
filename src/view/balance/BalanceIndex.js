@@ -9,7 +9,7 @@ export default class BalanceIndex {
         this.body = document.body;
     }
 
-    render(value) {
+    async render(balance) {
         const url = new Url();
 
         const navbar = new Navbar ([
@@ -40,7 +40,7 @@ export default class BalanceIndex {
             <div class="container">
                 <h2 class="mt-4">Balance</h2>
                 <div class="mt-4">
-                    <span class="px-2 border border-1 border-primary fs-4">${value}</span>
+                    <span class="px-2 border border-1 border-primary fs-4">${await balance.getValue()}</span>
                 </div>
                 ${replenishButton.render()}
             </div>

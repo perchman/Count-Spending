@@ -10,7 +10,7 @@ export default class CostIndex {
         this.body = document.body;
     }
 
-    render(data) {
+    async render(data) {
         const navbarView = new Navbar();
         const url = new Url();
 
@@ -97,12 +97,9 @@ export default class CostIndex {
                 <h2>${data.title}</h2>
                 <div class="mt-4">
                     ${addButton.render()}
-                    <div id="content">
-                    </div>  
+                    ${await grid.render()}  
                 </div>
             </div>
         `;
-        grid.render();
-        console.log('1');
     }
 }

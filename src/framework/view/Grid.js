@@ -28,7 +28,7 @@ export default class Grid {
 
             thead += `<th class="col">${content}</th>`;
         }
-        console.log(await this.dataProvider.getData());
+
         for (let item of await this.dataProvider.getData()) {
             tbody += '<tr>';
             const result = await item;
@@ -58,9 +58,8 @@ export default class Grid {
             this.dataProvider.getPageNum(),
         );
         const paginationView = pagination.create();
-        const content = document.getElementById('content');
 
-        content.innerHTML = `
+        return `
             <div>
                 <table id="table" class="table table-hover table-bordered mt-4">
                     <thead>

@@ -7,7 +7,7 @@ export default class Form {
         this.name = name;
     }
 
-    getFields() {
+    async getFields() {
         throw new Error("this method in not incremented");
     }
 
@@ -23,12 +23,12 @@ export default class Form {
         return '</form>';
     }
 
-    onSuccessSubmit(callback) {
+    async onSuccessSubmit(callback) {
         const form = document.getElementById(this.getId());
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const fields = this.getFields();
+            const fields = await this.getFields();
             const validatorFactory = new ValidatorFactory();
             let data = {};
             let errors = {};
@@ -40,6 +40,7 @@ export default class Form {
                 fields[field].validators.forEach((type) => {
                     const validator = validatorFactory.factory(type);
                     const error = validator.validate(value);
+
                     if (error) {
                         errors[field] = error;
                         return;
@@ -56,7 +57,7 @@ export default class Form {
                     elem.style.display = 'block';
                 }
             } else {
-                callback(data);
+                await callback(data);
             }
         })
     }

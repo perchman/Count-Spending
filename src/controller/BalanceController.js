@@ -40,15 +40,15 @@ export default class BalanceController {
         window.dispatchEvent(new Event('popstate'));
     }
 
-    index() {
+    async index() {
         const balance = new Balance()
-        this.view.render(balance.getValue());
+        await this.view.render(balance);
 
         this.addNavbarButtonsEventHandler();
         this.addReplenishButtonEventHandler();
     }
 
-    replenish() {
+    async replenish() {
         const form = new BalanceForm();
         this.view.render({
             title: 'Replenish balance',
@@ -56,9 +56,9 @@ export default class BalanceController {
         });
         this.addNavbarButtonsEventHandler();
 
-        form.onSuccessSubmit((data) => {
+        await form.onSuccessSubmit(async (data) => {
             const balance = new Balance();
-            balance.increase(parseInt(data.replenish));
+            await balance.increase(parseInt(data.replenish));
 
             this.redirect({action: 'balance/index'});
         });

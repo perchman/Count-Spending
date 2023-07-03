@@ -36,7 +36,7 @@ export default class Cost extends LocalStorageActiveRecordModel{
         );
     }
 
-    static create(date, price, description, category) {
+    static async create(date, price, description, category) {
         const cost = new Cost(
             null,
             date,
@@ -47,13 +47,13 @@ export default class Cost extends LocalStorageActiveRecordModel{
         const balance = new Balance();
 
         balance.decrease(cost.price);
-        cost.save();
+        await cost.save();
 
         return cost;
     }
 
-    static existsCostsHasCategory(categoryId) {
-        const costs = Cost.getAllRaw();
+    static async existsCostsHasCategory(categoryId) {
+        const costs = await Cost.getAllRaw();
         for (let cost in costs) {
             if (costs[cost].categoryId === categoryId) {
                 return true;
@@ -113,8 +113,8 @@ export default class Cost extends LocalStorageActiveRecordModel{
         return this.category.name;
     }
 
-    save() {
-        super.save();
+    async save() {
+        await super.save();
         const balance = new Balance();
 
         if (this.initData.price < this.price) {
