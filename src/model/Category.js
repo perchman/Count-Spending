@@ -1,9 +1,10 @@
 "use strict"
 
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
+import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel";
 import Cost from "./Cost";
 
-export default class Category extends LocalStorageActiveRecordModel{
+export default class Category extends IndexedDBActiveRecordModel{
     constructor(id, name) {
         super(id);
         this.name = name;
@@ -11,7 +12,7 @@ export default class Category extends LocalStorageActiveRecordModel{
     }
 
     static getEntityName() {
-        return 'category';
+        return 'Category';
     }
 
     static makeModel(data) {

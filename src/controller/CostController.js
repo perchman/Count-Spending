@@ -135,6 +135,7 @@ export default class CostController {
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {
+                console.log(error);
                 alert(error);
             }
         });

@@ -32,5 +32,8 @@ module.exports = {
             "constants": false,
             "fs": false
         }
+    },
+    externals: {
+        idb: 'idb',
     }
 }

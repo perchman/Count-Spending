@@ -4,6 +4,7 @@ import Navbar from "../../framework/view/Navbar";
 import Button from "../../framework/view/button/Button";
 import Grid from "../../framework/view/Grid";
 import Url from "../../framework/URL";
+import IndexedDBActiveRecordModel from "../../framework/IndexedDBActiveRecordModel";
 
 export default class CategoryIndex {
     constructor() {
