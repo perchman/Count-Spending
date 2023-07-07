@@ -9,15 +9,22 @@ export default class IndexedDBConnection {
             1,
             {
                 upgrade: (database) => {
-                    database.createObjectStore('CostStore', {keyPath: 'id'});
-                    database.createObjectStore('CostId');
-                    database.createObjectStore('CategoryStore', {keyPath: 'id'});
-                    database.createObjectStore('CategoryId');
-                    database.createObjectStore('Balance');
+                    if (!database.objectStoreNames.length) {
+                        database.createObjectStore('CostStore', {autoIncrement: true});
+                        database.createObjectStore('CategoryStore', {autoIncrement: true});
+                    }
                 }
             }
         );
     }
+
+    static async getDatabase() {
+        if (!this.database) {
+            this.database = await this.connect();
+        }
+
+        return this.database;
+    };
 
     static async getStore(storeName) {
         const database = await this.connect();

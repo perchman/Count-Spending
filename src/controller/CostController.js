@@ -124,6 +124,7 @@ export default class CostController {
 
         await form.onSuccessSubmit(async (data) => {
             try {
+                console.log(data.category)
                 await Cost.create(
                     new Date(data.date),
                     parseInt(data.price),

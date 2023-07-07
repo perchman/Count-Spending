@@ -19,8 +19,16 @@ export default class IndexedDBActiveRecordModel{
         throw new Error("this method in not incremented");
     }
 
+    static async getStore(mode) {
+        mode = mode || 'readonly';
+
+        const database = await IndexedDBConnection.getDatabase();
+        const transaction = database.transaction(this.getStoreName(), mode);
+        return transaction.store;
+    }
+
     static async getAllRaw() {
-      const store = await IndexedDBConnection.getStore(this.getStoreName());
+        const store = await this.getStore();
         return await store.getAll();
     }
 
@@ -29,6 +37,7 @@ export default class IndexedDBActiveRecordModel{
         const direction = orderBy.split(' ')[1];
 
         let data = await this.getAllRaw();
+
         data = this.sort(data, key, direction);
         return data.map((item) => {
             return this.makeModel(item)
@@ -63,20 +72,11 @@ export default class IndexedDBActiveRecordModel{
         return data;
     }
 
-    static async getNextId() {
-        const store = await IndexedDBConnection.getStore(`${this.getEntityName()}Id`);
-        let id = parseInt(await store.getAll()) || 0;
-        id += 1;
-
-        store.put(id, 'id');
-
-        return id;
-    }
-
     static async getById(id) {
-        const store = await IndexedDBConnection.getStore(this.getStoreName());
-        const obj = await store.get(id);
-        console.log(obj);
+        const store = await this.getStore('readwrite');
+
+        let obj = await store.get(id);
+
         return this.makeModel(obj);
     }
 
@@ -96,18 +96,21 @@ export default class IndexedDBActiveRecordModel{
     async save() {
         this.validate();
 
+        const store = await this.constructor.getStore('readwrite');
+
         if (!this.id) {
-            this.id = await this.constructor.getNextId();
-            const store = await IndexedDBConnection.getStore(this.constructor.getStoreName());
-            store.add(this.toJSON());
+            const obj = this.toJSON();
+            const key = await store.add(obj);
+
+            obj.id = key;
+            store.put(obj, key);
         } else {
-            const store = await IndexedDBConnection.getStore(this.constructor.getStoreName());
-            store.put(this.toJSON());
+            store.put(this.toJSON(), this.id);
         }
     }
 
     async delete() {
-        const store = await IndexedDBConnection.getStore(this.constructor.getStoreName());
+        const store = await this.constructor.getStore('readwrite');
         store.delete(this.id);
     }
 }
