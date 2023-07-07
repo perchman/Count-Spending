@@ -7,11 +7,11 @@ export default class LocalStorageActiveRecordModel {
     }
 
     static getEntityName() {
-        throw new Error("this method in not incremented");
+        throw new Error("this method in not implemented");
     }
 
     static makeModel() {
-        throw new Error("this method in not incremented");
+        throw new Error("this method in not implemented");
     }
 
     static async getAllRaw() {
@@ -88,11 +88,11 @@ export default class LocalStorageActiveRecordModel {
     }
 
     validate() {
-        throw new Error("this method in not incremented");
+        throw new Error("This method in not implemented");
     }
 
     toJSON() {
-        throw new Error("this method in not incremented");
+        throw new Error("This method in not implemented");
     }
 
     async save() {

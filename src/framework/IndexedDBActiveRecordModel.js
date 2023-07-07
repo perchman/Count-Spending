@@ -1,14 +1,19 @@
 "use strict"
 
-import IndexedDBConnection from "./IndexedDBConnection";
+import DefaultIndexedDB from "../DefaultIndexedDB";
+import ServiceLocator from "./ServiceLocator";
 
-export default class IndexedDBActiveRecordModel{
+export default class IndexedDBActiveRecordModel {
     constructor(id) {
         this.id = id;
     }
 
     static getEntityName() {
-        throw new Error("this method in not incremented");
+        throw new Error("This method in not implemented");
+    }
+
+    static getDatabaseName() {
+        throw new Error("This method in not implemented");
     }
 
     static getStoreName() {
@@ -16,13 +21,13 @@ export default class IndexedDBActiveRecordModel{
     }
 
     static makeModel() {
-        throw new Error("this method in not incremented");
+        throw new Error("This method in not implemented");
     }
 
     static async getStore(mode) {
         mode = mode || 'readonly';
 
-        const database = await IndexedDBConnection.getDatabase();
+        const database = ServiceLocator.get(this.getDatabaseName());
         const transaction = database.transaction(this.getStoreName(), mode);
         return transaction.store;
     }
@@ -86,11 +91,11 @@ export default class IndexedDBActiveRecordModel{
     }
 
     validate() {
-        throw new Error("this method in not incremented");
+        throw new Error("this method in not implemented");
     }
 
     toJSON() {
-        throw new Error("this method in not incremented");
+        throw new Error("this method in not implemented");
     }
 
     async save() {

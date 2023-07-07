@@ -5,7 +5,7 @@ import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel"
 import Balance from "../model/Balance";
 import Category from "./Category";
 
-export default class Cost extends IndexedDBActiveRecordModel{
+export default class Cost extends IndexedDBActiveRecordModel {
     constructor(id, date, price, description, category) {
         super(id);
         this.date = date;
@@ -25,6 +25,10 @@ export default class Cost extends IndexedDBActiveRecordModel{
 
     static getEntityName() {
         return 'Cost';
+    }
+
+    static getDatabaseName() {
+        return 'Default';
     }
 
     static async makeModel(data) {

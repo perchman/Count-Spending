@@ -4,7 +4,7 @@ import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecord
 import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel";
 import Cost from "./Cost";
 
-export default class Category extends IndexedDBActiveRecordModel{
+export default class Category extends IndexedDBActiveRecordModel {
     constructor(id, name) {
         super(id);
         this.name = name;
@@ -13,6 +13,10 @@ export default class Category extends IndexedDBActiveRecordModel{
 
     static getEntityName() {
         return 'Category';
+    }
+
+    static getDatabaseName() {
+        return 'Default';
     }
 
     static makeModel(data) {

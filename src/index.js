@@ -13,65 +13,68 @@ import CategoryUpdate from "./view/category/CategoryUpdate";
 import BalanceController from "./controller/BalanceController";
 import BalanceIndex from "./view/balance/BalanceIndex";
 import BalanceReplenish from "./view/balance/BalanceReplenish";
+import ServiceLocator from "./framework/ServiceLocator";
+import DefaultIndexedDB from "./DefaultIndexedDB";
 
+document.addEventListener('DOMContentLoaded', async () => {
+    ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
 
-document.addEventListener('DOMContentLoaded', () => {
     const route = new Route();
 
-    route.addRoute('cost/index', () => {
+    route.addRoute('cost/index', async () => {
         const indexView = new CostIndex();
         const controller = new CostController(indexView, route);
 
-        controller.index();
+        await controller.index();
     });
 
-    route.addRoute('cost/create', () => {
+    route.addRoute('cost/create', async () => {
         const createView = new CostCreate();
         const controller = new CostController(createView, route);
 
-        controller.create();
+        await controller.create();
     });
 
-    route.addRoute('cost/update', () => {
+    route.addRoute('cost/update', async () => {
         const updateView = new CostUpdate();
         const controller = new CostController(updateView, route);
 
-        controller.update();
+        await controller.update();
     });
 
-    route.addRoute('category/index', () => {
+    route.addRoute('category/index', async () => {
         const indexView = new CategoryIndex();
         const controller = new CategoryController(indexView, route);
 
-        controller.index();
+        await controller.index();
     });
 
-    route.addRoute('category/create', () => {
+    route.addRoute('category/create', async () => {
         const createView = new CategoryCreate();
         const controller = new CategoryController(createView, route);
 
-        controller.create();
+        await controller.create();
     });
 
-    route.addRoute('category/update', () => {
+    route.addRoute('category/update', async () => {
         const updateView = new CategoryUpdate();
         const controller = new CategoryController(updateView, route);
 
-        controller.update();
+        await controller.update();
     });
 
-    route.addRoute('balance/index', () => {
+    route.addRoute('balance/index', async () => {
         const balanceView = new BalanceIndex();
         const controller = new BalanceController(balanceView, route);
 
-        controller.index();
+        await controller.index();
     });
 
-    route.addRoute('balance/replenish', () => {
+    route.addRoute('balance/replenish', async () => {
         const balanceReplenish = new BalanceReplenish();
         const controller = new BalanceController(balanceReplenish, route);
 
-        controller.replenish();
+        await controller.replenish();
     });
 
     route.routing();

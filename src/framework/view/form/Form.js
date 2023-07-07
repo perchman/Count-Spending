@@ -8,7 +8,7 @@ export default class Form {
     }
 
     async getFields() {
-        throw new Error("this method in not incremented");
+        throw new Error("this method in not implemented");
     }
 
     getId() {
