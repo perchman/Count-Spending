@@ -2,7 +2,7 @@
 
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
 import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel";
-import Balance from "../model/Balance";
+import Balance from "./balance/BalanceIndexedDB";
 import Category from "./Category";
 
 export default class Cost extends IndexedDBActiveRecordModel {
@@ -51,7 +51,7 @@ export default class Cost extends IndexedDBActiveRecordModel {
         )
         const balance = new Balance();
 
-        balance.decrease(cost.price);
+        await balance.decrease(cost.price);
         await cost.save();
 
         return cost;
@@ -123,15 +123,15 @@ export default class Cost extends IndexedDBActiveRecordModel {
         const balance = new Balance();
 
         if (this.initData.price < this.price) {
-            balance.decrease(this.price - this.initData.price);
+            await balance.decrease(this.price - this.initData.price);
         } else {
-            balance.increase(this.initData.price - this.price);
+            await balance.increase(this.initData.price - this.price);
         }
     }
 
-    delete() {
+    async delete() {
         const balance = new Balance();
-        balance.increase(this.price);
-        super.delete();
+        await balance.increase(this.price);
+        await super.delete();
     }
 }

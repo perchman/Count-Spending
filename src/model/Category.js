@@ -20,7 +20,6 @@ export default class Category extends IndexedDBActiveRecordModel {
     }
 
     static makeModel(data) {
-        console.log(data);
         return new Category(
             data.id,
             data.name

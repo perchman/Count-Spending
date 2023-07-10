@@ -1,6 +1,6 @@
 "use strict"
 
-import Balance from "../model/Balance";
+import Balance from "../model/balance/BalanceIndexedDB";
 import Url from "../framework/URL";
 import BalanceForm from "../forms/BalanceForm";
 

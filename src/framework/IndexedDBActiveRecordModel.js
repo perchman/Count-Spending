@@ -24,17 +24,14 @@ export default class IndexedDBActiveRecordModel {
         throw new Error("This method in not implemented");
     }
 
-    static async getStore(mode) {
-        mode = mode || 'readonly';
-
-        const database = ServiceLocator.get(this.getDatabaseName());
-        const transaction = database.transaction(this.getStoreName(), mode);
-        return transaction.store;
+    static async getDatabase() {
+        return await ServiceLocator.get(this.getDatabaseName());
     }
 
     static async getAllRaw() {
-        const store = await this.getStore();
-        return await store.getAll();
+        const database = await this.getDatabase();
+        const transaction = database.transaction(this.getStoreName());
+        return await transaction.store.getAll();
     }
 
     static async getAll(orderBy) {
@@ -78,11 +75,11 @@ export default class IndexedDBActiveRecordModel {
     }
 
     static async getById(id) {
-        const store = await this.getStore('readwrite');
+        const database = await this.getDatabase();
+        const transaction = database.transaction(this.getStoreName(), 'readwrite');
+        const store = transaction.store;
 
-        let obj = await store.get(id);
-
-        return this.makeModel(obj);
+        return this.makeModel(await store.get(id));
     }
 
     static async getCount() {
@@ -101,7 +98,9 @@ export default class IndexedDBActiveRecordModel {
     async save() {
         this.validate();
 
-        const store = await this.constructor.getStore('readwrite');
+        const database = await this.constructor.getDatabase();
+        const transaction = database.transaction(this.constructor.getStoreName(), 'readwrite');
+        const store = transaction.store;
 
         if (!this.id) {
             const obj = this.toJSON();
@@ -115,7 +114,10 @@ export default class IndexedDBActiveRecordModel {
     }
 
     async delete() {
-        const store = await this.constructor.getStore('readwrite');
+        const database = await this.constructor.getDatabase();
+        const transaction = database.transaction(this.constructor.getStoreName(), 'readwrite');
+        const store = transaction.store;
+
         store.delete(this.id);
     }
 }

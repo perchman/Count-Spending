@@ -10,10 +10,17 @@ export default class DefaultIndexedDB extends IndexedDB {
     static migration() {
         return (database) => {
             if (!database.objectStoreNames.contains('CostStore')) {
-                database.createObjectStore('CostStore', {autoIncrement: true});
+                const store = database.createObjectStore('CostStore', {autoIncrement: true});
+                store.createIndex('dateIndex', 'date', {unique: false});
+                store.createIndex('priceIndex', 'price', {unique:false});
+                store.createIndex('idIndex', 'id', {unique: true});
             }
             if (!database.objectStoreNames.contains('CategoryStore')) {
-                database.createObjectStore('CategoryStore', {autoIncrement: true});
+                const store = database.createObjectStore('CategoryStore', {autoIncrement: true});
+                store.createIndex('idIndex', 'id', {unique: true});
+            }
+            if (!database.objectStoreNames.contains('Balance')) {
+                database.createObjectStore('Balance');
             }
         };
     }
