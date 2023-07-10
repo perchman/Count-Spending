@@ -31,47 +31,42 @@ export default class IndexedDBActiveRecordModel {
     static async getAllRaw() {
         const database = await this.getDatabase();
         const transaction = database.transaction(this.getStoreName());
-        return await transaction.store.getAll();
+        const store = transaction.store;
+
+        return await store.getAll();
     }
 
-    static async getAll(orderBy) {
-        const key = orderBy.split(' ')[0];
-        const direction = orderBy.split(' ')[1];
-
+    static async getAll() {
         let data = await this.getAllRaw();
 
-        data = this.sort(data, key, direction);
         return data.map((item) => {
             return this.makeModel(item)
         });
     }
 
     static async getPart(orderBy, limit) {
-        const data = await this.getAll(orderBy);
-        return data.slice(limit.start, limit.end);
-    }
+        const key = orderBy.split(' ')[0];
+        const direction = orderBy.split(' ')[1];
 
-    static sort(data, key, direction) {
-        for (let i = data.length - 1; i > 0; i--) {
-            for (let a = 0; a < i; a++) {
-                let compare;
-                let next = a + 1;
+        const database = await this.getDatabase();
+        const transaction = database.transaction(this.getStoreName());
+        const store = transaction.store;
+        const index = store.index(key + 'Index');
+        const request = index.openCursor();
 
-                if (direction === 'asc') {
-                    compare = (a, b) => a > b;
-                } else if (direction === 'desc') {
-                    compare = (a, b) => a < b;
-                } else {
-                    throw new Error('Invalid sort directory');
-                }
-                if (compare(parseInt(data[a][key]), parseInt(data[next][key]))) {
-                    let tmp  = data[a];
-                    data[a] = data[next];
-                    data[next] = tmp;
-                }
+        let result = [];
+        let count = 0;
+
+        let cursor = await request;
+        while (cursor) {
+            if (count >= limit.start && count < limit.end) {
+                result.push(this.makeModel(cursor.value));
             }
+            count++;
+            cursor = await cursor.continue();
         }
-        return data;
+
+        return result;
     }
 
     static async getById(id) {
