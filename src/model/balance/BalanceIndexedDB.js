@@ -10,10 +10,10 @@ export default class BalanceIndexedDB extends Balance {
 
     async getValue() {
         const database = ServiceLocator.get(this.constructor.getDatabaseName());
-        const transaction = database.transaction('Balance', 'readwrite');
+        const transaction = database.transaction('Balance');
         const store = transaction.store;
 
-        return parseInt(await store.getAll()) || 0;
+        return parseInt(await store.get('balance')) || 0;
     }
 
     async save(value) {
