@@ -4,7 +4,6 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import CategoryForm from "../forms/CategoryForm";
-import CategoryUpdate from "../view/category/CategoryUpdate";
 
 export default class CategoryController {
     constructor(view, route) {
@@ -32,6 +31,18 @@ export default class CategoryController {
 
             this.route.routing();
         });
+    }
+
+    addSortButtonsEventHandler() {
+        const sortButton = document.getElementsByClassName('btn-sort');
+        for (let button of sortButton) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.routing();
+            });
+        }
     }
 
     addUpdateButtonsEventHandler() {
@@ -86,13 +97,11 @@ export default class CategoryController {
     async index() {
         const url = new URL(window.location.href);
         const sort = url.searchParams.get('sort') || 'id_desc';
-        const orderBy = sort.split('_').join(' ');
 
         const dataProvider = new DataProvider({
             sort: {
-                defaultOrder: {
-                    id: 'desc'
-                }
+                defaultOrder: 'id desc',
+                orderBy: sort
             },
             model: Category,
             pagination: {
@@ -107,6 +116,7 @@ export default class CategoryController {
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
+        this.addSortButtonsEventHandler();
         this.addUpdateButtonsEventHandler();
         this.addDeleteButtonsEventHandler();
         this.addPaginationButtonsEventHandler();

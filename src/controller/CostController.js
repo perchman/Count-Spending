@@ -34,6 +34,18 @@ export default class CostController {
         });
     }
 
+    addSortButtonsEventHandler() {
+        const sortButton = document.getElementsByClassName('btn-sort');
+        for (let button of sortButton) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                this.route.routing();
+            });
+        }
+    }
+
     addUpdateButtonsEventHandler() {
         const updateButtons = document.getElementsByClassName('btn-update');
         for (let button of updateButtons) {
@@ -85,14 +97,12 @@ export default class CostController {
 
     async index() {
         const url = new URL(window.location.href);
-        const sort = url.searchParams.get('sort') || 'date_desc';
-        const orderBy = sort.split('_').join(' ');
+        const sort = url.searchParams.get('sort');
 
         const dataProvider = new DataProvider({
             sort: {
-                defaultOrder: {
-                    date: 'desc'
-                }
+                defaultOrder: 'date desc',
+                orderBy: sort
             },
             model: Cost,
             pagination: {
@@ -107,6 +117,7 @@ export default class CostController {
 
         this.addNavbarButtonsEventHandler();
         this.addCreateButtonEventHandler();
+        this.addSortButtonsEventHandler();
         this.addUpdateButtonsEventHandler();
         this.addDeleteButtonsEventHandler();
         this.addPaginationButtonsEventHandler();
@@ -124,7 +135,6 @@ export default class CostController {
 
         await form.onSuccessSubmit(async (data) => {
             try {
-                console.log(data.category)
                 await Cost.create(
                     new Date(data.date),
                     parseInt(data.price),
@@ -136,7 +146,6 @@ export default class CostController {
 
                 this.redirect({action: 'cost/index'});
             } catch (error) {
-                console.log(error);
                 alert(error);
             }
         });

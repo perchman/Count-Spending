@@ -1,7 +1,6 @@
 "use strict"
 
 import Pagination from "./Pagination";
-import Button from "./button/Button";
 import ButtonFactory from "./button/ButtonFactory";
 
 export default class Grid {
@@ -10,6 +9,14 @@ export default class Grid {
         this.dataProvider = data.dataProvider;
         this.buttons = data.buttons;
     }
+
+    #createUrlSort(key, sortDirection) {
+        let url = new URL(window.location.href);
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        url.searchParams.set('sort', `${key}_${sortDirection}`);
+        return url.toString();
+    }
+
     async render() {
         const buttonFactory = new ButtonFactory();
 
@@ -20,7 +27,13 @@ export default class Grid {
             let content;
 
             if (this.fields[header].sort) {
-                const button = new Button((this.fields[header]));
+                const button = buttonFactory.factory(
+                    'sort',
+                    {
+                        text: this.fields[header].text,
+                        url: this.#createUrlSort(header, this.dataProvider.getSortDirection())
+                    }
+                );
                 content = button.render();
             } else {
                 content = this.fields[header].text;

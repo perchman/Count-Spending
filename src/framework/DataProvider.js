@@ -22,11 +22,19 @@ export default class DataProvider {
         }
     }
 
-    computeOrderBy() {
-        const key = Object.keys(this.config.sort.defaultOrder).toString();
-        const value = this.config.sort.defaultOrder[key];
+    getSortDirection() {
+        return this.computeOrderBy().split(' ')[1];
+    }
 
-        return key + ' ' + value;
+    computeOrderBy() {
+        const sort = this.config.sort;
+
+        if (!sort.orderBy) {
+            return sort.defaultOrder;
+        }
+
+        const [key, direction] = sort.orderBy.split('_');
+        return key + ' ' + direction;
     }
 
     async getData() {

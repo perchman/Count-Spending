@@ -5,6 +5,12 @@ import Button from "./Button";
 export default class ButtonFactory {
     factory(type, params) {
         const types = {
+            navbar: {
+                class: 'nav-link'
+            },
+            sort: {
+                class: 'btn btn-sort p-0 fw-bold'
+            },
             update: {
                 text: '<i class="bi bi-pencil-fill pe-none"></i>',
                 class: 'btn btn-update btn-warning px-1 py-0 ms-1'
@@ -16,9 +22,7 @@ export default class ButtonFactory {
             pagination: {
                 class: 'btn btn-pagination border btn-outline-secondary'
             },
-            navbar: {
-                class: 'nav-link'
-            }
+
         }
 
         if (!params.hasOwnProperty('text')) {

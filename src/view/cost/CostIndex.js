@@ -40,8 +40,6 @@ export default class CostIndex {
                 date: {
                     text: 'Date',
                     sort: true,
-                    url: url.createUrlSort(),
-                    class: 'btn p-0 fw-bold',
                     value: (cost) => {
                         return cost.date.toLocaleDateString();
                     }
@@ -56,8 +54,6 @@ export default class CostIndex {
                 price: {
                     text: 'Price',
                     sort: true,
-                    url: url.createUrlSort(),
-                    class: 'btn p-0 fw-bold',
                     value: (cost) => {
                         return cost.price;
                     }

@@ -40,7 +40,6 @@ export default class CategoryIndex {
                 id: {
                     text: 'Id',
                     sort: true,
-                    url: url.createUrlSort(),
                     class: 'btn p-0 fw-bold',
                     value: (category) => {
                         return category.id

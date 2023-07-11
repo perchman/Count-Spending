@@ -1,6 +1,5 @@
 "use strict"
 
-import DefaultIndexedDB from "../DefaultIndexedDB";
 import ServiceLocator from "./ServiceLocator";
 
 export default class IndexedDBActiveRecordModel {
@@ -45,28 +44,38 @@ export default class IndexedDBActiveRecordModel {
     }
 
     static async getPart(orderBy, limit) {
-        const key = orderBy.split(' ')[0];
-        const direction = orderBy.split(' ')[1];
+        const [key, direction] = orderBy.split(' ');
 
         const database = await this.getDatabase();
         const transaction = database.transaction(this.getStoreName());
         const store = transaction.store;
-        const index = store.index(key + 'Index');
-        const request = index.openCursor();
 
-        let result = [];
+        const index = store.index(key + 'Index');
+
+        let request;
+        if (direction === 'desc') {
+            request = index.openCursor(null, 'prev');
+        } else {
+            request = index.openCursor();
+        }
+
+        return await this.dataCompilation(request, limit);
+    }
+
+    static async dataCompilation(request, limit) {
+        let data = [];
         let count = 0;
 
         let cursor = await request;
         while (cursor) {
             if (count >= limit.start && count < limit.end) {
-                result.push(this.makeModel(cursor.value));
+                data.push(this.makeModel(cursor.value));
             }
             count++;
             cursor = await cursor.continue();
         }
 
-        return result;
+        return data;
     }
 
     static async getById(id) {
