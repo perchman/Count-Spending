@@ -52,43 +52,38 @@ export default class IndexedDBActiveRecordModel {
 
         const index = store.index(key + 'Index');
 
-        let request;
-        if (direction === 'desc') {
-            request = index.openCursor(null, 'prev');
-        } else {
-            request = index.openCursor();
-        }
+        let cursor = direction === 'desc' ?
+            await index.openCursor(null, 'prev') :
+            await index.openCursor();
 
-        return await this.dataCompilation(request, limit);
-    }
-
-    static async dataCompilation(request, limit) {
-        let data = [];
+        let result = [];
         let count = 0;
 
-        let cursor = await request;
         while (cursor) {
             if (count >= limit.start && count < limit.end) {
-                data.push(this.makeModel(cursor.value));
+                result.push(this.makeModel(cursor.value));
             }
             count++;
             cursor = await cursor.continue();
         }
 
-        return data;
+        return result;
     }
 
     static async getById(id) {
         const database = await this.getDatabase();
-        const transaction = database.transaction(this.getStoreName(), 'readwrite');
+        const transaction = database.transaction(this.getStoreName());
         const store = transaction.store;
 
         return this.makeModel(await store.get(id));
     }
 
     static async getCount() {
-        const data = await this.getAllRaw()
-        return data.length;
+        const database = await this.getDatabase();
+        const transaction = database.transaction(this.getStoreName());
+        const store = transaction.store;
+
+        return await store.count();
     }
 
     validate() {
