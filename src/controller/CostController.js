@@ -88,11 +88,7 @@ export default class CostController {
     }
 
     redirect(action) {
-        const url = new Url();
-
-        window.addEventListener('popstate', (e) => this.route.routing());
-        window.history.pushState({}, "", url.createUrl(action));
-        window.dispatchEvent(new Event('popstate'));
+        this.route.redirect(Url.createUrl(action));
     }
 
     async index() {
@@ -112,15 +108,16 @@ export default class CostController {
 
         await this.view.render({
             title: 'Costs',
-            dataProvider: dataProvider
+            dataProvider: dataProvider,
+            route: this.route
         });
 
-        this.addNavbarButtonsEventHandler();
-        this.addCreateButtonEventHandler();
-        this.addSortButtonsEventHandler();
-        this.addUpdateButtonsEventHandler();
-        this.addDeleteButtonsEventHandler();
-        this.addPaginationButtonsEventHandler();
+        // this.addNavbarButtonsEventHandler();
+        // this.addCreateButtonEventHandler();
+        // this.addSortButtonsEventHandler();
+        // this.addUpdateButtonsEventHandler();
+        // this.addDeleteButtonsEventHandler();
+        // this.addPaginationButtonsEventHandler();
     }
 
     async create() {
@@ -183,6 +180,7 @@ export default class CostController {
         })
     }
 
+    //@todo переделать delete
     async delete(id) {
         const cost = await Cost.getById(id);
         await cost.delete();

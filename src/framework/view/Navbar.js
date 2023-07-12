@@ -1,10 +1,13 @@
 "use strict"
 
 import ButtonFactory from "./button/ButtonFactory";
+import Route from "../Route";
 
 export default class Navbar {
-    constructor(data) {
+    constructor(data, handler) {
         this.data = data;
+
+        window.navbarOnclickHandler = handler;
     }
     render() {
         const buttonFactory = new ButtonFactory();
@@ -13,11 +16,12 @@ export default class Navbar {
             if (item.hasOwnProperty('active')) {
                 item.class = 'nav-link active';
             }
+            item.handler = 'navbarOnclickHandler(event)';
             const button = buttonFactory.factory('navbar', item);
             buttons += `
-            <li class="nav-item">
-                ${button.render()}
-            </li>
+                <li class="nav-item">
+                    ${button.render()}
+                </li>
             `;
         })
 

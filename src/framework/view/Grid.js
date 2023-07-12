@@ -89,4 +89,40 @@ export default class Grid {
             </div>
         `;
     }
+
+    addEventHandler(callback) {
+        this.addEventHandlerUpdateButtons(callback);
+
+    }
+
+    addEventHandlerSortButtons
+
+    addEventHandlerUpdateButtons(callback) {
+        const updateButtons = document.getElementsByClassName('btn-update');
+        for (let button of updateButtons) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", e.target.href);
+
+                callback();
+            });
+        }
+    }
+
+    addEventHandlerDeleteButtons(callback) {
+        const deleteButtons = document.getElementsByClassName('btn-delete');
+        for (let button of deleteButtons) {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const url = new URL(window.location.href);
+                const targetUrl = new URL(e.target.href);
+                const id = parseInt(targetUrl.searchParams.get('id'));
+
+                await this.delete(id);
+
+                window.history.pushState({}, "", url);
+                this.route.routing();
+            });
+        }
+    }
 }

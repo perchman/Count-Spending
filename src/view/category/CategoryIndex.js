@@ -12,26 +12,27 @@ export default class CategoryIndex {
     }
 
     async render(data) {
-        const url = new Url();
-
-        const navbar = new Navbar([
-            {
-                text: 'Costs',
-                url: url.createUrl({action: 'cost/index'})
-            },
-            {
-                text: 'Categories',
-                url: url.createUrl({action: 'category/index'}),
-                active: true
-            },
-            {
-                text: 'Balance',
-                url: url.createUrl({action: 'balance/index'})
-            }
-        ]);
+        const navbar = new Navbar(
+            data.route,
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'})
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'}),
+                    active: true
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'})
+                }
+            ]
+        );
         const addButton = new Button({
             text: 'Add category',
-            url: url.createUrl({action: 'category/create'}),
+            url: Url.createUrl({action: 'category/create'}),
             id: 'btn-add',
             class: 'btn btn-primary'
         });
@@ -58,7 +59,7 @@ export default class CategoryIndex {
                 update: {
                     text: '<i class="bi bi-pencil-fill pe-none"></i>',
                     url: (category) => {
-                        return url.createUrl({
+                        return Url.createUrl({
                             action: 'category/update',
                             id: category.id
                         })
@@ -68,7 +69,7 @@ export default class CategoryIndex {
                 delete: {
                     text: '<i class="bi bi-trash-fill pe-none"></i>',
                     url: (category) => {
-                        return url.createUrl({
+                        return Url.createUrl({
                             action: 'category/delete',
                             id: category.id
                         })

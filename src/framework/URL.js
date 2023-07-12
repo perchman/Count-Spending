@@ -3,7 +3,7 @@
 export default class Url {
     constructor() {}
 
-    createUrl(params) {
+    static createUrl(params) {
         let url = new URL(window.location.href);
         url.search = '';
 

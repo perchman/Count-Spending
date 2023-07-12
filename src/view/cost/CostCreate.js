@@ -14,21 +14,21 @@ export default class CostCreate {
     }
 
     async render(data) {
-        const url = new Url();
+        const Url = new Url();
 
         const navbar = new Navbar ([
             {
                 text: 'Costs',
-                url: url.createUrl({action: 'cost/index'}),
+                url: Url.createUrl({action: 'cost/index'}),
                 active: true
             },
             {
                 text: 'Categories',
-                url: url.createUrl({action: 'category/index'})
+                url: Url.createUrl({action: 'category/index'})
             },
             {
                 text: 'Balance',
-                url: url.createUrl({action: 'balance/index'})
+                url: Url.createUrl({action: 'balance/index'})
             }
         ]);
 

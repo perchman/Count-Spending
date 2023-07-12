@@ -1,8 +1,17 @@
 "use strict"
 
+import Url from "./URL";
+
 export default class Route {
     constructor() {
         this.routes = {};
+
+        window.addEventListener('popstate', (e) => this.routing());
+    }
+
+    redirect(url) {
+        window.history.pushState({}, "", url);
+        window.dispatchEvent(new Event('popstate'));
     }
 
     routing() {

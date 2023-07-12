@@ -11,29 +11,41 @@ export default class CostIndex {
     }
 
     async render(data) {
-        const navbarView = new Navbar();
-        const url = new Url();
+        const navbar = new Navbar (
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'}),
+                    active: true
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'})
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'})
+                }
+            ],
+            (event) => {
+                event.preventDefault();
+                data.route.redirect(event.target.href);
+            },
+        );
 
-        const navbar = new Navbar ([
-            {
-                text: 'Costs',
-                url: url.createUrl({action: 'cost/index'}),
-                active: true
-            },
-            {
-                text: 'Categories',
-                url: url.createUrl({action: 'category/index'})
-            },
-            {
-                text: 'Balance',
-                url: url.createUrl({action: 'balance/index'})
-            }
-        ]);
+        window.addButtonOnclickHandler = (event) => {
+
+        }
         const addButton = new Button ({
             text: 'Add cost',
-            url: url.createUrl({action: 'cost/create'}),
+            url: Url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
-            class: 'btn btn-primary'
+            class: 'btn btn-primary',
+            handler: (event) => {
+                event.preventDefault();
+                console.log('hi');
+                // data.route.redirect(event.target.href);
+            }
         });
         const grid = new Grid ({
             fields: {
@@ -70,7 +82,7 @@ export default class CostIndex {
             buttons: {
                 update: {
                     url: (cost) => {
-                        return url.createUrl({
+                        return Url.createUrl({
                             action: 'cost/update',
                             id: cost.id
                         })
@@ -78,7 +90,7 @@ export default class CostIndex {
                 },
                 delete: {
                     url: (cost) => {
-                        return url.createUrl({
+                        return Url.createUrl({
                             action: 'cost/delete',
                             id: cost.id
                         })
@@ -93,7 +105,7 @@ export default class CostIndex {
                 <h2>${data.title}</h2>
                 <div class="mt-4">
                     ${addButton.render()}
-                    ${await grid.render()}  
+                    ${await grid.render()}
                 </div>
             </div>
         `;
