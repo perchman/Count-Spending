@@ -38,10 +38,12 @@ export default class CostIndex {
             }
         );
 
-        window.addButtonClickHandler = (event) => {
-            event.preventDefault();
-            route.redirect(event.target.href);
-        };
+        if (!window.hasOwnProperty('addButtonClickHandler')) {
+            window.addButtonClickHandler = (event) => {
+                event.preventDefault();
+                route.redirect(event.target.href);
+            };
+        }
         const addButton = new Button ({
             text: 'Add cost',
             url: Url.createUrl({action: 'cost/create'}),

@@ -87,7 +87,7 @@ export default class CostController {
 
         const form = new CostForm(cost);
 
-        await this.view.render({
+        this.view.render({
             title: 'Update cost',
             form: form
         });
@@ -110,9 +110,27 @@ export default class CostController {
         })
     }
 
-    //@todo переделать delete
-    async delete(id) {
+    async delete() {
+        const url = new URL(window.location.href);
+        const id = parseInt(url.searchParams.get('id'));
         const cost = await Cost.getById(id);
-        await cost.delete();
+
+        let data = {
+            title: 'Success!',
+            class: 'alert-success',
+            text: 'Cost #' + cost.id + ' removed.'
+        };
+
+        try {
+            await cost.delete();
+        } catch (error) {
+            data = {
+                title: 'Error!',
+                class: 'alert-danger',
+                text: error.message
+            }
+        }
+
+        this.view.render(data);
     }
 }

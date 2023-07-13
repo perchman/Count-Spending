@@ -2,19 +2,24 @@
 
 import './bootstrap.css';
 import Route from "./framework/Route";
+import ServiceLocator from "./framework/ServiceLocator";
+import DefaultIndexedDB from "./DefaultIndexedDB";
+
 import CostController from "./controller/CostController";
 import CostIndex from "./view/cost/CostIndex";
 import CostCreate from "./view/cost/CostCreate";
 import CostUpdate from "./view/cost/CostUpdate";
+import CostDelete from "./view/cost/CostDelete";
+
 import CategoryController from "./controller/CategoryController";
 import CategoryIndex from "./view/category/CategoryIndex";
 import CategoryCreate from "./view/category/CategoryCreate";
 import CategoryUpdate from "./view/category/CategoryUpdate";
+import CategoryDelete from "./view/category/CategoryDelete";
+
 import BalanceController from "./controller/BalanceController";
 import BalanceIndex from "./view/balance/BalanceIndex";
 import BalanceReplenish from "./view/balance/BalanceReplenish";
-import ServiceLocator from "./framework/ServiceLocator";
-import DefaultIndexedDB from "./DefaultIndexedDB";
 
 document.addEventListener('DOMContentLoaded', async () => {
     ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
@@ -42,6 +47,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         await controller.update();
     });
 
+    route.addRoute('cost/delete', async () => {
+        const deleteView = new CostDelete(route);
+        const controller = new CostController(deleteView, route);
+
+        await controller.delete();
+    });
+
     route.addRoute('category/index', async () => {
         const indexView = new CategoryIndex(route);
         const controller = new CategoryController(indexView, route);
@@ -61,6 +73,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const controller = new CategoryController(updateView, route);
 
         await controller.update();
+    });
+
+    route.addRoute('category/delete', async () => {
+        const deleteView = new CategoryDelete(route);
+        const controller = new CategoryController(deleteView, route);
+
+        await controller.delete();
     });
 
     route.addRoute('balance/index', async () => {

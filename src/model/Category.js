@@ -52,7 +52,7 @@ export default class Category extends IndexedDBActiveRecordModel {
 
     async checkCanRemove() {
         if (await Cost.existsCostsHasCategory(this.id)) {
-            throw new Error(`Can't delete category ${this.name}. The category has costs`);
+            throw new Error(`Can't delete category ${this.name}. The category has costs.`);
         }
     }
     async delete() {

@@ -14,7 +14,7 @@ export default class CostCreate {
         this.body = document.body;
     }
 
-    async render(data) {
+   async render(data) {
         const navbar = new Navbar (
             [
                 {

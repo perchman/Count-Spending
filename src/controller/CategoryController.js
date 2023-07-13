@@ -4,29 +4,13 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import CategoryForm from "../forms/CategoryForm";
+import Cost from "../model/Cost";
 
 export default class CategoryController {
     constructor(view, route) {
         this.view = view;
         this.route = route;
     }
-    //
-    // addDeleteButtonsEventHandler() {
-    //     const deleteButtons = document.getElementsByClassName('btn-delete');
-    //     for (let button of deleteButtons) {
-    //         button.addEventListener('click', async (e) => {
-    //             e.preventDefault();
-    //             const url = new URL(window.location.href);
-    //             const targetUrl = new URL(e.target.href);
-    //             const id = parseInt(targetUrl.searchParams.get('id'));
-    //
-    //             await this.delete(id);
-    //
-    //             window.history.pushState({}, "", url);
-    //             this.route.routing();
-    //         });
-    //     }
-    // }
 
     redirect(action) {
         this.route.redirect(Url.createUrl(action));
@@ -87,12 +71,27 @@ export default class CategoryController {
         })
     }
 
-    async delete(id) {
+    async delete() {
+        const url = new URL(window.location.href);
+        const id = parseInt(url.searchParams.get('id'));
         const category = await Category.getById(id);
+
+        let data = {
+            title: 'Success!',
+            class: 'alert-success',
+            text: 'Category #' + category.id + ' removed.'
+        };
+
         try {
             await category.delete();
         } catch (error) {
-            alert(error);
+            data = {
+                title: 'Error!',
+                class: 'alert-danger',
+                text: error.message
+            }
         }
+
+        this.view.render(data);
     }
 }
