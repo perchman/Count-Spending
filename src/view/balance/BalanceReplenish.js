@@ -6,28 +6,35 @@ import NumberField from "../../framework/view/form/fields/NumberField";
 import FormButton from "../../framework/view/form/fields/FormButton";
 
 export default class BalanceReplenish {
-    constructor() {
+    constructor(route) {
+        this.route = route;
         this.body = document.body;
     }
 
     render(data) {
-        const url = new Url();
-
-        const navbar = new Navbar ([
+        const navbar = new Navbar (
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'}),
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'}),
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'}),
+                    active: true
+                }
+            ],
             {
-                text: 'Costs',
-                url: url.createUrl({action: 'cost/index'})
-            },
-            {
-                text: 'Categories',
-                url: url.createUrl({action: 'category/index'})
-            },
-            {
-                text: 'Balance',
-                url: url.createUrl({action: 'balance/index'}),
-                active: true
+                navbarClickHandler: (event) => {
+                    event.preventDefault();
+                    this.route.redirect(event.target.href);
+                }
             }
-        ]);
+        );
 
         const form = data.form;
         const fields = form.getFields();

@@ -9,26 +9,35 @@ import TextField from "../../framework/view/form/fields/TextField";
 import FormButton from "../../framework/view/form/fields/FormButton";
 
 export default class CostCreate {
-    constructor() {
+    constructor(route) {
+        this.route = route;
         this.body = document.body;
     }
 
     async render(data) {
-        const navbar = new Navbar ([
+        const navbar = new Navbar (
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'}),
+                    active: true
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'})
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'})
+                }
+            ],
             {
-                text: 'Costs',
-                url: Url.createUrl({action: 'cost/index'}),
-                active: true
-            },
-            {
-                text: 'Categories',
-                url: Url.createUrl({action: 'category/index'})
-            },
-            {
-                text: 'Balance',
-                url: Url.createUrl({action: 'balance/index'})
+                navbarClickHandler: (event) => {
+                    event.preventDefault();
+                    this.route.redirect(event.target.href);
+                }
             }
-        ]);
+        );
 
         const form = data.form;
         const fields = await form.getFields();

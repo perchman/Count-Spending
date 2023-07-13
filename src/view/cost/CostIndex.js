@@ -6,11 +6,14 @@ import Grid from "../../framework/view/Grid";
 import Url from "../../framework/URL";
 
 export default class CostIndex {
-    constructor() {
+    constructor(route) {
+        this.route = route;
         this.body = document.body;
     }
 
     async render(data) {
+        const route = this.route;
+
         const navbar = new Navbar (
             [
                 {
@@ -27,26 +30,26 @@ export default class CostIndex {
                     url: Url.createUrl({action: 'balance/index'})
                 }
             ],
-            (event) => {
-                event.preventDefault();
-                data.route.redirect(event.target.href);
-            },
+            {
+                navbarClickHandler: (event) => {
+                    event.preventDefault();
+                    route.redirect(event.target.href);
+                }
+            }
         );
 
-        window.addButtonOnclickHandler = (event) => {
-
-        }
+        window.addButtonClickHandler = (event) => {
+            event.preventDefault();
+            route.redirect(event.target.href);
+        };
         const addButton = new Button ({
             text: 'Add cost',
             url: Url.createUrl({action: 'cost/create'}),
             id: 'btn-add',
             class: 'btn btn-primary',
-            handler: (event) => {
-                event.preventDefault();
-                console.log('hi');
-                // data.route.redirect(event.target.href);
-            }
+            handler: 'addButtonClickHandler(event)'
         });
+
         const grid = new Grid ({
             fields: {
                 date: {
@@ -87,6 +90,7 @@ export default class CostIndex {
                             id: cost.id
                         })
                     },
+
                 },
                 delete: {
                     url: (cost) => {
@@ -94,7 +98,25 @@ export default class CostIndex {
                             action: 'cost/delete',
                             id: cost.id
                         })
-                    },
+                    }
+                }
+            },
+            eventHandlers: {
+                sortClickHandler: (event) => {
+                    event.preventDefault();
+                    route.redirect(event.target.href);
+                },
+                updateClickHandler: (event) => {
+                    event.preventDefault();
+                    route.redirect(event.target.href);
+                },
+                deleteClickHandler: (event) => {
+                    event.preventDefault();
+                    route.redirect(event.target.href);
+                },
+                paginationClickHandler: (event) => {
+                    event.preventDefault();
+                    route.redirect(event.target.href);
                 }
             }
         });

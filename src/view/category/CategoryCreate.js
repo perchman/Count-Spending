@@ -6,26 +6,35 @@ import TextField from "../../framework/view/form/fields/TextField";
 import FormButton from "../../framework/view/form/fields/FormButton";
 
 export default class CategoryCreate {
-    constructor() {
+    constructor(route) {
+        this.route = route;
         this.body = document.body;
     }
 
     render(data) {
-        const navbar = new Navbar ([
+        const navbar = new Navbar (
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'})
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'}),
+                    active: true
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'})
+                }
+            ],
             {
-                text: 'Costs',
-                url: Url.createUrl({action: 'cost/index'})
-            },
-            {
-                text: 'Categories',
-                url: Url.createUrl({action: 'category/index'}),
-                active: true
-            },
-            {
-                text: 'Balance',
-                url: Url.createUrl({action: 'balance/index'})
+                navbarClickHandler: (event) => {
+                    event.preventDefault();
+                    this.route.redirect(event.target.href);
+                }
             }
-        ]);
+        );
 
         const form = data.form;
         const fields = form.getFields();

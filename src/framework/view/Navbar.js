@@ -4,10 +4,14 @@ import ButtonFactory from "./button/ButtonFactory";
 import Route from "../Route";
 
 export default class Navbar {
-    constructor(data, handler) {
+    constructor(data, eventHandlers) {
         this.data = data;
 
-        window.navbarOnclickHandler = handler;
+        for (let handler in eventHandlers) {
+            if (!window.hasOwnProperty(handler)) {
+                window[handler] = eventHandlers[handler];
+            }
+        }
     }
     render() {
         const buttonFactory = new ButtonFactory();
@@ -16,7 +20,6 @@ export default class Navbar {
             if (item.hasOwnProperty('active')) {
                 item.class = 'nav-link active';
             }
-            item.handler = 'navbarOnclickHandler(event)';
             const button = buttonFactory.factory('navbar', item);
             buttons += `
                 <li class="nav-item">

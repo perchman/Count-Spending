@@ -12,52 +12,6 @@ export default class CostController {
         this.route = route;
     }
 
-    addNavbarButtonsEventHandler() {
-        const navLinks = document.getElementsByClassName('nav-link');
-        for (const navLink of navLinks) {
-            navLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
-                this.route.routing();
-            });
-        }
-    }
-
-    addCreateButtonEventHandler() {
-        const addButton = document.getElementById('btn-add');
-        addButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.history.pushState({}, "", e.target.href);
-
-            this.route.routing();
-        });
-    }
-
-    addSortButtonsEventHandler() {
-        const sortButton = document.getElementsByClassName('btn-sort');
-        for (let button of sortButton) {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
-                this.route.routing();
-            });
-        }
-    }
-
-    addUpdateButtonsEventHandler() {
-        const updateButtons = document.getElementsByClassName('btn-update');
-        for (let button of updateButtons) {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
-                this.route.routing();
-            });
-        }
-    }
-
     addDeleteButtonsEventHandler() {
         const deleteButtons = document.getElementsByClassName('btn-delete');
         for (let button of deleteButtons) {
@@ -70,18 +24,6 @@ export default class CostController {
                 await this.delete(id);
 
                 window.history.pushState({}, "", url);
-                this.route.routing();
-            });
-        }
-    }
-
-    addPaginationButtonsEventHandler() {
-        const paginationButtons = document.getElementsByClassName('btn-pagination');
-        for (let button of paginationButtons) {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.history.pushState({}, "", e.target.href);
-
                 this.route.routing();
             });
         }
@@ -108,16 +50,8 @@ export default class CostController {
 
         await this.view.render({
             title: 'Costs',
-            dataProvider: dataProvider,
-            route: this.route
+            dataProvider: dataProvider
         });
-
-        // this.addNavbarButtonsEventHandler();
-        // this.addCreateButtonEventHandler();
-        // this.addSortButtonsEventHandler();
-        // this.addUpdateButtonsEventHandler();
-        // this.addDeleteButtonsEventHandler();
-        // this.addPaginationButtonsEventHandler();
     }
 
     async create() {
@@ -127,8 +61,6 @@ export default class CostController {
             title: 'Create cost',
             form: form
         });
-
-        this.addNavbarButtonsEventHandler();
 
         await form.onSuccessSubmit(async (data) => {
             try {
@@ -159,8 +91,6 @@ export default class CostController {
             title: 'Update cost',
             form: form
         });
-
-        this.addNavbarButtonsEventHandler();
 
         await form.onSuccessSubmit(async (data) => {
             try {

@@ -5,33 +5,46 @@ import Button from "../../framework/view/button/Button";
 import Url from "../../framework/URL";
 
 export default class BalanceIndex {
-    constructor() {
+    constructor(route) {
+        this.route = route;
         this.body = document.body;
     }
 
     async render(balance) {
-        const url = new Url();
-
-        const navbar = new Navbar ([
+        const navbar = new Navbar (
+            [
+                {
+                    text: 'Costs',
+                    url: Url.createUrl({action: 'cost/index'}),
+                },
+                {
+                    text: 'Categories',
+                    url: Url.createUrl({action: 'category/index'}),
+                },
+                {
+                    text: 'Balance',
+                    url: Url.createUrl({action: 'balance/index'}),
+                    active: true
+                }
+            ],
             {
-                text: 'Costs',
-                url: url.createUrl({action: 'cost/index'}),
-            },
-            {
-                text: 'Categories',
-                url: url.createUrl({action: 'category/index'}),
-            },
-            {
-                text: 'Balance',
-                url: url.createUrl({action: 'balance/index'}),
-                active: true
+                navbarClickHandler: (event) => {
+                    event.preventDefault();
+                    this.route.redirect(event.target.href);
+                }
             }
-        ]);
+        );
+
+        window.replenishClickHandler = (event) => {
+            event.preventDefault();
+            this.route.redirect(event.target.href);
+        }
         const replenishButton = new Button({
             text: 'Replenish',
-            url: url.createUrl({action: 'balance/replenish'}),
+            url: Url.createUrl({action: 'balance/replenish'}),
             id: 'btn-replenish',
-            class: 'btn btn-primary mt-4'
+            class: 'btn btn-primary mt-4',
+            handler: 'replenishClickHandler(event)'
         });
 
 

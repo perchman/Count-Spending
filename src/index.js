@@ -22,56 +22,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     const route = new Route();
 
     route.addRoute('cost/index', async () => {
-        const indexView = new CostIndex();
+        const indexView = new CostIndex(route);
         const controller = new CostController(indexView, route);
 
         await controller.index();
     });
 
     route.addRoute('cost/create', async () => {
-        const createView = new CostCreate();
+        const createView = new CostCreate(route);
         const controller = new CostController(createView, route);
 
         await controller.create();
     });
 
     route.addRoute('cost/update', async () => {
-        const updateView = new CostUpdate();
+        const updateView = new CostUpdate(route);
         const controller = new CostController(updateView, route);
 
         await controller.update();
     });
 
     route.addRoute('category/index', async () => {
-        const indexView = new CategoryIndex();
+        const indexView = new CategoryIndex(route);
         const controller = new CategoryController(indexView, route);
 
         await controller.index();
     });
 
     route.addRoute('category/create', async () => {
-        const createView = new CategoryCreate();
+        const createView = new CategoryCreate(route);
         const controller = new CategoryController(createView, route);
 
         await controller.create();
     });
 
     route.addRoute('category/update', async () => {
-        const updateView = new CategoryUpdate();
+        const updateView = new CategoryUpdate(route);
         const controller = new CategoryController(updateView, route);
 
         await controller.update();
     });
 
     route.addRoute('balance/index', async () => {
-        const balanceView = new BalanceIndex();
+        const balanceView = new BalanceIndex(route);
         const controller = new BalanceController(balanceView, route);
 
         await controller.index();
     });
 
     route.addRoute('balance/replenish', async () => {
-        const balanceReplenish = new BalanceReplenish();
+        const balanceReplenish = new BalanceReplenish(route);
         const controller = new BalanceController(balanceReplenish, route);
 
         await controller.replenish();
