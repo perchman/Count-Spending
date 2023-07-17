@@ -4,7 +4,7 @@ import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel"
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
 import Balance from "./balance/Balance";
 import Category from "./Category";
-import Transaction from "./balance/Transaction";
+import HistoryBalanceChange from "./balance/HistoryBalanceChange";
 
 export default class Cost extends LocalStorageActiveRecordModel {
     constructor(id, date, price, description, category) {
@@ -127,30 +127,29 @@ export default class Cost extends LocalStorageActiveRecordModel {
 
         await super.save();
 
-        let typeTransaction;
-        let amountTransaction;
+        const balance = new Balance();
 
         if (isNew) {
-            typeTransaction = 'deduction';
-            amountTransaction = -this.price;
-            // await balance.decrease(this.price);
+            await balance.decrease(
+                this.price,
+                this.date,
+                'deduction'
+                );
         } else {
             if (this.initData.price < this.price) {
-                typeTransaction = 'deduction';
-                amountTransaction = -(this.price - this.initData.price);
-                // await balance.decrease(this.price - this.initData.price);
+                await balance.decrease(
+                    this.price - this.initData.price,
+                    this.date,
+                    'deduction'
+                );
             } else {
-                typeTransaction = 'refund';
-                amountTransaction = this.initData.price - this.price;
-                // await balance.increase(this.initData.price - this.price);
+                await balance.increase(
+                    this.initData.price - this.price,
+                    this.date,
+                    'refund'
+                );
             }
         }
-
-        const transaction = await Transaction.create(
-            this.date,
-            typeTransaction,
-            amountTransaction
-        )
 
         // const updateBalance = async () => {
         //     const balance = new Balance();
@@ -176,10 +175,11 @@ export default class Cost extends LocalStorageActiveRecordModel {
 
 
     async delete() {
-        const transaction = await Transaction.create(
-            new Date,
-            'refund',
-            this.price
+        const balance = new Balance();
+        await balance.increase(
+            this.price,
+            new Date(),
+            'refund'
         )
 
         await super.delete();

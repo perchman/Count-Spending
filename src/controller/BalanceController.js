@@ -4,7 +4,7 @@ import Balance from "../model/balance/Balance";
 import Url from "../framework/URL";
 import BalanceForm from "../forms/BalanceForm";
 import DataProvider from "../framework/DataProvider";
-import Transaction from "../model/balance/Transaction";
+import HistoryBalanceChange from "../model/balance/HistoryBalanceChange";
 
 export default class BalanceController {
     constructor(view, route) {
@@ -29,14 +29,12 @@ export default class BalanceController {
         });
 
         await form.onSuccessSubmit(async (data) => {
-            const replenish = Transaction.create(
-                new Date(data.date),
-                'replenishment',
-                parseInt(data.replenish)
-            )
-
-            // const balance = new Balance();
-            // await balance.increase(parseInt(data.replenish));
+            const balance = new Balance();
+            await balance.increase(
+                parseInt(data.replenish),
+                data.date,
+                'replenishment'
+                );
 
             this.redirect({action: 'balance/index'});
         });
@@ -51,7 +49,7 @@ export default class BalanceController {
                 defaultOrder: 'id desc',
                 orderBy: sort
             },
-            model: Transaction,
+            model: HistoryBalanceChange,
             pagination: {
                 pageSize: 5
             }

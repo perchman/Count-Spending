@@ -3,7 +3,7 @@
 import LocalStorageActiveRecordModel from "../../framework/LocalStorageActiveRecordModel";
 import Balance from "./Balance";
 
-export default class Transaction extends LocalStorageActiveRecordModel {
+export default class HistoryBalanceChange extends LocalStorageActiveRecordModel {
     constructor(id, date, type, amount) {
         super(id);
         this.date = date;
@@ -14,7 +14,7 @@ export default class Transaction extends LocalStorageActiveRecordModel {
     }
 
     static getEntityName() {
-        return 'Transaction';
+        return 'HistoryBalanceChange';
     }
 
     validate() {
@@ -27,7 +27,7 @@ export default class Transaction extends LocalStorageActiveRecordModel {
     }
 
     static async create(date, type, amount) {
-        const transaction = new Transaction(
+        const transaction = new HistoryBalanceChange(
             null,
             date,
             type,
@@ -40,7 +40,7 @@ export default class Transaction extends LocalStorageActiveRecordModel {
     }
 
     static async makeModel(data) {
-        return new Transaction(
+        return new HistoryBalanceChange(
             data.id,
             new Date(data.date),
             data.type,
@@ -54,12 +54,5 @@ export default class Transaction extends LocalStorageActiveRecordModel {
             type: this.type,
             amount: this.amount
         };
-    }
-
-    async save() {
-        const balance = new Balance();
-        await balance.change(this.amount);
-
-        await super.save();
     }
 }
