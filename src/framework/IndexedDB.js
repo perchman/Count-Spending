@@ -1,6 +1,6 @@
 "use strict"
 
-import {openDB} from "idb";
+// import { openDB } from "idb";
 
 export default class IndexedDB {
     static getName() {
@@ -11,13 +11,13 @@ export default class IndexedDB {
         throw new Error("This method in not implemented");
     }
 
-    static async connect() {
-        return await openDB(
-            this.getName(),
-            1,
-            { upgrade: this.migration() }
-        );
-    }
+    // static async connect() {
+    //     return await openDB(
+    //         this.getName(),
+    //         1,
+    //         { upgrade: this.migration() }
+    //     );
+    // }
 
     static async getInstance() {
         if (!this.database) {

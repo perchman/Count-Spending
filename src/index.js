@@ -20,9 +20,10 @@ import CategoryDelete from "./view/category/CategoryDelete";
 import BalanceController from "./controller/BalanceController";
 import BalanceIndex from "./view/balance/BalanceIndex";
 import BalanceReplenish from "./view/balance/BalanceReplenish";
+import BalanceHistory from "./view/balance/BalanceHistory";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
+    // ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
 
     const route = new Route();
 
@@ -94,6 +95,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const controller = new BalanceController(balanceReplenish, route);
 
         await controller.replenish();
+    });
+
+    route.addRoute('balance/history', async () => {
+        const balanceHistory = new BalanceHistory(route);
+        const controller = new BalanceController(balanceHistory, route);
+
+        await controller.history();
     });
 
     route.routing();

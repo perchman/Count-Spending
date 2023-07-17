@@ -10,6 +10,12 @@ export default class LocalStorageActiveRecordModel {
         throw new Error("this method in not implemented");
     }
 
+    static getStoreName() {
+        return {
+            transaction: () => {}
+        }
+    }
+
     static makeModel() {
         throw new Error("this method in not implemented");
     }

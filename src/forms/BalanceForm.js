@@ -9,6 +9,11 @@ export default class BalanceForm extends Form {
 
     getFields() {
         return {
+            date: {
+                name: 'date',
+                label: 'Date',
+                validators: ['required']
+            },
             replenish: {
                 name: 'replenish',
                 label: 'Amount',

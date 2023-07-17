@@ -1,11 +1,9 @@
 "use strict"
 
-export default class Balance {
+import BalanceLocalStorage from "./BalanceLocalStorage";
+import BalanceIndexedDB from "./BalanceIndexedDB";
 
-    async getValue() {
-        throw new Error("This method is not implemented");
-    }
-
+export default class Balance extends BalanceLocalStorage {
     async increase(replenishment) {
         const value = await this.getValue() + parseInt(replenishment);
         await this.save(value);
@@ -19,7 +17,12 @@ export default class Balance {
         await this.save(value);
     }
 
-    async save(value) {
-        throw new Error("This method is not implemented");
+    async change(value) {
+        const result = await this.getValue() + (parseInt(value));
+        console.log(result);
+        if (result < 0) {
+            throw new Error("Not enough money on balance");
+        }
+        await this.save(result);
     }
 }

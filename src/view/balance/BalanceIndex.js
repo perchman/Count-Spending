@@ -47,6 +47,18 @@ export default class BalanceIndex {
             handler: 'replenishClickHandler(event)'
         });
 
+        window.historyClickHandler = (event) => {
+            event.preventDefault();
+            this.route.redirect(event.target.href);
+        }
+        const historyButton = new Button({
+            text: 'History',
+            url: Url.createUrl({action: 'balance/history'}),
+            id: 'btn-history',
+            class: 'btn btn-primary mt-4',
+            handler: 'historyClickHandler(event)'
+        });
+
 
         this.body.innerHTML = `
             ${navbar.render()}
@@ -56,6 +68,7 @@ export default class BalanceIndex {
                     <span class="px-2 border border-1 border-primary fs-4">${await balance.getValue()}</span>
                 </div>
                 ${replenishButton.render()}
+                ${historyButton.render()}
             </div>
         `;
     }

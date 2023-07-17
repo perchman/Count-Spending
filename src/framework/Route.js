@@ -1,7 +1,5 @@
 "use strict"
 
-import Url from "./URL";
-
 export default class Route {
     constructor() {
         this.routes = {};

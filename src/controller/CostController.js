@@ -87,7 +87,7 @@ export default class CostController {
 
         const form = new CostForm(cost);
 
-        this.view.render({
+        await this.view.render({
             title: 'Update cost',
             form: form
         });

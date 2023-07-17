@@ -4,7 +4,6 @@ import Category from "../model/Category";
 import Url from "../framework/URL";
 import DataProvider from "../framework/DataProvider";
 import CategoryForm from "../forms/CategoryForm";
-import Cost from "../model/Cost";
 
 export default class CategoryController {
     constructor(view, route) {

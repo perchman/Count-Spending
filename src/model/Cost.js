@@ -1,11 +1,12 @@
 "use strict"
 
-import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
 import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel";
-import Balance from "./balance/BalanceIndexedDB";
+import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
+import Balance from "./balance/Balance";
 import Category from "./Category";
+import Transaction from "./balance/Transaction";
 
-export default class Cost extends IndexedDBActiveRecordModel {
+export default class Cost extends LocalStorageActiveRecordModel {
     constructor(id, date, price, description, category) {
         super(id);
         this.date = date;
@@ -49,9 +50,7 @@ export default class Cost extends IndexedDBActiveRecordModel {
             description,
             category
         )
-        const balance = new Balance();
 
-        await balance.decrease(cost.price);
         await cost.save();
 
         return cost;
@@ -119,19 +118,70 @@ export default class Cost extends IndexedDBActiveRecordModel {
     }
 
     async save() {
-        await super.save();
-        const balance = new Balance();
+        const isNew = !this.id;
 
-        if (this.initData.price < this.price) {
-            await balance.decrease(this.price - this.initData.price);
+        // const storeNames = [
+        //     this.constructor.getStoreName(),
+        //     Balance.getStoreName()
+        // ];
+
+        await super.save();
+
+        let typeTransaction;
+        let amountTransaction;
+
+        if (isNew) {
+            typeTransaction = 'deduction';
+            amountTransaction = -this.price;
+            // await balance.decrease(this.price);
         } else {
-            await balance.increase(this.initData.price - this.price);
+            if (this.initData.price < this.price) {
+                typeTransaction = 'deduction';
+                amountTransaction = -(this.price - this.initData.price);
+                // await balance.decrease(this.price - this.initData.price);
+            } else {
+                typeTransaction = 'refund';
+                amountTransaction = this.initData.price - this.price;
+                // await balance.increase(this.initData.price - this.price);
+            }
         }
+
+        const transaction = await Transaction.create(
+            this.date,
+            typeTransaction,
+            amountTransaction
+        )
+
+        // const updateBalance = async () => {
+        //     const balance = new Balance();
+        //     if (isNew) {
+        //         await balance.decrease(this.price);
+        //     } else {
+        //         if (this.initData.price < this.price) {
+        //             await balance.decrease(this.price - this.initData.price);
+        //         } else {
+        //             await balance.increase(this.initData.price - this.price);
+        //         }
+        //     }
+        // };
+
+
+        // const transaction = await this.beginTransaction(storeNames);
+        // await Promise.all([
+        //     await super.save(transaction),
+        //     await updateBalance(),
+        //     transaction.done,
+        // ]);
     }
 
+
     async delete() {
-        const balance = new Balance();
-        await balance.increase(this.price);
+        const transaction = await Transaction.create(
+            new Date,
+            'refund',
+            this.price
+        )
+
         await super.delete();
     }
 }

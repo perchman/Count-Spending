@@ -27,6 +27,10 @@ export default class IndexedDBActiveRecordModel {
         return await ServiceLocator.get(this.getDatabaseName());
     }
 
+    static createTransaction() {
+        throw new Error("This method in not implemented");
+    }
+
     static async getAllRaw() {
         const database = await this.getDatabase();
         const transaction = database.transaction(this.getStoreName());
@@ -97,8 +101,8 @@ export default class IndexedDBActiveRecordModel {
     async save() {
         this.validate();
 
-        const database = await this.constructor.getDatabase();
-        const transaction = database.transaction(this.constructor.getStoreName(), 'readwrite');
+        const database = this.constructor.getDatabase();
+        const transaction = database.transaction(this.constructor.getStoreName, 'readwrite');
         const store = transaction.store;
 
         if (!this.id) {
@@ -110,6 +114,13 @@ export default class IndexedDBActiveRecordModel {
         } else {
             store.put(this.toJSON(), this.id);
         }
+    }
+
+    async beginTransaction(storeNames) {
+        const database = await this.constructor.getDatabase();
+        const transaction = database.transaction(storeNames, 'readwrite');
+
+        return transaction;
     }
 
     async delete() {

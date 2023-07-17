@@ -1,7 +1,5 @@
 "use strict"
 
-import DefaultIndexedDB from "../DefaultIndexedDB";
-
 export default class ServiceLocator {
     static instances = {};
     static set(name, instance) {

@@ -52,7 +52,7 @@ export default class CostDelete {
             ${navbar.render()}
             <div class="container mt-4">
                 <h2 class="">${data.title}</h2>
-                <div class="mt-3">
+                <div class="mt-4">
                     <div class="alert ${data.class}" role="alert">
                         ${data.text}
                     </div>

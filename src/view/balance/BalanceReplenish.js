@@ -4,6 +4,7 @@ import Navbar from "../../framework/view/Navbar";
 import Url from "../../framework/URL";
 import NumberField from "../../framework/view/form/fields/NumberField";
 import FormButton from "../../framework/view/form/fields/FormButton";
+import DateField from "../../framework/view/form/fields/DateField";
 
 export default class BalanceReplenish {
     constructor(route) {
@@ -38,6 +39,7 @@ export default class BalanceReplenish {
 
         const form = data.form;
         const fields = form.getFields();
+        const dateField = new DateField(form, fields.date);
         const replenishField = new NumberField(form, fields.replenish);
         const replenishButton = new FormButton(form, 'Add');
 
@@ -46,6 +48,7 @@ export default class BalanceReplenish {
             <div class="container mt-4">
                 <h2>${data.title}</h2>
                 ${form.before()}
+                    ${dateField.render()}
                     ${replenishField.render()}
                     ${replenishButton.render()}
                 ${form.end()}
