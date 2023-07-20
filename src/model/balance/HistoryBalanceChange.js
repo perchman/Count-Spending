@@ -1,9 +1,10 @@
 "use strict"
 
 import LocalStorageActiveRecordModel from "../../framework/LocalStorageActiveRecordModel";
+import IndexedDBActiveRecordModel from "../../framework/IndexedDBActiveRecordModel";
 import Balance from "./Balance";
 
-export default class HistoryBalanceChange extends LocalStorageActiveRecordModel {
+export default class HistoryBalanceChange extends IndexedDBActiveRecordModel {
     constructor(id, date, type, amount) {
         super(id);
         this.date = date;
@@ -14,7 +15,11 @@ export default class HistoryBalanceChange extends LocalStorageActiveRecordModel 
     }
 
     static getEntityName() {
-        return 'HistoryBalanceChange';
+        return 'historyBalanceChange';
+    }
+
+    static getDatabaseName() {
+        return 'Default';
     }
 
     validate() {
@@ -48,11 +53,17 @@ export default class HistoryBalanceChange extends LocalStorageActiveRecordModel 
         );
     }
     toJSON() {
-        return {
+        let obj = {
             id: this.id,
             date: new Date(this.date).getTime(),
             type: this.type,
             amount: this.amount
         };
+
+        if (!this.id) {
+            delete obj.id;
+        }
+
+        return obj;
     }
 }

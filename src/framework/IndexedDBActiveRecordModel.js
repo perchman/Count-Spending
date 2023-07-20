@@ -1,6 +1,7 @@
 "use strict"
 
 import ServiceLocator from "./ServiceLocator";
+import DefaultIndexedDB from "../DefaultIndexedDB";
 
 export default class IndexedDBActiveRecordModel {
     constructor(id) {
@@ -32,11 +33,10 @@ export default class IndexedDBActiveRecordModel {
     }
 
     static async getAllRaw() {
-        const database = await this.getDatabase();
-        const transaction = database.transaction(this.getStoreName());
-        const store = transaction.store;
+        const db = await this.getDatabase();
+        const table = db[this.getEntityName()];
 
-        return await store.getAll();
+        return await table.toArray();
     }
 
     static async getAll() {
@@ -49,45 +49,36 @@ export default class IndexedDBActiveRecordModel {
 
     static async getPart(orderBy, limit) {
         const [key, direction] = orderBy.split(' ');
-
-        const database = await this.getDatabase();
-        const transaction = database.transaction(this.getStoreName());
-        const store = transaction.store;
-
-        const index = store.index(key + 'Index');
-
-        let cursor = direction === 'desc' ?
-            await index.openCursor(null, 'prev') :
-            await index.openCursor();
+        const db = await this.getDatabase();
 
         let result = [];
-        let count = 0;
+        let data = await db[this.getEntityName()].orderBy(key);
 
-        while (cursor) {
-            if (count >= limit.start && count < limit.end) {
-                result.push(this.makeModel(cursor.value));
-            }
-            count++;
-            cursor = await cursor.continue();
+        if (direction === 'desc') {
+            data = data.reverse();
         }
+
+        await data.offset(limit.start)
+                  .limit(limit.end)
+                  .each((elem) => {
+                      result.push(this.makeModel(elem));
+                  });
 
         return result;
     }
 
     static async getById(id) {
-        const database = await this.getDatabase();
-        const transaction = database.transaction(this.getStoreName());
-        const store = transaction.store;
+        const db = await this.getDatabase();
+        const obj = await db[this.getEntityName()].get(id);
 
-        return this.makeModel(await store.get(id));
+        return this.makeModel(obj);
     }
 
     static async getCount() {
-        const database = await this.getDatabase();
-        const transaction = database.transaction(this.getStoreName());
-        const store = transaction.store;
+        const db = await this.getDatabase();
+        const table = db[this.getEntityName()];
 
-        return await store.count();
+        return await table.count();
     }
 
     validate() {
@@ -101,33 +92,16 @@ export default class IndexedDBActiveRecordModel {
     async save() {
         this.validate();
 
-        const database = this.constructor.getDatabase();
-        const transaction = database.transaction(this.constructor.getStoreName, 'readwrite');
-        const store = transaction.store;
+        const db = await this.constructor.getDatabase();
+        const table = db[this.constructor.getEntityName()];
 
-        if (!this.id) {
-            const obj = this.toJSON();
-            const key = await store.add(obj);
-
-            obj.id = key;
-            store.put(obj, key);
-        } else {
-            store.put(this.toJSON(), this.id);
-        }
-    }
-
-    async beginTransaction(storeNames) {
-        const database = await this.constructor.getDatabase();
-        const transaction = database.transaction(storeNames, 'readwrite');
-
-        return transaction;
+        await table.put(this.toJSON());
     }
 
     async delete() {
-        const database = await this.constructor.getDatabase();
-        const transaction = database.transaction(this.constructor.getStoreName(), 'readwrite');
-        const store = transaction.store;
+        const db = await this.constructor.getDatabase();
+        const table = db[this.constructor.getEntityName()];
 
-        store.delete(this.id);
+        table.delete(this.id);
     }
 }

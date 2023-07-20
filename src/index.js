@@ -23,7 +23,7 @@ import BalanceReplenish from "./view/balance/BalanceReplenish";
 import BalanceHistory from "./view/balance/BalanceHistory";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
+    await ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
 
     const route = new Route();
 

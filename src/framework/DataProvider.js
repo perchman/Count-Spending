@@ -41,6 +41,6 @@ export default class DataProvider {
         return await this.config.model.getPart(
             this.computeOrderBy(),
             await this.computeLimit()
-        );;
+        );
     }
 }

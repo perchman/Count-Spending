@@ -4,7 +4,7 @@ import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecord
 import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel";
 import Cost from "./Cost";
 
-export default class Category extends LocalStorageActiveRecordModel {
+export default class Category extends IndexedDBActiveRecordModel {
     constructor(id, name) {
         super(id);
         this.name = name;
@@ -12,11 +12,17 @@ export default class Category extends LocalStorageActiveRecordModel {
     }
 
     static getEntityName() {
-        return 'Category';
+        return 'category';
     }
 
     static getDatabaseName() {
         return 'Default';
+    }
+
+    validate() {
+        if (typeof this.name !== "string") {
+            throw new Error("Invalid data type for name of category. Type must be a string");
+        }
     }
 
     static makeModel(data) {
@@ -37,17 +43,17 @@ export default class Category extends LocalStorageActiveRecordModel {
         return category;
     }
 
-    validate() {
-        if (typeof this.name !== "string") {
-            throw new Error("Invalid data type for name of category. Type must be a string");
-        }
-    }
-
     toJSON() {
-        return {
+        let obj = {
             id: this.id,
             name: this.name
         }
+
+        if (!this.id) {
+            delete obj.id;
+        }
+
+        return obj;
     }
 
     async checkCanRemove() {

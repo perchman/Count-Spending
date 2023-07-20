@@ -7,27 +7,15 @@ export default class BalanceIndexedDB {
         return 'Default';
     }
 
-    static getStoreName() {
-        return 'Balance';
+    async getValue() {
+        const db = ServiceLocator.get(this.constructor.getDatabaseName());
+        const obj = await db['balance'].get('balance');
+
+        return obj ? parseInt(obj.value) : 0;
     }
 
-    async getValue(store) {
-        if (!store) {
-            const database = ServiceLocator.get(this.constructor.getDatabaseName());
-            const transaction = database.transaction(this.constructor.getStoreName());
-            store = transaction.store;
-        }
-
-        return parseInt(await store.get('balance')) || 0;
-    }
-
-    async save(value, store) {
-        if (!store) {
-            const database = ServiceLocator.get(this.constructor.getDatabaseName());
-            const transaction = database.transaction(this.constructor.getStoreName(), 'readwrite');
-            store = transaction.store;
-        }
-
-        store.put(value, 'balance');
+    async save(value) {
+        const db = ServiceLocator.get(this.constructor.getDatabaseName());
+        await db['balance'].put({ key: 'balance', value: value }, 'balance');
     }
 }

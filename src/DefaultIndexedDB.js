@@ -1,27 +1,27 @@
 "use strict"
 
-import IndexedDB from "./framework/IndexedDB";
+import IndexedDB from "./framework/databases/IndexedDB";
 
 export default class DefaultIndexedDB extends IndexedDB {
     static getName() {
         return 'Default';
     }
 
-    static migration() {
-        return (database) => {
-            if (!database.objectStoreNames.contains('CostStore')) {
-                const store = database.createObjectStore('CostStore', {autoIncrement: true});
-                store.createIndex('dateIndex', 'date', {unique: false});
-                store.createIndex('priceIndex', 'price', {unique:false});
-                store.createIndex('idIndex', 'id', {unique: true});
-            }
-            if (!database.objectStoreNames.contains('CategoryStore')) {
-                const store = database.createObjectStore('CategoryStore', {autoIncrement: true});
-                store.createIndex('idIndex', 'id', {unique: true});
-            }
-            if (!database.objectStoreNames.contains('Balance')) {
-                database.createObjectStore('Balance');
-            }
-        };
+    static migration(db) {
+        let obj = {};
+        if (!db.tables.includes('cost')) {
+            obj.cost = '++id, date, price';
+        }
+        if (!db.tables.includes('category')) {
+            obj.category = '++id';
+        }
+        if (!db.tables.includes('balance')) {
+            obj.balance = 'key';
+        }
+        if (!db.tables.includes('historyBalanceChange')) {
+            obj.historyBalanceChange = '++id, date, amount'
+        }
+
+        return obj;
     }
 }

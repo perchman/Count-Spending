@@ -4,9 +4,8 @@ import IndexedDBActiveRecordModel from "../framework/IndexedDBActiveRecordModel"
 import LocalStorageActiveRecordModel from "../framework/LocalStorageActiveRecordModel";
 import Balance from "./balance/Balance";
 import Category from "./Category";
-import HistoryBalanceChange from "./balance/HistoryBalanceChange";
 
-export default class Cost extends LocalStorageActiveRecordModel {
+export default class Cost extends IndexedDBActiveRecordModel {
     constructor(id, date, price, description, category) {
         super(id);
         this.date = date;
@@ -25,45 +24,11 @@ export default class Cost extends LocalStorageActiveRecordModel {
     }
 
     static getEntityName() {
-        return 'Cost';
+        return 'cost';
     }
 
     static getDatabaseName() {
         return 'Default';
-    }
-
-    static async makeModel(data) {
-        return new Cost(
-            data.id,
-            new Date(data.date),
-            data.price,
-            data.description,
-            await Category.getById(data.categoryId)
-        );
-    }
-
-    static async create(date, price, description, category) {
-        const cost = new Cost(
-            null,
-            date,
-            price,
-            description,
-            category
-        )
-
-        await cost.save();
-
-        return cost;
-    }
-
-    static async existsCostsHasCategory(categoryId) {
-        const costs = await Cost.getAllRaw();
-        for (let cost in costs) {
-            if (costs[cost].categoryId === categoryId) {
-                return true;
-            }
-        }
-        return false;
     }
 
     validate() {
@@ -103,14 +68,54 @@ export default class Cost extends LocalStorageActiveRecordModel {
         }
     }
 
+    static async makeModel(data) {
+        return new Cost(
+            data.id,
+            new Date(data.date),
+            data.price,
+            data.description,
+            await Category.getById(data.categoryId)
+        );
+    }
+
+    static async create(date, price, description, category) {
+        const cost = new Cost(
+            null,
+            date,
+            price,
+            description,
+            category
+        )
+
+        await cost.save();
+
+        return cost;
+    }
+
+    static async existsCostsHasCategory(categoryId) {
+        const costs = await Cost.getAllRaw();
+        for (let cost in costs) {
+            if (costs[cost].categoryId === categoryId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     toJSON() {
-        return {
+        let obj = {
             id: this.id,
             date: new Date(this.date).getTime(),
             price: this.price,
             description: this.description,
             categoryId: this.category.id,
-        };
+        }
+
+        if (!this.id) {
+            delete obj.id;
+        }
+
+        return obj;
     }
 
     getCategoryName() {
@@ -118,70 +123,54 @@ export default class Cost extends LocalStorageActiveRecordModel {
     }
 
     async save() {
-        const isNew = !this.id;
+        const db = await this.constructor.getDatabase();
 
-        // const storeNames = [
-        //     this.constructor.getStoreName(),
-        //     Balance.getStoreName()
-        // ];
+        db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
+            await super.save();
+            await changeBalance();
+        });
 
-        await super.save();
+        const changeBalance = async () => {
+            const isNew = !this.id;
+            const balance = new Balance();
 
-        const balance = new Balance();
-
-        if (isNew) {
-            await balance.decrease(
-                this.price,
-                this.date,
-                'deduction'
-                );
-        } else {
-            if (this.initData.price < this.price) {
+            if (isNew) {
                 await balance.decrease(
-                    this.price - this.initData.price,
+                    this.price,
                     this.date,
                     'deduction'
                 );
             } else {
-                await balance.increase(
-                    this.initData.price - this.price,
-                    this.date,
-                    'refund'
-                );
+                if (this.initData.price < this.price) {
+                    await balance.decrease(
+                        this.price - this.initData.price,
+                        this.date,
+                        'deduction'
+                    );
+                } else {
+                    await balance.increase(
+                        this.initData.price - this.price,
+                        this.date,
+                        'refund'
+                    );
+                }
             }
         }
-
-        // const updateBalance = async () => {
-        //     const balance = new Balance();
-        //     if (isNew) {
-        //         await balance.decrease(this.price);
-        //     } else {
-        //         if (this.initData.price < this.price) {
-        //             await balance.decrease(this.price - this.initData.price);
-        //         } else {
-        //             await balance.increase(this.initData.price - this.price);
-        //         }
-        //     }
-        // };
-
-
-        // const transaction = await this.beginTransaction(storeNames);
-        // await Promise.all([
-        //     await super.save(transaction),
-        //     await updateBalance(),
-        //     transaction.done,
-        // ]);
     }
 
 
     async delete() {
-        const balance = new Balance();
-        await balance.increase(
-            this.price,
-            new Date(),
-            'refund'
-        )
+        const db = await this.constructor.getDatabase();
 
-        await super.delete();
+        db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
+            await super.delete();
+
+            const balance = new Balance();
+            await balance.increase(
+                this.price,
+                new Date(),
+                'refund'
+            );
+        });
     }
 }

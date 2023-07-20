@@ -54,29 +54,29 @@ export default class BalanceHistory {
                 id: {
                     text: 'Id',
                     sort: true,
-                    value: (transaction) => {
-                        return transaction.id;
+                    value: (historyBalanceChange) => {
+                        return historyBalanceChange.id;
                     }
                 },
                 date: {
                     text: 'Date',
                     sort: true,
-                    value: (transaction) => {
-                        return transaction.date.toLocaleDateString();
+                    value: (historyBalanceChange) => {
+                        return historyBalanceChange.date.toLocaleDateString();
                     }
                 },
                 type: {
                     text: 'Type',
                     sort: false,
-                    value: (transaction) => {
-                        return transaction.type;
+                    value: (historyBalanceChange) => {
+                        return historyBalanceChange.type;
                     }
                 },
                 amount: {
                     text: 'Amount',
                     sort: true,
-                    value: (transaction) => {
-                        return transaction.amount;
+                    value: (historyBalanceChange) => {
+                        return historyBalanceChange.amount;
                     }
                 }
             },

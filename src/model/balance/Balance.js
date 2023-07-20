@@ -4,7 +4,7 @@ import BalanceLocalStorage from "./BalanceLocalStorage";
 import BalanceIndexedDB from "./BalanceIndexedDB";
 import HistoryBalanceChange from "./HistoryBalanceChange";
 
-export default class Balance extends BalanceLocalStorage {
+export default class Balance extends BalanceIndexedDB {
     constructor() {
         super();
     }
@@ -18,6 +18,7 @@ export default class Balance extends BalanceLocalStorage {
         if (result < 0) {
             throw new Error("Not enough money on balance");
         }
+
         await this.save(result, value, date, type);
     }
 
@@ -30,11 +31,4 @@ export default class Balance extends BalanceLocalStorage {
             value
         );
     }
-    // async change(value) {
-    //     const result = await this.getValue() + (parseInt(value));
-    //     if (result < 0) {
-    //         throw new Error("Not enough money on balance");
-    //     }
-    //     await this.save(result);
-    // }
 }
