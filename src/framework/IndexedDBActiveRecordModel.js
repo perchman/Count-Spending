@@ -16,16 +16,12 @@ export default class IndexedDBActiveRecordModel {
         throw new Error("This method in not implemented");
     }
 
-    static getStoreName() {
-        return this.getEntityName() + 'Store';
+    static async getDatabase() {
+        return await ServiceLocator.get(this.getDatabaseName());
     }
 
     static makeModel() {
         throw new Error("This method in not implemented");
-    }
-
-    static async getDatabase() {
-        return await ServiceLocator.get(this.getDatabaseName());
     }
 
     static createTransaction() {
@@ -51,12 +47,13 @@ export default class IndexedDBActiveRecordModel {
         const [key, direction] = orderBy.split(' ');
         const db = await this.getDatabase();
 
-        let result = [];
         let data = await db[this.getEntityName()].orderBy(key);
 
         if (direction === 'desc') {
             data = data.reverse();
         }
+
+        let result = [];
 
         await data.offset(limit.start)
                   .limit(limit.end)

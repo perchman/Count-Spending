@@ -30,5 +30,6 @@ export default class Balance extends BalanceIndexedDB {
             type,
             value
         );
+        console.log(historyBalanceChange, result, value, date, type);
     }
 }

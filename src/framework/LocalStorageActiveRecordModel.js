@@ -10,9 +10,16 @@ export default class LocalStorageActiveRecordModel {
         throw new Error("this method in not implemented");
     }
 
-    static getStoreName() {
+    static getDatabaseName() {
+        throw new Error("This method in not implemented");
+    }
+
+    static async getDatabase() {
         return {
-            transaction: () => {}
+            transaction: async (...arg) => {
+                const callback = arg.pop();
+                await callback();
+            }
         }
     }
 

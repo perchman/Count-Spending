@@ -85,7 +85,7 @@ export default class BalanceHistory {
                 delete: {
                     url: (transaction) => {
                         return Url.createUrl({
-                            action: 'transaction/delete',
+                            action: 'history/delete',
                             id: transaction.id
                         })
                     }

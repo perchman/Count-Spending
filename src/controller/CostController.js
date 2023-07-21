@@ -73,7 +73,7 @@ export default class CostController {
                     )
                 );
 
-                // this.redirect({action: 'cost/index'});
+                this.redirect({action: 'cost/index'});
             } catch (error) {
                 alert(error);
             }

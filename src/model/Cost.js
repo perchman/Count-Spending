@@ -125,12 +125,8 @@ export default class Cost extends IndexedDBActiveRecordModel {
     async save() {
         const db = await this.constructor.getDatabase();
 
-        db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
-            await super.save();
-            await changeBalance();
-        });
+        await db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
 
-        const changeBalance = async () => {
             const isNew = !this.id;
             const balance = new Balance();
 
@@ -155,14 +151,16 @@ export default class Cost extends IndexedDBActiveRecordModel {
                     );
                 }
             }
-        }
+
+            await super.save();
+        });
     }
 
 
     async delete() {
         const db = await this.constructor.getDatabase();
 
-        db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
+        await db.transaction('rw', db.cost, db.balance, db.historyBalanceChange, async () => {
             await super.delete();
 
             const balance = new Balance();

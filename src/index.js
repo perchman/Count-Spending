@@ -21,6 +21,7 @@ import BalanceController from "./controller/BalanceController";
 import BalanceIndex from "./view/balance/BalanceIndex";
 import BalanceReplenish from "./view/balance/BalanceReplenish";
 import BalanceHistory from "./view/balance/BalanceHistory";
+import HistoryBalanceChangeDelete from "./view/balance/HistoryBalanceChangeDelete";
 
 document.addEventListener('DOMContentLoaded', async () => {
     await ServiceLocator.set('Default', await DefaultIndexedDB.getInstance());
@@ -91,17 +92,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     route.addRoute('balance/replenish', async () => {
-        const balanceReplenish = new BalanceReplenish(route);
-        const controller = new BalanceController(balanceReplenish, route);
+        const replenishView = new BalanceReplenish(route);
+        const controller = new BalanceController(replenishView, route);
 
         await controller.replenish();
     });
 
     route.addRoute('balance/history', async () => {
-        const balanceHistory = new BalanceHistory(route);
-        const controller = new BalanceController(balanceHistory, route);
+        const historyView = new BalanceHistory(route);
+        const controller = new BalanceController(historyView, route);
 
         await controller.history();
+    });
+
+    route.addRoute('history/delete', async () => {
+        const deleteView = new HistoryBalanceChangeDelete(route);
+        const controller = new BalanceController(deleteView, route);
+
+        await controller.deleteHistoryChange();
     });
 
     route.routing();

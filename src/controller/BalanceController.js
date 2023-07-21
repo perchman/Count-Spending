@@ -60,4 +60,28 @@ export default class BalanceController {
             dataProvider: dataProvider
         });
     }
+
+    async deleteHistoryChange() {
+        const url = new URL(window.location.href);
+        const id = parseInt(url.searchParams.get('id'));
+        const historyBalanceChange = await HistoryBalanceChange.getById(id);
+
+        let data = {
+            title: 'Success!',
+            class: 'alert-success',
+            text: 'History balance change #' + historyBalanceChange.id + ' removed.'
+        };
+
+        try {
+            await historyBalanceChange.delete();
+        } catch (error) {
+            data = {
+                title: 'Error!',
+                class: 'alert-danger',
+                text: error.message
+            }
+        }
+
+        this.view.render(data);
+    }
 }
