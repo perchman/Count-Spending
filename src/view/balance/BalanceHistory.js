@@ -83,10 +83,10 @@ export default class BalanceHistory {
             dataProvider: data.dataProvider,
             buttons: {
                 delete: {
-                    url: (transaction) => {
+                    url: (historyBalanceChange) => {
                         return Url.createUrl({
                             action: 'history/delete',
-                            id: transaction.id
+                            id: historyBalanceChange.id
                         })
                     }
                 }

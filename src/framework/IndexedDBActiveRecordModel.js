@@ -1,7 +1,6 @@
 "use strict"
 
 import ServiceLocator from "./ServiceLocator";
-import DefaultIndexedDB from "../DefaultIndexedDB";
 
 export default class IndexedDBActiveRecordModel {
     constructor(id) {

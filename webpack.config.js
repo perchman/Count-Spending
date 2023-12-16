@@ -35,7 +35,6 @@ module.exports = {
     },
     externals: {
         idb: 'idb',
-        dexie: 'dexie'
     }
 }
 
